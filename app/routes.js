@@ -1,6 +1,6 @@
 const Post = require('./models/posts');
 const Board = require('./models/boards');
-const Admin = require('./models/admin'); //administrative stuff
+//const Admin = require('./models/admin'); //administrative stuff
 //const AdminUsers = require('./models/mods');
 const postManager = require('./src/post');
 const toolbox = require('./src/tools')
@@ -21,94 +21,27 @@ module.exports = (function(app){
 
     //Get Home page
     app.get('/', (req,res)=>{
-
-        var cats = [];
-
-        Admin.findOne({item:'categories'},function(err,entry){
-            var contents = entry.contents;
-            contents.forEach(function(entries){
-                cats.push(entries.category)
-            })
-            res.send(cats)
-        })
+        res.send('Build this, yo')
     })
 
     //Get board page
     /* TO-DO:
         + get metadata like board title from Boards
-        + get OPs
-            + Sort by lastUpdated
-            + Page Numbers
-            + 3 most recent posts
     */
     app.get('/boards/:board/:page*?', (req,res) => {
         var page;
         req.params.page ? page = req.params.page : page = 1; 
         var board = req.params.board;
+        // function that makes variable, queries board for metadata, and 
+        // only returns when the variable is set to the fetched metadata?
         postManager.getPage(board,page,req,res)
-/*        Board.findOne({boardCode:board},function(err,board){
-            if(err) throw err
-            var threads = board.activeThreads;
-            var sorted = toolbox.sortByUpdate(threads,'lastUpdated');
-            /* for each thread listed in [sorted], 
-                    sort [get thread's OP + 3 most recent] + NUMBER of total replies 
-                    + NUMBER of images
-            //
-            var finalArr = []
-            var completed = 0;
-            sorted.forEach(function(thread){
-                var OP = thread.OP;
-                var index = sorted.indexOf(thread)
-                var imageList = thread.imagesList;
-                var opObj = {
-                    posts: [],
-                    replies: 0,
-                    images: imageList.length
-                }
-                Post.find({OP:OP})
-                    .sort({postID:'descending'})
-                    .exec(function(err,posts){
-                        if(err) throw err;
-                        var len = posts.length;
-                        opObj['replies'] = len - 1;
-                        if(len<=4){
-                            for(var i=0;i<len;i++){
-                                opObj.posts[i] = posts[i]
-                            }
-                            opObj.posts = toolbox.sortByPost(opObj.posts,'postID')
-                        } else {
-                            opObj.posts[0] = posts[0]
-                            var trailing = len - 3
-                            for(i=1;trailing<len;trailing++){
-                                opObj.posts[i] = posts[trailing]
-                            }
-                            opObj.posts = toolbox.sortByPost(opObj.posts,'postID')
-                        }
-                        finalArr[index] = opObj
-                        if(finalArr.length == sorted.length){
-                            res.render('board.ejs', {
-                                board: board,
-                                OPs: finalArr        
-                            });
-                        } 
-                    });
-            })
-        })
-        */
-    });
+});
 
 
     //Post New thread 
-    /*
-        TO-DO:
-            Delete oldest thread if >100
-    */
-    app.post('/api/thread/:board', upload.any(), (req,res) => {
-
-        postManager.writePost(req.params,req.body, req.connection.remoteAddress)
-
-        res.send('Check DB and try to access manually')
-
+    app.post('/boards/:board', upload.any(), (req,res) => {
+        postManager.writePost(req.params,req.body, req.connection.remoteAddress,req,res)
+        postManager.bumpAndGrind(req.params.board)
     })
 
     //Get thread by ID
@@ -118,7 +51,6 @@ module.exports = (function(app){
         Post.find({board: board, OP:threadID})
             .sort('postID')
             .exec(function(err,posts){
-            console.log(posts)
             res.render('thread.ejs',{
                 posts: posts,
                 boardID: board,
@@ -129,11 +61,7 @@ module.exports = (function(app){
 
     //Reply to thread ID on BOARD
     app.post('/:board/thread/:id', (req,res)=>{
-       
-        postManager.writePost(req.params,req.body, req.connection.remoteAddress)
-        
-        res.redirect('/'+req.params.board+'/thread/'+req.params.id)
-        
+        postManager.writePost(req.params,req.body, req.connection.remoteAddress,req,res)       
     });
 
 });
