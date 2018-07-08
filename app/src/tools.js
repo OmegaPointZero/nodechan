@@ -26,7 +26,6 @@ exports.getOPs = (function getOPs(array){
 })
 
 exports.trimPreview = (function trimPreview(array){
-    console.log(array)
     var newArr = [];
     newArr[0] = array[0];
     newArr[1] = array[array.length-3]
