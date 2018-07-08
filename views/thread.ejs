@@ -1,0 +1,25 @@
+<html>
+<link rel="stylesheet" type="text/css" href="/css/main.css">
+<body>
+
+        <form action='/api/<%=boardID%>/<%=threadID%>' method='POST'>
+            <input type="text" name="name" placeholder="name"></input><br>
+            <input type="text" name="subject" placeholder="subject"></input><br>
+            <textarea name="text" cols="48" rows="4" warp="soft"></textarea><br>
+            <button type="submit">Submit</button>
+        </form> 
+</body>
+<div id="thread">
+<%posts.forEach(function(post){%>
+<div class=<%if(post.postID == post.OP){%>"post OP"<%} else {%>"post reply"<%}%> id="<%=post.postID%>">
+    <div class="postInfo"><input type="checkbox" name="<%=post.postID%>">
+    <span class="subject"><%=post.subject%></span>
+    <span class="name"><%if(post.name.length>0){%><%=post.name%><%}else{%>Anonymous<%}%></span>
+    <span class="postTime"><%=new Date(post.time)%></span>
+    <span class="postNumber">No. <%=post.postID%></span>
+    </div>
+<div class="postMessage"><%-post.body%></div>
+    </div>
+<%})%>
+</div>
+</html>

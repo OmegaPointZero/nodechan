@@ -1,0 +1,56 @@
+<html>
+<link rel="stylesheet" type="text/css" href="/css/main.css">
+<style>
+    #newThread{
+        margin: auto;
+        width: 468px;
+    }
+
+    #newThread textarea{
+        width: 292px;
+    }
+
+    table#newThread>tbody>tr>td:first-child {
+        background-color: #ea8;
+        color: #800;
+        border: 1px solid #800;
+        padding: 0 5px;
+    }
+    
+    .abovePostForm {
+        width: 90%;
+    }
+</style>
+<body>
+<div class="main-container">
+<div class="boardNav"> [BOARDS WILL GO HERE] </div>
+    <hr class="abovePostForm">
+    <form enctype='multipart/form-data' action='/api/thread/<%=board.boardCode%>' method='POST'>
+        <table id="newThread" style="display:table;">
+            <tbody>
+            <tr data-type="Name">
+                <td>Name</td>
+                <td><input type="text" name="name" placeholder="name"></input></td>
+            </tr>
+            <tr data-type="Subject">
+                <td>Subject</td>
+                <td><input type="text" name="subject" placeholder="subject"></input> <button type="submit">Submit</button></td>
+            </tr>
+            <tr data-type="Text">
+                <td>Comment</td>
+                <td><textarea name="text" cols="48" rows="4" warp="soft"></textarea></td>
+            </tr>
+            <tr data-type="file">
+                <td>File</td>
+                <td><input type="file" name="post-image"/></td>
+            </tr>
+            </tbody>
+        </table>
+    </form>  
+<%OPs.forEach(function(OP){%>
+<div class="posts-container">
+<%=JSON.stringify(OP.posts)%>
+</div>   <hr>   
+<%})%>
+</div>
+</body>
