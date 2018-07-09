@@ -90,7 +90,8 @@ exports.writePost = (function writePost(params,body,IP,imgInfo,req,res){
             }
         })
     }
-    //Write post to DB
+    console.log(`imgInfo:\n${imgInfo}`)
+    //Write information to post Schema for db
     var post = new Post();     
     post.IP = IP;
     post.name = body.name;
@@ -98,7 +99,15 @@ exports.writePost = (function writePost(params,body,IP,imgInfo,req,res){
     post.board = params.board;
     post.body = body.text;
     var time = imgInfo.time;
-    post.time = time
+    post.fileName = imgInfo.fileName;
+    post.fileOriginalName = imgInfo.originalname;
+    post.fileSize = imgInfo.size;
+    post.fileDimensions = imgInfo.fileDimensions;
+    post.time = time;
+    console.log(`post so far:\n${post}`)
+    //Get all posts and grab the biggest post #
+    //Assign biggest post # +1 to post
+    //check if this is an OP
     Post.findOne({board:params.board})
         .sort({postID: 'descending'})
         .exec(function(err,posts){

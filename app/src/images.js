@@ -15,11 +15,8 @@ exports.uploadImage = (function imageUpload(image,time,isOP){
     var temp = image.originalname.split('.')
     var ext = temp[temp.length-1]
     var newName = time+'.'+ext
-    console.log(`temp: ${temp}\next: ${ext}\nnewName: ${newName}`)
     var previewDimensions = toolbox.previewResize(dimensions,maximum)    
-    console.log(previewDimensions)
     // make preview
-    console.log(`image.path: ${image.path}`)
     var path = image.path
     var str = 'public/images/s' + time + '.png'
     filepreview.generate(image.path, str, previewDimensions,function(err){

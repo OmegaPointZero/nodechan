@@ -51,7 +51,6 @@ module.exports = (function(app){
             return
         }
         var imgInfo = imageManager.uploadImage(req.files[0],time,true)
-        console.log(imgInfo)
         // add imgInfo to postManager.writePost
         postManager.writePost(req.params,req.body,req.connection.remoteAddress,imgInfo,req,res)
         postManager.bumpAndGrind(req.params.board)
