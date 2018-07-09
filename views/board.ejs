@@ -21,11 +21,22 @@
         width: 90%;
     }
 </style>
-<body>
+<body class="main">
 <div class="main-container">
-<div class="boardNav"> [BOARDS WILL GO HERE] </div>
+<div class="boardNav"> 
+   [ <%allBoards.forEach(function(board){%>
+        
+       / <a href="/boards/<%=board.boardCode%>" title="<%=board.boardCode%> - <%=board.boardTitle%>"><%=board.boardCode%></a> 
+        
+    <% }) %> ]
+</div>
+    <br class="abovePostForm">
+    <h1 class="boardTitle">/<%=thisBoard[0].boardCode%>/ - <%=thisBoard[0].boardTitle%></h1>
+
+</div>
+
     <hr class="abovePostForm">
-    <form enctype='multipart/form-data' action='/api/thread/<%=board.boardCode%>' method='POST'>
+    <form enctype='multipart/form-data' action='/boards/<%=thisBoard[0].boardCode%>' method='POST'>
         <table id="newThread" style="display:table;">
             <tbody>
             <tr data-type="Name">
@@ -46,11 +57,22 @@
             </tr>
             </tbody>
         </table>
-    </form>  
+    </form>
 <%OPs.forEach(function(OP){%>
 <div class="posts-container">
-<%=JSON.stringify(OP.posts)%>
+<%=JSON.stringify(OP.preview)%>
 </div>   <hr>   
 <%})%>
 </div>
+
+<div class="boardNav"> 
+   [ <%allBoards.forEach(function(board){%>
+        
+       / <a href="/boards/<%=board.boardCode%>" title="<%=board.boardCode%> - <%=board.boardTitle%>"><%=board.boardCode%></a> 
+        
+    <% }) %> ]
+</div>
+    <hr class="abovePostForm">
+
+
 </body>

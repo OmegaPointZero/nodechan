@@ -27,7 +27,7 @@ app.engine('html', require('ejs').renderFile);
 app.set('views', 'views');
 app.set('view engine', 'html');
 
-var port = 80;
+var port = 8080;
 app.listen(port,function(){
     console.log('Listening on ' + port)
 })

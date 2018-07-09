@@ -7,6 +7,33 @@ exports.sortByUpdate = (function sortByUpdate(array,key){
     })
 })
 
+//resize picture for preview
+exports.previewResize = (function previewResize(dimensions,imgMax){
+    var width = dimensions.width;
+    var height = dimensions.height;
+    var proportion = 0
+    if(width>height){
+        proportion = width / imgMax;
+        width = imgMax;
+        height = height / proportion
+    } else if(width<height) {
+        proportion = height / imgMax;
+        height = imgMax;
+        width = width / proportion
+    } else if(width==height) {
+        width = imgMax;
+        height = imgMax;
+    }
+    
+    var resized = {
+        width: width,
+        height: height,
+    }
+
+    return resized;
+
+})
+
 //sort thread by post, most recent post at bottom
 exports.sortByPost = (function sortByPost(array,key){
     return array.sort(function(a,b){
@@ -17,12 +44,12 @@ exports.sortByPost = (function sortByPost(array,key){
 })
 
 //Get every unique OP for all posts passed to it
-exports.getOPs = (function getOPs(array){
-    allOPs = array.map(a=>a.OP)
-    uniqueOPs = allOPs.filter(function(post,position){
-        return allOPs.indexOf(post) == position
+exports.getUnique = (function getOPs(array,item){
+    allitems = array.map(a=>a[item])
+    uniqueItems = allitems.filter(function(post,position){
+        return allitems.indexOf(post) == position
     })
-    return uniqueOPs
+    return uniqueItems
 })
 
 exports.trimPreview = (function trimPreview(array){

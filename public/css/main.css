@@ -78,4 +78,10 @@ div.thread {
     margin-bottom: 5px;
 }
 
+.boardNav {
+    text-align: center;
+}
 
+h1.boardTitle{
+    text-align: center;
+}
