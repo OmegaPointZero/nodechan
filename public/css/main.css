@@ -1,6 +1,6 @@
 body.main {
     height: 200px;
-    background: linear-gradient(#fed6af, #ffffee) no-repeat;
+    background: linear-gradient(#fed6af, #ffebcf, #ffffee) no-repeat;
     background-size:auto 175px;
     background-color: #ffffee;
     color: maroon;
@@ -65,7 +65,7 @@ table#newPost>tbody>tr>td:first-child {
     width: 90%;
 }
 
-div.thread {
+div.postContainer {
     max-width: 75%;
     margin: 0;
     clear: both;
@@ -78,10 +78,26 @@ div.thread {
     margin-bottom: 5px;
 }
 
+.file{
+    display: block;
+}
+
 .boardNav {
     text-align: center;
 }
 
 h1.boardTitle{
     text-align: center;
+}
+
+.thumbnail{
+    float: left;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 3px;
+    margin-bottom: 5px;
+}
+
+.thread{
+    display:block;
 }

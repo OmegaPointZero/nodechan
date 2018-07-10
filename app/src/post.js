@@ -3,10 +3,23 @@ const Board = require('../models/boards');
 const toolbox = require('./tools')
 
 //Get all posts for a single thread
-exports.getThread = (function getPosts(OP){
-    Post.find({OP:OP}, function(err,posts){
-        if(err){console.log(err)};
-        var sorted = toolbox.sortByPost(posts)
+exports.getThread = (function getPosts(board,OP,res){
+    Board.find({},function(err,boards){
+        if(err) throw err;
+        var thisBoard = boards.filter(b=>b.boardCode==board)[0]
+        Post.find({board:board,OP:OP}, function(error,posts){
+            if(error){console.log(error)};
+            if(posts.length === 0){
+                res.send(404)
+            } else {
+                var sorted = toolbox.sortByPost(posts)
+                res.render('thread.ejs', {
+                    allBoards: boards,
+                    thisBoard: thisBoard,
+                    posts: sorted
+                });
+            }
+        })
     })
 })
 
@@ -15,11 +28,8 @@ exports.getCatalog = (function getCatalog(board,page){
 })
 
 exports.getPage = (function getPage(board,page,req,res){
-
     Board.find({},function(err,boards){
-
         var thisBoard = boards.filter(b=>b.boardCode==board)
-        console.log(`thisBoard: ${thisBoard}`)
         Post.find({board:board},function(err,posts){
             if(err) throw err;
             var OPs = toolbox.getUnique(posts,'OP')       
@@ -32,8 +42,6 @@ exports.getPage = (function getPage(board,page,req,res){
             })
         });
     })    
-
-
 });
 
 //Deletes post with specified postID for one post, or OP for a thread
@@ -64,7 +72,6 @@ exports.bumpAndGrind = (function bumpAndGrind(board){
         var OPs = toolbox.getUnique(posts,'OP')
         var sortedOPs = toolbox.getThreadBumps(OPs,posts)
         var len = sortedOPs.length;
-        console.log(`len: ${len}`)
         if(len>100){
             var obj = {
                 board: board,
@@ -79,7 +86,6 @@ exports.bumpAndGrind = (function bumpAndGrind(board){
 
 //Write new post to database
 exports.writePost = (function writePost(params,body,IP,imgInfo,req,res){
-
     //if it's a reply, don't do it if the thread has 250+ replies
     if(params.id){
         Post.find({board:params.board,OP:params.id},function(err,posts){
@@ -90,24 +96,26 @@ exports.writePost = (function writePost(params,body,IP,imgInfo,req,res){
             }
         })
     }
-    console.log(`imgInfo:\n${imgInfo}`)
     //Write information to post Schema for db
+    console.log(imgInfo)
     var post = new Post();     
     post.IP = IP;
     post.name = body.name;
     post.subject = body.subject;
     post.board = params.board;
     post.body = body.text;
-    var time = imgInfo.time;
-    post.fileName = imgInfo.fileName;
-    post.fileOriginalName = imgInfo.originalname;
-    post.fileSize = imgInfo.size;
-    post.fileDimensions = imgInfo.fileDimensions;
+    if(imgInfo.time){
+        var time = imgInfo.time;
+    } else {
+        var time = new Date().getTime();
+    }
+    if(imgInfo.size){
+        post.fileName = imgInfo.fileName;
+        post.fileOriginalName = imgInfo.originalname;
+        post.fileSize = imgInfo.size;
+        post.fileDimensions = imgInfo.fileDimensions;
+    }
     post.time = time;
-    console.log(`post so far:\n${post}`)
-    //Get all posts and grab the biggest post #
-    //Assign biggest post # +1 to post
-    //check if this is an OP
     Post.findOne({board:params.board})
         .sort({postID: 'descending'})
         .exec(function(err,posts){

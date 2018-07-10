@@ -16,6 +16,12 @@ var storage = multer.diskStorage({
     }
 });
 const upload = multer({storage: storage});
+if(!Array.prototype.last){
+    Array.prototype.last = function(){
+        return this[this.length-1]
+    }
+}
+
 
 module.exports = (function(app){
 
@@ -26,55 +32,45 @@ module.exports = (function(app){
 
     //Get board page
     /* TO-DO:
-        + get metadata like board title from Boards
+        Return 404 if board doesn't exist or page > 10
     */
     app.get('/boards/:board/:page*?', (req,res) => {
         var page;
         req.params.page ? page = req.params.page : page = 1; 
         var board = req.params.board;
-        // function that makes variable, queries board for metadata, and 
-        // only returns when the variable is set to the fetched metadata?
         postManager.getPage(board,page,req,res)
 });
 
-
-    //Post New thread 
+    //Post New thread on :board
     app.post('/boards/:board', upload.any(), (req,res) => {
-        var time = new Date().getTime();
-        var e = req.files[0].filename.split('.');
-        var ext = imageManager.verifyExtension(e[e.length-1])
-        if(ext==true){
-            console.log(`Good file extension: ${e[e.length-1]}`)
-        } else {
-            console.log(`Bad file extension: ${e[e.length-1]}`)
-            res.send('Bad file extension: ' + ext)
-            return
+        if(req.files.length===0){
+            res.send('Error: You forgot to upload an image')
+            return;
         }
-        var imgInfo = imageManager.uploadImage(req.files[0],time,true)
-        // add imgInfo to postManager.writePost
-        postManager.writePost(req.params,req.body,req.connection.remoteAddress,imgInfo,req,res)
+        var time = new Date().getTime();
+        var imgInfo = imageManager.uploadImage(req.files[0],time,true,req,res)
+        console.log(req)
         postManager.bumpAndGrind(req.params.board)
     })
 
     //Get thread by ID
-    //Send 404 if ID not found
     app.get('/:board/thread/:id', (req,res)=>{
-        var board = req.params.board;
         var threadID = req.params.id;
-        Post.find({board: board, OP:threadID})
-            .sort('postID')
-            .exec(function(err,posts){
-            res.render('thread.ejs',{
-                posts: posts,
-                boardID: board,
-                threadID: threadID
-            })
-        })
+        var board = req.params.board;
+        postManager.getThread(board,threadID,res);
     });
 
     //Reply to thread ID on BOARD
-    app.post('/:board/thread/:id', (req,res)=>{
-        postManager.writePost(req.params,req.body, req.connection.remoteAddress,req,res)       
+    app.post('/:board/thread/:id', upload.any(), (req,res)=>{
+        if(req.files.length===0 && req.body.text== ""){
+            res.send('Error: Response cannot be empty')
+        }
+        var time = new Date().getTime();
+        if(req.files.length>0){
+            var imgInfo = imageManager.uploadImage(req.files[0],time,false,req,res);
+        } else {
+            postManager.writePost(req.params,req.body,req.connection.remoteAddress,{time:new Date().getTime()},req,res);
+        }
     });
 
-});
+}); 

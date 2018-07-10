@@ -2,7 +2,14 @@
 <link rel="stylesheet" type="text/css" href="/css/main.css">
 <body class="main">
 
-        <form action='/<%=boardID%>/thread/<%=threadID%>' method='POST'>
+<div class="boardNav"> 
+   [ <%allBoards.forEach(function(board){%>
+        
+       / <a href="/boards/<%=board.boardCode%>" title="<%=board.boardCode%> - <%=board.boardTitle%>"><%=board.boardCode%></a> 
+        
+    <% }) %> ]
+</div>
+        <form action='/<%=thisBoard.boardCode%>/thread/<%=posts[0].OP%>' method='POST' enctype="multipart/form-data">
             <table id="newPost">
                 <tbody>
                     <tr>
@@ -24,23 +31,63 @@
                 </tbody>
             </table>
         </form> 
-
-            <br>
-            
-            
-
+        <br>
 </body>
-<div id="thread">
+<div class="thread" id="t<%=posts[0].OP%>">  
 <%posts.forEach(function(post){%>
-<div class=<%if(post.postID == post.OP){%>"post OP"<%} else {%>"post reply"<%}%> id="<%=post.postID%>">
-    <div class="postInfo"><input type="checkbox" name="<%=post.postID%>">
-    <span class="subject"><%=post.subject%></span>
-    <span class="name"><%if(post.name.length>0){%><%=post.name%><%}else{%>Anonymous<%}%></span>
-    <span class="postTime"><%=new Date(post.time)%></span>
-    <span class="postNumber">No. <%=post.postID%></span>
+    <div class="postContainer" id="post.OP">
+    <div id="<%=post.postID%>" class=<%if(post.postID == post.OP){%>"post OP"<%} else {%>"post reply"<%}%> id="<%=post.postID%>">
+        <div class="postInfo">
+            <input type="checkbox" name="124205675" value="delete"> 
+            <span class="subject"><%=post.subject%></span> 
+            <span class="nameBlock">
+                <span class="name"><%if(post.name.length>0){%><%=post.name%><%}else{%>Anonymous<%}%></span> 
+                <!--<span class="posteruid id_Bg9BS7Xl"> 
+                    (ID: <span class="hand" title="Highlight posts by this ID" style="background-color: rgb(117, 188, 71); color: black;">Bg9BS7Xl</span>)
+                </span> 
+                <span title="United States" class="flag flag-us"></span>
+            </span> 
+                -->
+            <span class="postTime"><%=new Date(post.time)%></span>
+            <span class="postNumber">No. <%=post.postID%></span>
+            <!-- <a href="#" class="postMenuBtn" title="Post menu" data-cmd="post-menu">▶</a> -->
+        </div>
+
+            <%if(post.fileSize){%>
+            <div class="file">
+            <div class="FileInfo">
+               File: <a href="/images/<%=post.fileName%>" target="_blank"><%=post.fileOriginalName%></a>
+                    <% if(post.fileSize < 1000 ){ %>
+                        (<%=post.fileSize%> Bytes, 
+                    <%} else { %>
+                        <%var filesize = Math.floor(post.fileSize/1000)%>
+                        <%if(filesize < 1000){ %>
+                            (<%=filesize%> KB, 
+                        <%} else if(filesize > 1000) {%>
+                            <%newsize = Math.floor(filesize/1000) + "." + filesize%100 %>(<%=newsize%> MB,
+                        <% } %>
+                    <% } %> 
+                    <%=post.fileDimensions%>)
+            </div>
+            <div class="thumbnail">
+                <a href="/images/<%=post.fileName%>" target="_blank">
+                    <img src="/images/s<%=post.time%>.png" alt="<%=post.fileSize%> Bytes">
+                </a>
+            </div>
+            <%}%>
+        <div class="postMessage">
+            <%=post.body%>
+        </div>
     </div>
-<div class="postMessage"><%-post.body%></div>
-    </div>
+</div>
 <%})%>
+</div>
+
+<div class="boardNav"> 
+   [ <%allBoards.forEach(function(board){%>
+        
+       / <a href="/boards/<%=board.boardCode%>" title="<%=board.boardCode%> - <%=board.boardTitle%>"><%=board.boardCode%></a> 
+        
+    <% }) %> ]
 </div>
 </html>
