@@ -20,23 +20,30 @@ You will also need to make 2 folders in the `public/` folder, `public/temporary`
 + After 100 threads, new threads cause old ones to 404
 
 ## To Implement:
+1. User-facing front end:
 + User ID's per thread
 + Color scheme for said IDs
 + Flags based on Location
 + Quoting a post
 + Reporting a post
 + Deleting a post/thread (modules to handle this are in place)
-+ Wordfilters
-+ IP Bans
-+ Admin/Mod login
 + Home Page
-+ Multiple options for colors
-+ Options to expand images instead of opening in new
 + Settings for the user to customize experience
+    + Multiple options for colors
+    + Options to expand images instead of opening in new
++ Rotating Banners
 + A way to serve a blank board, provided it exists in the DB, and 404 otherwise
 + Custom 404 for invalid paths
-+ Sticky
-+ Locked
-+ Rotating Banners
 + Thread metadata: posts, unique posters, replies, image replies 
 + Update thread via ajax without updating the page
+
+2. Back-End server-side:
++ Admin/Mod login
+    + Admins can manage:    
+        + Wordfilters
+        + IP Bans
+        + Sticky
+        + Lock threads        
++ A way to serve a blank board, provided it exists in the DB, and 404 otherwise
++ Custom 404 for invalid paths
++ Modifying/adding paths for other front-end stuff not yet done
