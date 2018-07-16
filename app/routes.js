@@ -22,7 +22,6 @@ if(!Array.prototype.last){
     }
 }
 
-
 module.exports = (function(app){
 
     //Get Home page
@@ -37,6 +36,10 @@ module.exports = (function(app){
     app.get('/boards/:board/:page*?', (req,res) => {
         var page;
         req.params.page ? page = req.params.page : page = 1; 
+        if(page>10){
+            res.send(404)
+            return
+        }
         var board = req.params.board;
         postManager.getPage(board,page,req,res)
 });
@@ -49,7 +52,6 @@ module.exports = (function(app){
         }
         var time = new Date().getTime();
         var imgInfo = imageManager.uploadImage(req.files[0],time,true,req,res)
-        console.log(req)
         postManager.bumpAndGrind(req.params.board)
     })
 
@@ -62,6 +64,7 @@ module.exports = (function(app){
 
     //Reply to thread ID on BOARD
     app.post('/:board/thread/:id', upload.any(), (req,res)=>{
+        console.log(req.body)
         if(req.files.length===0 && req.body.text== ""){
             res.send('Error: Response cannot be empty')
         }

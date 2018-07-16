@@ -25,7 +25,7 @@ exports.uploadImage = (function uploadImage(image,time,isOP,req,res){
         var path = image.path
         var str = 'public/images/s' + time + '.png';
         filepreview.generate(image.path, str, previewDimensions,function(err){
-            if(err) throw err;
+            if(err) console.log(err);
             fs.move(image.path, 'public/images/'+newName);
         })
         var retObj = image;

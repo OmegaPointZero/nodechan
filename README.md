@@ -18,11 +18,12 @@ You will also need to make 2 folders in the `public/` folder, `public/temporary`
 + You can reply to a thread with text, an image, or both, but not neither
 + New replies bump a thread on the board page
 + After 100 threads, new threads cause old ones to 404
++ User ID's per thread
++ Color scheme for said IDs
++ Greentext
 
 ## To Implement:
 1. User-facing front end:
-+ User ID's per thread
-+ Color scheme for said IDs
 + Flags based on Location
 + Quoting a post
 + Reporting a post

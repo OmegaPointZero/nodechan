@@ -96,8 +96,9 @@ exports.writePost = (function writePost(params,body,IP,imgInfo,req,res){
             }
         })
     }
-    //Write information to post Schema for db
-    console.log(imgInfo)
+    //convert body.text into
+    var newBody = body.text
+    
     var post = new Post();     
     post.IP = IP;
     post.name = body.name;
@@ -122,6 +123,9 @@ exports.writePost = (function writePost(params,body,IP,imgInfo,req,res){
             var OP
             if(params.id){OP = params.id;}else{OP= posts.postID+1}
             post.OP = OP
+            var userID = toolbox.makeID(OP,IP)
+            post.userID = userID
+            post.userIDColor = toolbox.makeRGB(OP,IP)
             post.postID = posts.postID + 1;
             post.save(function(err){
                 if(err) throw err;

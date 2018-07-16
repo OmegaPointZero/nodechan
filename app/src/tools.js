@@ -1,3 +1,14 @@
+var md5 = require('md5')
+
+exports.makeID = (function makeOP(OP,IP){
+    
+    var str = String(OP+IP)
+    var crypt = md5(str)
+    var len = crypt.length;
+    var sliced = crypt.slice(len-8,len)
+    return sliced
+})
+
 //sort threads by last bump, most recent at top
 exports.sortByUpdate = (function sortByUpdate(array,key){
     return array.sort(function(a,b){
@@ -15,11 +26,11 @@ exports.previewResize = (function previewResize(dimensions,imgMax){
     if(width>height){
         proportion = width / imgMax;
         width = imgMax;
-        height = height / proportion
+        height = Math.floor(height / proportion)
     } else if(width<height) {
         proportion = height / imgMax;
         height = imgMax;
-        width = width / proportion
+        width = Math.floor(width / proportion)
     } else if(width==height) {
         width = imgMax;
         height = imgMax;
@@ -95,3 +106,12 @@ exports.trimToPage = (function trimToPage(arr,page){
     var lastIndex = page*10
     return arr.slice(firstIndex,lastIndex)
 })
+
+//Generate a random set of RGB values
+exports.makeRGB = (function randRGB(OP,IP){
+    var value = String(OP+IP)
+    var converted = md5(value);
+    converted = converted.slice(converted.length-6,converted.length)
+    var rgb = 'rgb('+parseInt(converted.slice(0,2),16)+','+parseInt(converted.slice(2,4),16)+','+parseInt(converted.slice(4,6),16)+',1)'
+    return rgb
+});

@@ -1,5 +1,6 @@
 <html>
 <link rel="stylesheet" type="text/css" href="/css/main.css">
+
 <body class="main">
 
 <div class="boardNav"> 
@@ -9,6 +10,8 @@
         
     <% }) %> ]
 </div>
+    <hr class="abovePostForm">
+    <h1 class="boardTitle">/<%=thisBoard.boardCode%>/ - <%=thisBoard.boardTitle%></h1>
         <form action='/<%=thisBoard.boardCode%>/thread/<%=posts[0].OP%>' method='POST' enctype="multipart/form-data">
             <table id="newPost">
                 <tbody>
@@ -35,20 +38,23 @@
 </body>
 <div class="thread" id="t<%=posts[0].OP%>">  
 <%posts.forEach(function(post){%>
-    <div class="postContainer" id="post.OP">
+    <div class="postContainer" id="p<%=post.postID%>">
+    
+    <%if(post.postID != post.OP){%><div class="memeArrows">>></div><%}%>
     <div id="<%=post.postID%>" class=<%if(post.postID == post.OP){%>"post OP"<%} else {%>"post reply"<%}%> id="<%=post.postID%>">
         <div class="postInfo">
-            <input type="checkbox" name="124205675" value="delete"> 
+            <input type="checkbox" name="" value="delete"> 
             <span class="subject"><%=post.subject%></span> 
             <span class="nameBlock">
                 <span class="name"><%if(post.name.length>0){%><%=post.name%><%}else{%>Anonymous<%}%></span> 
-                <!--<span class="posteruid id_Bg9BS7Xl"> 
-                    (ID: <span class="hand" title="Highlight posts by this ID" style="background-color: rgb(117, 188, 71); color: black;">Bg9BS7Xl</span>)
+                <span class="posteruid id_<%=post.userID%>"> 
+                    (ID: <span class="hand" title="Highlight posts by this ID" style="background-color: <%=post.userIDColor%>;"><a class="hand"><%=post.userID%></a></span>)
                 </span> 
                 <span title="United States" class="flag flag-us"></span>
             </span> 
-                -->
-            <span class="postTime"><%=new Date(post.time)%></span>
+<% var ptime = new Date(post.time);%>
+<% var time = String(ptime).split(" ").slice(0,5).join(" ")%>
+            <span class="postTime"><%=time%></span>
             <span class="postNumber">No. <%=post.postID%></span>
             <!-- <a href="#" class="postMenuBtn" title="Post menu" data-cmd="post-menu">▶</a> -->
         </div>
@@ -75,9 +81,18 @@
                 </a>
             </div>
             <%}%>
-        <div class="postMessage">
-            <%=post.body%>
-        </div>
+<!--        <div class="postMessage">
+            <p><%-post.body%></p>
+        </div>-->
+            <div class="postMessage">
+                <%var body = post.body%>
+                <%var mySplit = body.split('\r\n')%>
+                <% mySplit.forEach(function(lines){%>
+                    <span <% if(/^>/.test(lines)){%>style="color:#789922"<%}%>><%=lines%></span><br/>
+                <%})%>
+                
+            </div>
+    </div>
     </div>
 </div>
 <%})%>

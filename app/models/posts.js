@@ -15,6 +15,8 @@ var postSchema = new mongoose.Schema({
     subject: String,
     body: String,
     time: Number,
+    userID: String,
+    userIDColor: String,
     fileName: String,
     fileOriginalName: String,
     fileSize: String,
