@@ -30,11 +30,15 @@ exports.getCatalog = (function getCatalog(board,page){
 exports.getPage = (function getPage(board,page,req,res){
     Board.find({},function(err,boards){
         var thisBoard = boards.filter(b=>b.boardCode==board)
+        if(thisBoard==""){
+            res.send(404)
+            return
+        }
         Post.find({board:board},function(err,posts){
             if(err) throw err;
             var OPs = toolbox.getUnique(posts,'OP')       
             var sortedOPs = toolbox.getThreadBumps(OPs,posts)
-            var pageArr = toolbox.trimToPage(sortedOPs,page) 
+            if(sortedOPs!=undefined){var pageArr = toolbox.trimToPage(sortedOPs,page)} else {var pageArr=""}
             res.render('board.ejs', {
                 allBoards: boards,
                 thisBoard: thisBoard,

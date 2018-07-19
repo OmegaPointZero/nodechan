@@ -20,7 +20,12 @@ You will also need to make 2 folders in the `public/` folder, `public/temporary`
 + After 100 threads, new threads cause old ones to 404
 + User ID's per thread
 + Color scheme for said IDs
++ Highlight post by selecting No.
++ Highlight all posts by same user in thread
 + Greentext
++ 404 if attempting to access board that doesn't exist
++ 404 if attempting to access a valid board with invalid page
++ A way to serve a blank board, provided it exists in the DB, and 404 otherwise
 
 ## To Implement:
 1. User-facing front end:
@@ -33,7 +38,6 @@ You will also need to make 2 folders in the `public/` folder, `public/temporary`
     + Multiple options for colors
     + Options to expand images instead of opening in new
 + Rotating Banners
-+ A way to serve a blank board, provided it exists in the DB, and 404 otherwise
 + Custom 404 for invalid paths
 + Thread metadata: posts, unique posters, replies, image replies 
 + Update thread via ajax without updating the page
@@ -45,6 +49,5 @@ You will also need to make 2 folders in the `public/` folder, `public/temporary`
         + IP Bans
         + Sticky
         + Lock threads        
-+ A way to serve a blank board, provided it exists in the DB, and 404 otherwise
 + Custom 404 for invalid paths
 + Modifying/adding paths for other front-end stuff not yet done

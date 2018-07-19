@@ -1,6 +1,24 @@
 <html>
 <link rel="stylesheet" type="text/css" href="/css/main.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> <!-- add JQuery -->
+<script>
+$(document).ready(function(){
+    $("a.highlightThisPost").click(function(){
+        var str = String(this)
+        var post = str.split('#')[1]
+        $('div.reply').removeClass('highlight')
+        $('div.reply#'+post).addClass('highlight')
+    });
 
+    $('.posteruid').click(function(){
+        var id = $(this).attr('class').split(' ')[1]
+        $('div.reply').removeClass('highlight')
+        $('.'+id).parent().parent().parent().addClass('highlight')
+        
+    })
+
+})
+</script>
 <body class="main">
 
 <div class="boardNav"> 
@@ -55,7 +73,8 @@
 <% var ptime = new Date(post.time);%>
 <% var time = String(ptime).split(" ").slice(0,5).join(" ")%>
             <span class="postTime"><%=time%></span>
-            <span class="postNumber">No. <%=post.postID%></span>
+            <span class="postNumber">
+                <a href="#<%=post.postID%>" class="highlightThisPost" id="<%=post.postID%>">No.</a> <a href="#" class="quotePostNumber" id="<%=post.postID%>"><%=post.postID%></a></span>
             <!-- <a href="#" class="postMenuBtn" title="Post menu" data-cmd="post-menu">▶</a> -->
         </div>
 
@@ -88,7 +107,9 @@
                 <%var body = post.body%>
                 <%var mySplit = body.split('\r\n')%>
                 <% mySplit.forEach(function(lines){%>
-                    <span <% if(/^>/.test(lines)){%>style="color:#789922"<%}%>><%=lines%></span><br/>
+                    <span class='postContents' <% if(/^>/.test(lines)){%>style="color:#789922"<%}%>>
+                    <%=lines%>
+                    </span><br/>
                 <%})%>
                 
             </div>

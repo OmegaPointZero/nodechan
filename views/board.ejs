@@ -58,11 +58,17 @@
             </tbody>
         </table>
     </form>
-<%OPs.forEach(function(OP){%>
-<div class="posts-container">
-<%=JSON.stringify(OP.preview)%>
-</div>   <hr>   
-<%})%>
+
+<%if(OPs.length>0){%>
+    <%OPs.forEach(function(OP){%>
+    <div class="posts-container">
+    <%=JSON.stringify(OP.preview)%>
+    </div>   <hr>   
+    <%})%>
+<%} else {%>
+    <div class="blankBoard">This board is valid but there's nothing here! Make the first post!</div>
+<% } %>
+
 </div>
 
 <div class="boardNav"> 

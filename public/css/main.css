@@ -130,3 +130,13 @@ span.hand{
     background: #f0c0b0!important;
     border: 1px solid #d99f91!important;
 }
+
+a.highlightThisPost{
+    text-decoration: none;
+    color: maroon;
+}
+
+a.quotePostNumber{
+    text-decoration: none;
+    color: maroon;
+}
