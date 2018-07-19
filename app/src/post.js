@@ -31,7 +31,7 @@ exports.getPage = (function getPage(board,page,req,res){
     Board.find({},function(err,boards){
         var thisBoard = boards.filter(b=>b.boardCode==board)
         if(thisBoard==""){
-            res.send(404)
+            res.status(404).send(404)
             return
         }
         Post.find({board:board},function(err,posts){

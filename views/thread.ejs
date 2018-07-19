@@ -17,6 +17,13 @@ $(document).ready(function(){
         
     })
 
+    //Analyze post messages for >> regexp
+    var text = $('span.postContents').text()
+
+    var regexp = new RegExp(/^>>[0-9]/,'ig')
+    var result = text.replace(regexp, '<a href="#$&">$&</a>')
+    alert(result)
+
 })
 </script>
 <body class="main">
