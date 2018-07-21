@@ -64,8 +64,9 @@ $(document).ready(function(){
                 </tbody>
             </table>
         </form> 
-        <br>
-</body>
+        <hr>
+    <div class="overboard" id="top"> <div class="threadNav">[<a class="threadNavItem" href="/boards/<%=thisBoard.boardCode%>">Return</a>] [<a class="threadNavItem" href="/boards/<%=thisBoard.boardCode%>/catalog">Catalog</a>] [<a class="threadNavItem" href="#bottom">Bottom</a>] [<a class="threadNavItem" href="#">Update</a>] </div><div class="metadata"> <span title="replies"><%=metadata.replies%></span> / <span title="images"><%=metadata.images%></span> / <span title="posters"><%=metadata.posters%></span> / <span title="page"><%=metadata.page%> </span> </div></div>
+        <hr>
 <div class="thread" id="t<%=posts[0].OP%>">  
 <%posts.forEach(function(post){%>
     <div class="postContainer" id="p<%=post.postID%>">
@@ -138,11 +139,17 @@ $(document).ready(function(){
 <%})%>
 </div>
 
-<div class="boardNav"> 
+<hr>
+    <div class="overboard"> <div class="threadNav">[<a class="threadNavItem" href="/boards/<%=thisBoard.boardCode%>">Return</a>] [<a class="threadNavItem" href="/boards/<%=thisBoard.boardCode%>/catalog">Catalog</a>] [<a class="threadNavItem" href="#top">Top</a>] [<a class="threadNavItem" href="#">Update</a>] </div><div class="metadata"> <span title="replies"><%=metadata.replies%></span> / <span title="images"><%=metadata.images%></span> / <span title="posters"><%=metadata.posters%></span> / </div></div>
+<hr>
+
+<div class="boardNav" id="bottom"> 
    [ <%allBoards.forEach(function(board){%>
         
        / <a href="/boards/<%=board.boardCode%>" title="<%=board.boardCode%> - <%=board.boardTitle%>"><%=board.boardCode%></a> 
         
     <% }) %> ]
+    <br>
 </div>
+</body>
 </html>

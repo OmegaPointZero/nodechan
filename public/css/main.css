@@ -147,4 +147,21 @@ a.quotePostNumber:hover{
     color: #FF0000 !important;
 }
 
+.metadata{
+    text-align: right;
+    padding: 3px;
+}
 
+.threadNav{
+    display: block;
+    float: left;
+    padding: 3px;
+}
+
+a.threadNavItem{
+    color: blue;
+}
+
+.boardNav#bottom{
+    margin-bottom: 5px;
+}

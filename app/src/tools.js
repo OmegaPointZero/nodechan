@@ -1,7 +1,41 @@
-var md5 = require('md5')
+const md5 = require('md5')
+const postManager = require('./post')
 
-exports.makeID = (function makeOP(OP,IP){
+// replies / images / posters / page
+exports.threadMetaData = (function threadMetaData(posts){
+    var replies = posts.length;
+    var images = exports.countImages(posts);
+    var posters = exports.getUnique(posts,'IP');
+    var catalog = postManager.getCatalogData(posts[0])
+    console.log('catalog: ')
+    console.log(catalog)
+//    var page = catalog.map(function(post){ return post['OP']}).indexOf(posts[0].OP)
     
+    var page = 1
+    var obj = {
+        replies: replies,
+        images: images,
+        posters: posters.length,
+        page: page,
+    }
+    
+    return obj;
+})
+
+//Get number of images for thread
+exports.countImages = (function countImages(posts){
+    var images = 0;
+    for(var i=0;i<posts.length;i++){
+        var thisPost = posts[i]
+        if(thisPost.fileSize != undefined){
+            images++
+        }
+    }
+    return images
+})
+
+//Make userID based on md5 of OP number and IP Address
+exports.makeID = (function makeOP(OP,IP){
     var str = String(OP+IP)
     var crypt = md5(str)
     var len = crypt.length;
@@ -55,7 +89,7 @@ exports.sortByPost = (function sortByPost(array,key){
 })
 
 //Get every unique OP for all posts passed to it
-exports.getUnique = (function getOPs(array,item){
+exports.getUnique = (function getUnique(array,item){
     allitems = array.map(a=>a[item])
     uniqueItems = allitems.filter(function(post,position){
         return allitems.indexOf(post) == position
