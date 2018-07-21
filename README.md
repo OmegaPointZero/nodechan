@@ -27,6 +27,7 @@ You will also need to make 2 folders in the `public/` folder, `public/temporary`
 + 404 if attempting to access a valid board with invalid page
 + A way to serve a blank board, provided it exists in the DB, and 404 otherwise
 + Quoting a post
++ Thread metadata: posts, unique posters, replies, image replies 
 
 ## To Implement:
 1. User-facing front end:
@@ -35,12 +36,11 @@ You will also need to make 2 folders in the `public/` folder, `public/temporary`
     + Open images in new tab/open in page/fit to page
     + WebM's play with/without sound
 + Flags based on Location
-+ Reporting a post
++ Reporting a post !NEEDS ADMINS/MODS
 + Deleting a post/thread (modules to handle this are in place)
 + Home Page
 + Rotating Banners
 + Custom 404 for invalid paths
-+ Thread metadata: posts, unique posters, replies, image replies 
 + Update thread via ajax without updating the page
 
 2. Back-End server-side:
@@ -54,4 +54,9 @@ You will also need to make 2 folders in the `public/` folder, `public/temporary`
             + Gets notification for reported thread
         + Banners
 + Custom 404 for invalid paths
-+ Modifying/adding paths for other front-end stuff not yet done
++ API endpoints to:
+    + Update Thread replies
+    + Get thread's page number
+    + Update thread metadata
+    + Get board data
+    + Get thread data
