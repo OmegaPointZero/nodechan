@@ -26,17 +26,18 @@ You will also need to make 2 folders in the `public/` folder, `public/temporary`
 + 404 if attempting to access board that doesn't exist
 + 404 if attempting to access a valid board with invalid page
 + A way to serve a blank board, provided it exists in the DB, and 404 otherwise
++ Quoting a post
 
 ## To Implement:
 1. User-facing front end:
++ Cookie to keep track of options
+    + Color Scheme
+    + Open images in new tab/open in page/fit to page
+    + WebM's play with/without sound
 + Flags based on Location
-+ Quoting a post
 + Reporting a post
 + Deleting a post/thread (modules to handle this are in place)
 + Home Page
-+ Settings for the user to customize experience
-    + Multiple options for colors
-    + Options to expand images instead of opening in new
 + Rotating Banners
 + Custom 404 for invalid paths
 + Thread metadata: posts, unique posters, replies, image replies 
@@ -49,5 +50,8 @@ You will also need to make 2 folders in the `public/` folder, `public/temporary`
         + IP Bans
         + Sticky
         + Lock threads        
+        + Reported Threads
+            + Gets notification for reported thread
+        + Banners
 + Custom 404 for invalid paths
 + Modifying/adding paths for other front-end stuff not yet done

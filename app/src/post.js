@@ -1,6 +1,7 @@
 const Post = require('../models/posts');
 const Board = require('../models/boards');
-const toolbox = require('./tools')
+const toolbox = require('./tools');
+const escape = require('escape-html');
 
 //Get all posts for a single thread
 exports.getThread = (function getPosts(board,OP,res){
@@ -23,10 +24,13 @@ exports.getThread = (function getPosts(board,OP,res){
     })
 })
 
+
+//Get catalog of a board
 exports.getCatalog = (function getCatalog(board,page){
 
 })
 
+//get a specific page of threads on a board
 exports.getPage = (function getPage(board,page,req,res){
     Board.find({},function(err,boards){
         var thisBoard = boards.filter(b=>b.boardCode==board)
@@ -105,10 +109,10 @@ exports.writePost = (function writePost(params,body,IP,imgInfo,req,res){
     
     var post = new Post();     
     post.IP = IP;
-    post.name = body.name;
-    post.subject = body.subject;
+    post.name = escape(body.name);
+    post.subject = escape(body.subject);
     post.board = params.board;
-    post.body = body.text;
+    post.body = escape(body.text);
     if(imgInfo.time){
         var time = imgInfo.time;
     } else {

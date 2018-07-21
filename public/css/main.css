@@ -135,8 +135,16 @@ a.highlightThisPost{
     text-decoration: none;
     color: maroon;
 }
+a.highlightThisPost:hover{
+    color: #FF0000 !important;
+}
 
 a.quotePostNumber{
     text-decoration: none;
     color: maroon;
 }
+a.quotePostNumber:hover{
+    color: #FF0000 !important;
+}
+
+

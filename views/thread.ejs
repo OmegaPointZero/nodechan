@@ -14,15 +14,20 @@ $(document).ready(function(){
         var id = $(this).attr('class').split(' ')[1]
         $('div.reply').removeClass('highlight')
         $('.'+id).parent().parent().parent().addClass('highlight')
+        $('.OP').removeClass('highlight')
         
+    });
+
+    $('a.postLink').click(function(){
+        var post = $(this).attr('href').slice(1)
+        $('div.reply').removeClass('highlight')
+        $('div.reply#'+post).addClass('highlight')
+    });
+
+    $('a.quotePostNumber').click(function(){
+        var post = $(this).attr('id')
+        $('textarea.text').val($('textarea.text').val()+'>>'+post+'\r\n');       
     })
-
-    //Analyze post messages for >> regexp
-    var text = $('span.postContents').text()
-
-    var regexp = new RegExp(/^>>[0-9]/,'ig')
-    var result = text.replace(regexp, '<a href="#$&">$&</a>')
-    alert(result)
 
 })
 </script>
@@ -50,7 +55,7 @@ $(document).ready(function(){
                     </tr>
                     <tr>
                         <td>Comment</td>
-                        <td><textarea name="text" cols="48" rows="4" warp="soft"></textarea></td>
+                        <td><textarea name="text" class="text" cols="48" rows="4" warp="soft"></textarea></td>
                     </tr>
                     <tr>
                         <td>File</td>
@@ -114,8 +119,15 @@ $(document).ready(function(){
                 <%var body = post.body%>
                 <%var mySplit = body.split('\r\n')%>
                 <% mySplit.forEach(function(lines){%>
-                    <span class='postContents' <% if(/^>/.test(lines)){%>style="color:#789922"<%}%>>
-                    <%=lines%>
+                    <span class='postContents' <% if(/^&gt;/.test(lines)){%>style="color:#789922"<%}%>>
+                    <% var lArr = lines.split(' ')%>
+                       <% for(var i=0;i<lArr.length;i++) { %>
+                            <% var word = lArr[i]%>
+                            <% if(/^&gt;&gt;\d+$/.test(word)){%> 
+                                <% lArr[i] = '<a href="#'+word.slice(8)+'" class="postLink">'+word+'</a>' %>
+                            <% } %>
+                        <% } %>
+                    <%-lArr.join(' ')%>
                     </span><br/>
                 <%})%>
                 
