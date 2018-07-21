@@ -6,17 +6,11 @@ exports.threadMetaData = (function threadMetaData(posts){
     var replies = posts.length;
     var images = exports.countImages(posts);
     var posters = exports.getUnique(posts,'IP');
-    var catalog = postManager.getCatalogData(posts[0])
-    console.log('catalog: ')
-    console.log(catalog)
-//    var page = catalog.map(function(post){ return post['OP']}).indexOf(posts[0].OP)
     
-    var page = 1
     var obj = {
         replies: replies,
         images: images,
         posters: posters.length,
-        page: page,
     }
     
     return obj;

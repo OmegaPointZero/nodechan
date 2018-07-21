@@ -54,22 +54,6 @@ exports.getPage = (function getPage(board,page,req,res){
     })    
 });
 
-// find what page number a thread is at
-exports.getCatalogData = (function getPageNumber(thread){
-    var OP = thread.OP
-    var board = thread.board
-    var ready = false
-    var sorted = []
-    Post.find({board:board},function(err,posts){
-        var OPs = toolbox.getUnique(posts,'OP')
-        var sortedOPs = toolbox.getThreadBumps(OPs,posts)
-        sorted = sortedOPs
-        ready = true
-    })
-
-    
-    
-})
 
 //Deletes post with specified postID for one post, or OP for a thread
 exports.deletePost = (function deletePost(obj){
