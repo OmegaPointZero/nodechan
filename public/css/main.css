@@ -180,4 +180,14 @@ a.boardCodes{
     color: navy!important;
 }
 
+hr{
+    border-top: 1px solid #d9bfb7;
+    clear: both;
+}
+
+div.footer{
+    font-size: 10px;
+    text-align: center;
+    padding-bottom: 3px;
+}
 

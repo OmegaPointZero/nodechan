@@ -28,6 +28,7 @@ You will also need to make 2 folders in the `public/` folder, `public/temporary`
 + A way to serve a blank board, provided it exists in the DB, and 404 otherwise
 + Quoting a post
 + Thread metadata: posts, unique posters, replies, image replies 
++ Frontend architecture for deleting threads, updating, etc
 
 ## To Implement:
 1. User-facing front end:

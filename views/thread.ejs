@@ -31,7 +31,10 @@ $(document).ready(function(){
 
     $('input#delete').click(function(){
         var id =$('input.postDeleteBox:checkbox:checked').attr('id')
-        $.post('/<%=thisBoard.boardCode%>/delete',{id}, function(data,status){
+        var fo = $('input.deleteImageOnly:checkbox:checked').attr('value')
+        fo == undefined ? fo = "off" : ""
+        var board = '<%=thisBoard.boardCode%>'
+        $.post('/<%=thisBoard.boardCode%>/delete',{board,id,fo}, function(data,status){
             console.log("Data: "+data)
             console.log("Status: "+status)
         })
@@ -93,8 +96,12 @@ $(document).ready(function(){
                 <span title="United States" class="flag flag-us"></span>
             </span> 
 <% var ptime = new Date(post.time);%>
-<% var time = String(ptime).split(" ").slice(0,5).join(" ")%>
-            <span class="postTime"><%=time%></span>
+<% var time = String(ptime).split(" ")%>
+<% var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'] %>
+<% var month = months.indexOf(time[1])+1 %>
+<% var day = time[2]%>
+<% var year = time[3].slice(2)%>
+            <span class="postTime"><%if(month<10){%><%=String("0"+month)%><%} else { %><%=month%><% } %>/<%=day%>/<%=year%> (<%=time[0]%>) <%=time[4]%></span>
             <span class="postNumber">
                 <a href="#<%=post.postID%>" class="highlightThisPost" id="<%=post.postID%>">No.</a> <a href="#" class="quotePostNumber" id="<%=post.postID%>"><%=post.postID%></a></span>
             <!-- <a href="#" class="postMenuBtn" title="Post menu" data-cmd="post-menu">▶</a> -->
@@ -149,7 +156,7 @@ $(document).ready(function(){
 </div>
 
 <hr>
-    <div class="overboard"> <div class="threadNav">[<a class="threadNavItem" href="/boards/<%=thisBoard.boardCode%>">Return</a>] [<a class="threadNavItem" href="/boards/<%=thisBoard.boardCode%>/catalog">Catalog</a>] [<a class="threadNavItem" href="#top">Top</a>] [<a class="threadNavItem" href="#">Update</a>] </div><div class="metadata"> <span title="replies"><%=metadata.replies%></span> / <span title="images"><%=metadata.images%></span> / <span title="posters"><%=metadata.posters%></span> / </div></div>
+    <div class="overboard"> <div class="threadNav">[<a class="threadNavItem" href="/boards/<%=thisBoard.boardCode%>">Return</a>] [<a class="threadNavItem" href="/boards/<%=thisBoard.boardCode%>/catalog">Catalog</a>] [<a class="threadNavItem" href="#top">Top</a>] [<a class="threadNavItem" href="#">Update</a>] </div><div class="metadata"> <span title="Replies"><%=metadata.replies%></span> / <span title="Images"><%=metadata.images%></span> / <span title="Posters"><%=metadata.posters%></span> / </div></div>
 <hr>
 <hr>
 
@@ -160,7 +167,6 @@ $(document).ready(function(){
         <input type="submit" id="delete" value="Delete">
     </span>
 </div>
-<br>
 <div class="boardNav" id="bottom"> 
    [ <%allBoards.forEach(function(board){%>
         
@@ -168,6 +174,9 @@ $(document).ready(function(){
         
     <% }) %> ]
     <br>
+</div>
+<div class="footer">
+All works posted on here are artistic works of fiction and falsehood. Only a fool would take anything posted here as fact.
 </div>
 </body>
 </html>
