@@ -29,6 +29,15 @@ $(document).ready(function(){
         $('textarea.text').val($('textarea.text').val()+'>>'+post+'\r\n');       
     })
 
+    $('input#delete').click(function(){
+        var id =$('input.postDeleteBox:checkbox:checked').attr('id')
+        $.post('/<%=thisBoard.boardCode%>/delete',{id}, function(data,status){
+            console.log("Data: "+data)
+            console.log("Status: "+status)
+        })
+        // Find said post, and if IPs match, unlink files & delete
+    });
+
 })
 </script>
 <body class="main">
@@ -36,7 +45,7 @@ $(document).ready(function(){
 <div class="boardNav"> 
    [ <%allBoards.forEach(function(board){%>
         
-       / <a href="/boards/<%=board.boardCode%>" title="<%=board.boardCode%> - <%=board.boardTitle%>"><%=board.boardCode%></a> 
+       / <a href="/boards/<%=board.boardCode%>" title="<%=board.boardCode%> - <%=board.boardTitle%>"  class="boardCodes"><%=board.boardCode%></a> 
         
     <% }) %> ]
 </div>
@@ -74,7 +83,7 @@ $(document).ready(function(){
     <%if(post.postID != post.OP){%><div class="memeArrows">>></div><%}%>
     <div id="<%=post.postID%>" class=<%if(post.postID == post.OP){%>"post OP"<%} else {%>"post reply"<%}%> id="<%=post.postID%>">
         <div class="postInfo">
-            <input type="checkbox" name="" value="delete"> 
+            <input type="checkbox" name="" id="delete_<%=post.postID%>" class="postDeleteBox" value="delete"> 
             <span class="subject"><%=post.subject%></span> 
             <span class="nameBlock">
                 <span class="name"><%if(post.name.length>0){%><%=post.name%><%}else{%>Anonymous<%}%></span> 
@@ -142,11 +151,20 @@ $(document).ready(function(){
 <hr>
     <div class="overboard"> <div class="threadNav">[<a class="threadNavItem" href="/boards/<%=thisBoard.boardCode%>">Return</a>] [<a class="threadNavItem" href="/boards/<%=thisBoard.boardCode%>/catalog">Catalog</a>] [<a class="threadNavItem" href="#top">Top</a>] [<a class="threadNavItem" href="#">Update</a>] </div><div class="metadata"> <span title="replies"><%=metadata.replies%></span> / <span title="images"><%=metadata.images%></span> / <span title="posters"><%=metadata.posters%></span> / </div></div>
 <hr>
+<hr>
 
+<div class="bottomCtrl">
+    <span class="deleteForm">
+        <input type="hidden" name="mode" value="userDelete">
+            Delete Post: [<input type="checkbox" name="deleteImageOnly" class="deleteImageOnly" value="on"> File Only]
+        <input type="submit" id="delete" value="Delete">
+    </span>
+</div>
+<br>
 <div class="boardNav" id="bottom"> 
    [ <%allBoards.forEach(function(board){%>
         
-       / <a href="/boards/<%=board.boardCode%>" title="<%=board.boardCode%> - <%=board.boardTitle%>"><%=board.boardCode%></a> 
+       / <a href="/boards/<%=board.boardCode%>" title="<%=board.boardCode%> - <%=board.boardTitle%>" class="boardCodes"><%=board.boardCode%></a> 
         
     <% }) %> ]
     <br>

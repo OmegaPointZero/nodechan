@@ -165,3 +165,19 @@ a.threadNavItem{
 .boardNav#bottom{
     margin-bottom: 5px;
 }
+
+a.boardCodes{
+    color: maroon;
+    text-decoration: none;
+}
+
+.bottomCtrl{
+    text-align: right;
+    padding: 3px;
+}
+
+.postLink{
+    color: navy!important;
+}
+
+

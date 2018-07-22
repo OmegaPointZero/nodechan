@@ -76,4 +76,9 @@ module.exports = (function(app){
         }
     });
 
+    app.post('/:board/delete', (req,res)=>{
+        console.log(req.body);
+        res.send('Got em')
+    });
+
 }); 
