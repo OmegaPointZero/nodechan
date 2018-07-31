@@ -37,7 +37,7 @@ module.exports = (function(app){
         var page;
         req.params.page ? page = req.params.page : page = 1; 
         if(page>10){
-            res.send(404)
+            res.redirect('/404')
             return
         }
         var board = req.params.board;
@@ -76,9 +76,34 @@ module.exports = (function(app){
         }
     });
 
+    // Delete a thread or post from a board
     app.post('/:board/delete', (req,res)=>{
-        console.log(req.body);
-        res.send('Got em')
+        var board = req.body.board 
+        var id = Number(req.body.id.slice(7))
+        var OP = req.body.OP 
+        var fo = req.body.fo; // fileOnly delete
+        var IP = req.connection.remoteAddress;
+        console.log(req.body)
+        if(fo=='true'){
+            console.log('fo==true')
+            Post.find({},function(post){
+                console.log(post)
+                var file = post[0].fileName
+                imageManager.deleteImage(file)
+            })
+        }else{
+            console.log('fo==false')
+            console.log(fo)
+            var myObj = {
+                postID: id,
+                OP: OP,
+                IP: IP,
+                board: board
+            }
+            postManager.deletePost(myObj)
+        }
+        // postManager.deletePost(board,id)
+
     });
 
 }); 

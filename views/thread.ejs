@@ -32,13 +32,14 @@ $(document).ready(function(){
     $('input#delete').click(function(){
         var id =$('input.postDeleteBox:checkbox:checked').attr('id')
         var fo = $('input.deleteImageOnly:checkbox:checked').attr('value')
-        fo == undefined ? fo = "off" : ""
-        var board = '<%=thisBoard.boardCode%>'
-        $.post('/<%=thisBoard.boardCode%>/delete',{board,id,fo}, function(data,status){
-            console.log("Data: "+data)
-            console.log("Status: "+status)
+        fo == undefined ? fo = false : "";
+        var OP = window.location.pathname;
+        OP = OP.split('/thread/')[1];
+        var board = '<%=thisBoard.boardCode%>';
+        $.post('/<%=thisBoard.boardCode%>/delete',{board,id,fo,OP}, function(data,status){
+            console.log("Status: "+status);
+            console.log("Data: "+data);
         })
-        // Find said post, and if IPs match, unlink files & delete
     });
 
 })
@@ -163,7 +164,7 @@ $(document).ready(function(){
 <div class="bottomCtrl">
     <span class="deleteForm">
         <input type="hidden" name="mode" value="userDelete">
-            Delete Post: [<input type="checkbox" name="deleteImageOnly" class="deleteImageOnly" value="on"> File Only]
+            Delete Post: [<input type="checkbox" name="deleteImageOnly" class="deleteImageOnly" value=true> File Only]
         <input type="submit" id="delete" value="Delete">
     </span>
 </div>

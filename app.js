@@ -27,6 +27,10 @@ app.engine('html', require('ejs').renderFile);
 app.set('views', 'views');
 app.set('view engine', 'html');
 
+app.use(function(req,res,next){
+    res.status(404).render('404.ejs')
+})
+
 var port = 8080;
 app.listen(port,function(){
     console.log('Listening on ' + port)

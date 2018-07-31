@@ -43,3 +43,13 @@ exports.verifyExtension = (function verifyExtension(ext){
         return false
     }
 })
+
+exports.deleteImage = (function deleteImage(post){
+    console.log(`deleteImage(){\npost: \n${post}}`)
+    fs.unlink('public/images/'+post);
+    var preview = 's'+post
+    preview = preview.split('.')[0]
+    preview = preview + '.png'
+    console.log(`preview: ${preview}`)
+    fs.unlink('public/images/'+preview);
+})

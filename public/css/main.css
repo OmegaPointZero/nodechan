@@ -191,3 +191,6 @@ div.footer{
     padding-bottom: 3px;
 }
 
+.error-message{
+    text-align: center;
+}

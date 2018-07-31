@@ -29,6 +29,7 @@ You will also need to make 2 folders in the `public/` folder, `public/temporary`
 + Quoting a post
 + Thread metadata: posts, unique posters, replies, image replies 
 + Frontend architecture for deleting threads, updating, etc
++ Custom 404 for invalid paths
 
 ## To Implement:
 1. User-facing front end:
@@ -41,7 +42,7 @@ You will also need to make 2 folders in the `public/` folder, `public/temporary`
 + Deleting a post/thread (modules to handle this are in place)
 + Home Page
 + Rotating Banners
-+ Custom 404 for invalid paths
+
 + Update thread via ajax without updating the page
 
 2. Back-End server-side:
@@ -54,7 +55,6 @@ You will also need to make 2 folders in the `public/` folder, `public/temporary`
         + Reported Threads
             + Gets notification for reported thread
         + Banners
-+ Custom 404 for invalid paths
 + API endpoints to:
     + Update Thread replies
     + Get thread's page number

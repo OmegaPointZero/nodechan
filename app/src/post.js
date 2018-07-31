@@ -1,6 +1,7 @@
 const Post = require('../models/posts');
 const Board = require('../models/boards');
 const toolbox = require('./tools');
+const imageManager = require('./images');
 const escape = require('escape-html');
 
 //Get all posts for a single thread
@@ -11,7 +12,7 @@ exports.getThread = (function getPosts(board,OP,res){
         Post.find({board:board,OP:OP}, function(error,posts){
             if(error){console.log(error)};
             if(posts.length === 0){
-                res.send(404)
+                res.redirect('/404')
             } else {
                 var sorted = toolbox.sortByPost(posts)
                 var metadata = toolbox.threadMetaData(posts)
@@ -37,7 +38,7 @@ exports.getPage = (function getPage(board,page,req,res){
     Board.find({},function(err,boards){
         var thisBoard = boards.filter(b=>b.boardCode==board)
         if(thisBoard==""){
-            res.status(404).send(404)
+            res.redirect('/404')
             return
         }
         Post.find({board:board},function(err,posts){
@@ -49,29 +50,40 @@ exports.getPage = (function getPage(board,page,req,res){
                 allBoards: boards,
                 thisBoard: thisBoard,
                 OPs: pageArr
-            })
+            });
         });
     })    
 });
 
 
 //Deletes post with specified postID for one post, or OP for a thread
+
+/*Currently this needs to be passed an object
+with either postID or OP. Maybe this needs a refactor*/
 exports.deletePost = (function deletePost(obj){
+    console.log('deleting post')
     var board = obj.board;
     var postID = obj.postID;
+    var IP = obj.IP;
     var OP = obj.OP;
-    if(postID && !OP){
+    console.log
+    if(postID != OP){
         Post.findOneAndRemove({board:board,postID:postID},function(err,post){
             if (err) throw err
             if(post){
+                imageManager.deleteImage(post.fileName)
                 console.log('Deleted ' + post + ' posts')
             }
         })
-    } else if(!postID && OP){
-        Post.remove({board:board,OP:OP},function(err,post){
+    } else if(postID == OP){
+        Post.remove({board:board,OP:OP},function(err,posts){
             if (err) throw err
-            if(post){
-                console.log('Deleted a thread: ' + post + ' posts')
+            if(posts){
+                for(var n=0;n<posts.length;n++){
+                    var image = posts[n].fileName
+                    imageManager.deleteImage(fileName)
+                }
+                console.log('Deleted a thread: ' + posts + ' posts')
             }
         })
     }
@@ -82,15 +94,18 @@ exports.bumpAndGrind = (function bumpAndGrind(board){
     Post.find({board:board},function(err,posts){
         var OPs = toolbox.getUnique(posts,'OP')
         var sortedOPs = toolbox.getThreadBumps(OPs,posts)
-        var len = sortedOPs.length;
-        if(len>100){
-            var obj = {
-                board: board,
-                postID: null,
-                OP: 0
+        if(sortedOPs == undefined){
+            return
+        }else{
+            if(sortedOPs.length>100){
+                var obj = {
+                    board: board,
+                    postID: null,
+                    OP: 0
+                }
+                obj.OP = sortedOPs[sortedOPs.length-1].OP
+                exports.deletePost(obj)
             }
-            obj.OP = sortedOPs[sortedOPs.length-1].OP
-            exports.deletePost(obj)
         }
     })
 })
@@ -132,12 +147,22 @@ exports.writePost = (function writePost(params,body,IP,imgInfo,req,res){
         .sort({postID: 'descending'})
         .exec(function(err,posts){
             var OP
-            if(params.id){OP = params.id;}else{OP= posts.postID+1}
+            if(params.id){
+                OP = params.id;
+            }else if(posts){
+                OP = posts.postID+1
+            }else{
+                OP = 1
+            }
             post.OP = OP
             var userID = toolbox.makeID(OP,IP)
             post.userID = userID
             post.userIDColor = toolbox.makeRGB(OP,IP)
-            post.postID = posts.postID + 1;
+            if(posts){
+                post.postID = posts.postID + 1;
+            } else {
+                post.postID = OP
+            }
             post.save(function(err){
                 if(err) throw err;
                 res.redirect('/'+req.params.board+'/thread/'+OP)
