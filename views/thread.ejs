@@ -49,7 +49,7 @@ $(document).ready(function(){
 <div class="boardNav"> 
    [ <%allBoards.forEach(function(board){%>
         
-       / <a href="/boards/<%=board.boardCode%>" title="<%=board.boardCode%> - <%=board.boardTitle%>"  class="boardCodes"><%=board.boardCode%></a> 
+       / <a href="/<%=board.boardCode%>" title="<%=board.boardCode%> - <%=board.boardTitle%>"  class="boardCodes"><%=board.boardCode%></a> 
         
     <% }) %> ]
 </div>

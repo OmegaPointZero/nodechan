@@ -30,6 +30,7 @@ You will also need to make 2 folders in the `public/` folder, `public/temporary`
 + Thread metadata: posts, unique posters, replies, image replies 
 + Frontend architecture for deleting threads, updating, etc
 + Custom 404 for invalid paths
++ Deleting a post/thread (modules to handle this are in place)
 
 ## To Implement:
 1. User-facing front end:
@@ -39,7 +40,6 @@ You will also need to make 2 folders in the `public/` folder, `public/temporary`
     + WebM's play with/without sound
 + Flags based on Location
 + Reporting a post !NEEDS ADMINS/MODS
-+ Deleting a post/thread (modules to handle this are in place)
 + Home Page
 + Rotating Banners
 

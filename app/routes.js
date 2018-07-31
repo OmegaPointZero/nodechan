@@ -30,12 +30,10 @@ module.exports = (function(app){
     })
 
     //Get board page
-    /* TO-DO:
-        Return 404 if board doesn't exist or page > 10
-    */
-    app.get('/boards/:board/:page*?', (req,res) => {
+    app.get('/:board/:page*?', (req,res,next) => {
         var page;
         req.params.page ? page = req.params.page : page = 1; 
+        if(page=='thread'){next();return}
         if(page>10){
             res.redirect('/404')
             return
@@ -45,7 +43,7 @@ module.exports = (function(app){
 });
 
     //Post New thread on :board
-    app.post('/boards/:board', upload.any(), (req,res) => {
+    app.post('/:board', upload.any(), (req,res) => {
         if(req.files.length===0){
             res.send('Error: You forgot to upload an image')
             return;
@@ -86,10 +84,18 @@ module.exports = (function(app){
         console.log(req.body)
         if(fo=='true'){
             console.log('fo==true')
-            Post.find({},function(post){
+            Post.find({board:board,postID:id},function(err,post){
                 console.log(post)
                 var file = post[0].fileName
                 imageManager.deleteImage(file)
+                post.fileName = 'deleted'
+                post.fileOriginalName = 'deleted'
+                post.fileSize = 0
+                post.fileDimensions = '0 x 0'
+                post.save(function(err){
+                    if(err) console.log(err)
+                })
+                
             })
         }else{
             console.log('fo==false')
@@ -102,8 +108,5 @@ module.exports = (function(app){
             }
             postManager.deletePost(myObj)
         }
-        // postManager.deletePost(board,id)
-
     });
-
 }); 
