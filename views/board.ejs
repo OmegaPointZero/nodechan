@@ -58,12 +58,84 @@
             </tbody>
         </table>
     </form>
+    <hr>
 
 <%if(OPs.length>0){%>
     <%OPs.forEach(function(OP){%>
-    <div class="posts-container">
-    <%=JSON.stringify(OP.preview)%>
-    </div>   <hr>   
+    <div class="thread-preview-container">
+        <% var preview = OP.preview %>
+        <% preview.forEach(function(post){ %>
+        <div class="postContainer" id="p<%=post.postID%>">
+            <%if(post.postID != post.OP){%>
+            <div class="memeArrows">>></div>
+            <%}%>
+            <div id="<%=post.postID%>" class=<%if(post.postID == post.OP){%>"post OP"<%} else {%>"post reply"<%}%> id="<%=post.postID%>">
+                <div class="postInfo">
+                    <input type="checkbox" name="" id="delete_<%=post.postID%>" class="postDeleteBox" value="delete"> 
+                    <span class="subject"><%=post.subject%></span> 
+                    <span class="nameBlock">
+                    <span class="name"><%if(post.name.length>0){%><%=post.name%><%}else{%>Anonymous<%}%></span> 
+                    <span class="posteruid id_<%=post.userID%>"> 
+                    (ID: <span class="hand" title="Highlight posts by this ID" style="background-color: <%=post.userIDColor%>;"><a class="hand"><%=post.userID%></a></span>)
+                    </span> 
+                    <span title="United States" class="flag flag-us"></span>
+                    </span> 
+                    <% var ptime = new Date(post.time);%>
+                    <% var time = String(ptime).split(" ")%>
+                    <% var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'] %>
+                    <% var month = months.indexOf(time[1])+1 %>
+                    <% var day = time[2]%>
+                    <% var year = time[3].slice(2)%>
+                    <span class="postTime"><%if(month<10){%><%=String("0"+month)%><%} else { %><%=month%><% } %>/<%=day%>/<%=year%> (<%=time[0]%>) <%=time[4]%></span>
+                    <span class="postNumber">
+                    <a href="#<%=post.postID%>" class="highlightThisPost" id="<%=post.postID%>">No.</a> <a href="#" class="quotePostNumber" id="<%=post.postID%>"><%=post.postID%></a></span>
+                     <%if(post.postID==post.OP){%>[<a href="/<%=thisBoard[0].boardCode%>/thread/<%=post.OP%>" class="reply-link">Reply</a>]<%}%>
+                    <!-- <a href="#" class="postMenuBtn" title="Post menu" data-cmd="post-menu">▶</a> -->
+                </div>
+            <%if(post.fileSize){%>
+            <div class="file">
+                <div class="FileInfo">
+                    File: <a href="/images/<%=post.fileName%>" target="_blank"><%=post.fileOriginalName%></a>
+                    <% if(post.fileSize < 1000 ){ %>
+                    (<%=post.fileSize%> Bytes, 
+                    <%} else { %>
+                    <%var filesize = Math.floor(post.fileSize/1000)%>
+                    <%if(filesize < 1000){ %>
+                    (<%=filesize%> KB, 
+                    <%} else if(filesize > 1000) {%>
+                    <%newsize = Math.floor(filesize/1000) + "." + filesize%100 %>(<%=newsize%> MB,
+                    <% } %>
+                    <% } %> 
+                    <%=post.fileDimensions%>)
+                </div>
+                <div class="thumbnail">
+                    <a href="/images/<%=post.fileName%>" target="_blank">
+                    <img src="/images/s<%=post.time%>.png" alt="<%=post.fileSize%> Bytes">
+                    </a>
+                </div>
+            </div>
+                <%}%>
+                <div class="postMessage">
+                    <%var body = post.body%>
+                    <%var mySplit = body.split('\r\n')%>
+                    <% mySplit.forEach(function(lines){%>
+                    <span class='postContents' <% if(/^&gt;/.test(lines)){%>style="color:#789922"<%}%>>
+                    <% var lArr = lines.split(' ')%>
+                    <% for(var i=0;i<lArr.length;i++) { %>
+                    <% var word = lArr[i]%>
+                    <% if(/^&gt;&gt;\d+$/.test(word)){%> 
+                    <% lArr[i] = '<a href="#'+word.slice(8)+'" class="postLink">'+word+'</a>' %>
+                    <% } %>
+                    <% } %>
+                    <%-lArr.join(' ')%>
+                    </span><br/>
+                    <%})%>
+                </div>
+            </div>
+        </div>
+        <% })%>
+    </div>
+    <hr>
     <%})%>
 <%} else {%>
     <div class="blankBoard">This board is valid but there's nothing here! Make the first post!</div>

@@ -165,7 +165,7 @@ exports.writePost = (function writePost(params,body,IP,imgInfo,req,res){
             }
             post.save(function(err){
                 if(err) throw err;
-                res.redirect('/'+req.params.board+'/thread/'+OP)
+                res.redirect('/'+req.params.board+'/thread/'+OP+'#'+post.postID)
             });
         })
 })

@@ -162,6 +162,10 @@ a.threadNavItem{
     color: blue;
 }
 
+a.reply-link{
+    color: blue;
+}
+
 .boardNav#bottom{
     margin-bottom: 5px;
 }
@@ -181,8 +185,11 @@ a.boardCodes{
 }
 
 hr{
+    border: 0;
+    height: 0;
     border-top: 1px solid #d9bfb7;
     clear: both;
+
 }
 
 div.footer{

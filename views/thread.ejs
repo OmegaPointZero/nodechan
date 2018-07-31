@@ -80,8 +80,13 @@ $(document).ready(function(){
         <hr>
     <div class="overboard" id="top"> <div class="threadNav">[<a class="threadNavItem" href="/boards/<%=thisBoard.boardCode%>">Return</a>] [<a class="threadNavItem" href="/boards/<%=thisBoard.boardCode%>/catalog">Catalog</a>] [<a class="threadNavItem" href="#bottom">Bottom</a>] [<a class="threadNavItem" href="#">Update</a>] </div><div class="metadata"> <span title="replies"><%=metadata.replies%></span> / <span title="images"><%=metadata.images%></span> / <span title="posters"><%=metadata.posters%></span>  </div></div>
         <hr>
-<div class="thread" id="t<%=posts[0].OP%>">  
-<%posts.forEach(function(post){%>
+<div class="thread" id="t<%=posts[0].OP%>"> 
+
+<!-- sort posts again, then loop --> 
+<%for(var j=0;j<posts.length;j++){%>
+
+    <% var post = posts[j] %>
+
     <div class="postContainer" id="p<%=post.postID%>">
     
     <%if(post.postID != post.OP){%><div class="memeArrows">>></div><%}%>
@@ -96,12 +101,12 @@ $(document).ready(function(){
                 </span> 
                 <span title="United States" class="flag flag-us"></span>
             </span> 
-<% var ptime = new Date(post.time);%>
-<% var time = String(ptime).split(" ")%>
-<% var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'] %>
-<% var month = months.indexOf(time[1])+1 %>
-<% var day = time[2]%>
-<% var year = time[3].slice(2)%>
+            <% var ptime = new Date(post.time);%>
+            <% var time = String(ptime).split(" ")%>
+            <% var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'] %>
+            <% var month = months.indexOf(time[1])+1 %>
+            <% var day = time[2]%>
+            <% var year = time[3].slice(2)%>
             <span class="postTime"><%if(month<10){%><%=String("0"+month)%><%} else { %><%=month%><% } %>/<%=day%>/<%=year%> (<%=time[0]%>) <%=time[4]%></span>
             <span class="postNumber">
                 <a href="#<%=post.postID%>" class="highlightThisPost" id="<%=post.postID%>">No.</a> <a href="#" class="quotePostNumber" id="<%=post.postID%>"><%=post.postID%></a></span>
@@ -130,9 +135,6 @@ $(document).ready(function(){
                 </a>
             </div>
             <%}%>
-<!--        <div class="postMessage">
-            <p><%-post.body%></p>
-        </div>-->
             <div class="postMessage">
                 <%var body = post.body%>
                 <%var mySplit = body.split('\r\n')%>
@@ -148,12 +150,11 @@ $(document).ready(function(){
                     <%-lArr.join(' ')%>
                     </span><br/>
                 <%})%>
-                
             </div>
     </div>
     </div>
 </div>
-<%})%>
+<%}%>
 </div>
 
 <hr>

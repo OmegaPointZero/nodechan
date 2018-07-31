@@ -31,6 +31,7 @@ You will also need to make 2 folders in the `public/` folder, `public/temporary`
 + Frontend architecture for deleting threads, updating, etc
 + Custom 404 for invalid paths
 + Deleting a post/thread (modules to handle this are in place)
++ Thread pages render previews properly despite issue with posts rendering out of order
 
 ## To Implement:
 1. User-facing front end:
