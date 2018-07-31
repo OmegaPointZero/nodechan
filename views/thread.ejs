@@ -83,9 +83,11 @@ $(document).ready(function(){
 <div class="thread" id="t<%=posts[0].OP%>"> 
 
 <!-- sort posts again, then loop --> 
-<%for(var j=0;j<posts.length;j++){%>
+<% function sortByPostNo(array,key){ return array.sort(function(a,b){ var x = a[key]; var y = b[key]; return ((x<y) ? -1 : ((x>y) ? 1 : 0));})}; %>
+<% var resorted = sortByPostNo(posts,'postID') %>
+<%for(var j=0;j<resorted.length;j++){%>
 
-    <% var post = posts[j] %>
+    <% var post = resorted[j] %>
 
     <div class="postContainer" id="p<%=post.postID%>">
     

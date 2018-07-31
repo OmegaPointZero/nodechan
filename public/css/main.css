@@ -162,8 +162,39 @@ a.threadNavItem{
     color: blue;
 }
 
+a.threadNavItem:clicked{
+    color:blue;
+    text-decoration: none;
+}
+
 a.reply-link{
     color: blue;
+    text-decoration: none;
+}
+
+a.reply-link:clicked{
+    color: blue;
+    text-decoration: none;
+}
+
+a.boardLink{
+    color: blue;
+    text-decoration: none;
+}
+
+a.boardLink:clicked{
+    color: blue;
+    text-decoration: none;
+}
+
+a.pageLink{
+    color: blue;
+    text-decoration: none;
+}
+
+a.pageLink:clicked{
+    color: blue;
+    text-decoration: none;
 }
 
 .boardNav#bottom{
@@ -195,9 +226,30 @@ hr{
 div.footer{
     font-size: 10px;
     text-align: center;
-    padding-bottom: 3px;
+    padding-bottom: 13px;
 }
 
 .error-message{
     text-align: center;
+}
+
+.catalogLink{
+    border-left: 1px solid #d9bfb7;
+    padding-left: 12px;
+    margin-left: 7px;
+}
+
+.pageTab{
+    float: left;
+    background-color:#f0e0d6;
+    border-right: 1px solid #d9bfb7;
+    border-bottom: 1px solid #d9bfb7;
+    margin-left: 5px;
+    max-width: 25%;
+    padding: 2px;
+    color: #b86;
+}
+
+.pageTab button{
+    color: black;
 }

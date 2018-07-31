@@ -26,17 +26,17 @@
 <div class="boardNav"> 
    [ <%allBoards.forEach(function(board){%>
         
-       / <a href="/boards/<%=board.boardCode%>" title="<%=board.boardCode%> - <%=board.boardTitle%>"><%=board.boardCode%></a> 
+       / <a href="/boards/<%=board.boardCode%>" title="<%=board.boardCode%> - <%=board.boardTitle%>" class="boardLink"><%=board.boardCode%></a> 
         
     <% }) %> ]
 </div>
     <hr class="abovePostForm">
-    <h1 class="boardTitle">/<%=thisBoard[0].boardCode%>/ - <%=thisBoard[0].boardTitle%></h1>
+    <h1 class="boardTitle">/<%=thisBoard.boardCode%>/ - <%=thisBoard.boardTitle%></h1>
 
 </div>
 
     <hr class="abovePostForm">
-    <form enctype='multipart/form-data' action='/boards/<%=thisBoard[0].boardCode%>' method='POST'>
+    <form enctype='multipart/form-data' action='/boards/<%=thisBoard.boardCode%>' method='POST'>
         <table id="newThread" style="display:table;">
             <tbody>
             <tr data-type="Name">
@@ -89,7 +89,7 @@
                     <span class="postTime"><%if(month<10){%><%=String("0"+month)%><%} else { %><%=month%><% } %>/<%=day%>/<%=year%> (<%=time[0]%>) <%=time[4]%></span>
                     <span class="postNumber">
                     <a href="#<%=post.postID%>" class="highlightThisPost" id="<%=post.postID%>">No.</a> <a href="#" class="quotePostNumber" id="<%=post.postID%>"><%=post.postID%></a></span>
-                     <%if(post.postID==post.OP){%>[<a href="/<%=thisBoard[0].boardCode%>/thread/<%=post.OP%>" class="reply-link">Reply</a>]<%}%>
+                     <%if(post.postID==post.OP){%>[<a href="/<%=thisBoard.boardCode%>/thread/<%=post.OP%>" class="reply-link">Reply</a>]<%}%>
                     <!-- <a href="#" class="postMenuBtn" title="Post menu" data-cmd="post-menu">▶</a> -->
                 </div>
             <%if(post.fileSize){%>
@@ -142,11 +142,23 @@
 <% } %>
 
 </div>
-
+<div class="pageTab">
+<%for(var n=1;n<=10;n++){ %> 
+    [<a href="/<%=thisBoard.boardCode%>/<%=n%>" class="pageLink" <%if(n==page){%>style="font-weight:bold"<%}%> ><%=n%></a>] 
+<% } %>
+<button id="nextPage">Next</button><a href="/<%=thisBoard.boardCode%>/catalog" class="catalogLink pageLink" >Catalog</a>
+</div>
+<div class="bottomCtrl">
+    <span class="deleteForm">
+        <input type="hidden" name="mode" value="userDelete">
+            Delete Post: [<input type="checkbox" name="deleteImageOnly" class="deleteImageOnly" value=true> File Only]
+        <input type="submit" id="delete" value="Delete">
+    </span>
+</div>
 <div class="boardNav"> 
    [ <%allBoards.forEach(function(board){%>
         
-       / <a href="/boards/<%=board.boardCode%>" title="<%=board.boardCode%> - <%=board.boardTitle%>"><%=board.boardCode%></a> 
+       / <a href="/boards/<%=board.boardCode%>" title="<%=board.boardCode%> - <%=board.boardTitle%>" class="boardLink"><%=board.boardCode%></a> 
         
     <% }) %> ]
 </div>

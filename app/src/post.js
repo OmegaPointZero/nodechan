@@ -48,8 +48,9 @@ exports.getPage = (function getPage(board,page,req,res){
             if(sortedOPs!=undefined){var pageArr = toolbox.trimToPage(sortedOPs,page)} else {var pageArr=""}
             res.render('board.ejs', {
                 allBoards: boards,
-                thisBoard: thisBoard,
-                OPs: pageArr
+                thisBoard: thisBoard[0],
+                OPs: pageArr,
+                page: page
             });
         });
     })    
