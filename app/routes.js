@@ -26,7 +26,12 @@ module.exports = (function(app){
 
     //Get Home page
     app.get('/', (req,res)=>{
-        res.send('Home Page Coming soon!')
+
+        Board.find({},function(err,boards){
+            if(err){console.log(err)}
+            res.render('home.ejs',{boards:boards})
+        })
+
     })
 
     //Get board page

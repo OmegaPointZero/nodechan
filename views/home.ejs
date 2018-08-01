@@ -1,0 +1,42 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="/css/main.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> <!-- add JQuery -->
+<script src="/js/main.js"></script>
+
+    <title>
+        Welcome to Nodechan!
+    </title>
+</head>
+<body class="main">
+<div class="container" id="home">
+    <h1>Welcome to Nodechan!</h1>
+
+    <h3>What is NodeChan?</h3>
+
+    <span>Nodechan is a clone of 4chan built on NodeJS, Express, and Mongo. It is meant to be identically functional to the 4chan I remember from 2006. The current demo is living here, but once passport is fully incorporated and Admin/Mod accounts are a thing, it will be transferred to it's own domain and host to live on forever as another one of the *chans.</span><br><br>
+
+    <span>Nodechan is an anonymous imageboard that anyone can use without having to sign up. We aren't big enough to sell out to Big Data yet, so no need for emails or logins or anything of the such. Being an imageboard, an image is required to start a new thread. Replies may consist of an image, text, or both. </span><br><br>
+
+    <span>While I am a libertarian who believes in a free an open internet, I can't afford to have anyone breaking the law because that could blow up on me. The only things against the rules to post are explicitly illegal content that could get me into trouble. Otherwise, try to stay on the topic of the boards.</span><br>
+
+    <hr class="abovePostForm">
+
+    <div class="boardsContainer" id="boards">
+        <div class="boardsTitleBar">
+            <h2 id="bTB">Boards</h2>
+        </div>
+        <%let unique = [...new Set(boards.map(board=>board.category))]%>
+        <%unique.forEach(function(category){%>
+            <table class="column">
+                <tbody>
+                <tr><td><h3><%=category%></h3></td></tr>
+                <% var filteredCategories = boards.filter(function(board){return board.category===category})%>
+                <%filteredCategories.forEach(function(b){ %> <tr><td><a href="/boards/<%=b.boardCode%>" class="boardCodes"><%=b.boardTitle%></a></td></tr> <% }) %>
+                </tbody>
+            </table>
+        <%})%>
+    </div>
+</div>
+</body>
+</html>

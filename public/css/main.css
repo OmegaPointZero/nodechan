@@ -276,6 +276,11 @@ div.footer{
 .pageTab button{
     color: black;
 }
+.container#home{
+    margin: auto;
+    max-width: 75%;
+    text-align:center;
+}
 
 .error-message{
     margin-bottom: 5%;
@@ -288,4 +293,31 @@ div.footer{
 
 img.banner{
     border: 1px solid maroon;
+}
+
+.boardsContainer{
+    border: 1px solid;
+    zoom: 100%;
+    margin-bottom: 0px;
+    padding-bottom: 3em;
+    height: 100%;
+}
+.boardsTitleBar {
+    vertical-align: top;
+    text-align: left;
+    background: #fca;
+    color: #800;
+
+}
+
+#bTB{
+    margin-top: 0px;
+}
+
+.column{
+    float:left;
+}
+
+.column h3{
+    margin-top: 0px;
 }
