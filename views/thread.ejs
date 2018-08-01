@@ -1,60 +1,29 @@
 <html>
-<link rel="stylesheet" type="text/css" href="/css/main.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> <!-- add JQuery -->
-<script>
-$(document).ready(function(){
-    $("a.highlightThisPost").click(function(){
-        var str = String(this)
-        var post = str.split('#')[1]
-        $('div.reply').removeClass('highlight')
-        $('div.reply#'+post).addClass('highlight')
-    });
+<head>
+    <title>
+        /<%=thisBoard.boardCode%>/ - Thread <%=posts[0].OP%>
+    </title>
+    <link rel="stylesheet" type="text/css" href="/css/main.css">.
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> <!-- add JQuery -->
+    <script src="/js/main.js"></script>
 
-    $('.posteruid').click(function(){
-        var id = $(this).attr('class').split(' ')[1]
-        $('div.reply').removeClass('highlight')
-        $('.'+id).parent().parent().parent().addClass('highlight')
-        $('.OP').removeClass('highlight')
-        
-    });
 
-    $('a.postLink').click(function(){
-        var post = $(this).attr('href').slice(1)
-        $('div.reply').removeClass('highlight')
-        $('div.reply#'+post).addClass('highlight')
-    });
-
-    $('a.quotePostNumber').click(function(){
-        var post = $(this).attr('id')
-        $('textarea.text').val($('textarea.text').val()+'>>'+post+'\r\n');       
-    })
-
-    $('input#delete').click(function(){
-        var id =$('input.postDeleteBox:checkbox:checked').attr('id')
-        var fo = $('input.deleteImageOnly:checkbox:checked').attr('value')
-        fo == undefined ? fo = false : "";
-        var OP = window.location.pathname;
-        OP = OP.split('/thread/')[1];
-        var board = '<%=thisBoard.boardCode%>';
-        $.post('/<%=thisBoard.boardCode%>/delete',{board,id,fo,OP}, function(data,status){
-            console.log("Status: "+status);
-            console.log("Data: "+data);
-        })
-    });
-
-})
-</script>
+</head>
 <body class="main">
 
 <div class="boardNav"> 
    [ <%allBoards.forEach(function(board){%>
         
-       / <a href="/<%=board.boardCode%>" title="<%=board.boardCode%> - <%=board.boardTitle%>"  class="boardCodes"><%=board.boardCode%></a> 
+       / <a href="/boards/<%=board.boardCode%>" title="<%=board.boardCode%> - <%=board.boardTitle%>"  class="boardCodes"><%=board.boardCode%></a> 
         
     <% }) %> ]
 </div>
+<div class="topBanner">
     <hr class="abovePostForm">
+    <img src="/<%=banner%>" class="banner">
     <h1 class="boardTitle">/<%=thisBoard.boardCode%>/ - <%=thisBoard.boardTitle%></h1>
+
+</div>
         <form action='/<%=thisBoard.boardCode%>/thread/<%=posts[0].OP%>' method='POST' enctype="multipart/form-data">
             <table id="newPost">
                 <tbody>
@@ -118,7 +87,7 @@ $(document).ready(function(){
             <%if(post.fileSize){%>
             <div class="file">
             <div class="FileInfo">
-               File: <a href="/images/<%=post.fileName%>" target="_blank"><%=post.fileOriginalName%></a>
+               File: <a href="/images/<%=post.fileName%>" target="_blank" class="fileLink"><%=post.fileOriginalName%></a>
                     <% if(post.fileSize < 1000 ){ %>
                         (<%=post.fileSize%> Bytes, 
                     <%} else { %>

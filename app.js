@@ -5,6 +5,7 @@ const morgan = require('morgan'); //log reqs
 const bodyParser = require('body-parser')
 const passport = require('passport');
 const app = express();
+const Board = require('./app/models/boards')
 
 //Declare configURL
 var configURL = "mongodb://@127.0.0.1:27017/nodechan"
@@ -28,8 +29,12 @@ app.set('views', 'views');
 app.set('view engine', 'html');
 
 app.use(function(req,res,next){
-    res.status(404).render('404.ejs')
-})
+    Board.find({}, function(err,boards){
+        res.status(404).render('404.ejs', {
+            allBoards: boards
+        })
+    });
+});
 
 var port = 8080;
 app.listen(port,function(){

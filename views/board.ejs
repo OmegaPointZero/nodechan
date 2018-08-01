@@ -1,36 +1,25 @@
 <html>
+<head>
 <link rel="stylesheet" type="text/css" href="/css/main.css">
-<style>
-    #newThread{
-        margin: auto;
-        width: 468px;
-    }
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> <!-- add JQuery -->
+<script src="/js/main.js"></script>
 
-    #newThread textarea{
-        width: 292px;
-    }
-
-    table#newThread>tbody>tr>td:first-child {
-        background-color: #ea8;
-        color: #800;
-        border: 1px solid #800;
-        padding: 0 5px;
-    }
-    
-    .abovePostForm {
-        width: 90%;
-    }
-</style>
+    <title>
+        /<%=thisBoard.boardCode%>/ - <%=thisBoard.boardTitle%>
+    </title>
+</head>
 <body class="main">
 <div class="main-container">
 <div class="boardNav"> 
    [ <%allBoards.forEach(function(board){%>
         
-       / <a href="/boards/<%=board.boardCode%>" title="<%=board.boardCode%> - <%=board.boardTitle%>" class="boardLink"><%=board.boardCode%></a> 
+       / <a href="/boards/<%=board.boardCode%>" title="<%=board.boardCode%> - <%=board.boardTitle%>" class="boardCodes"><%=board.boardCode%></a> 
         
     <% }) %> ]
 </div>
+<div class="topBanner">
     <hr class="abovePostForm">
+    <img src="/<%=banner%>" class="banner">
     <h1 class="boardTitle">/<%=thisBoard.boardCode%>/ - <%=thisBoard.boardTitle%></h1>
 
 </div>
@@ -95,7 +84,7 @@
             <%if(post.fileSize){%>
             <div class="file">
                 <div class="FileInfo">
-                    File: <a href="/images/<%=post.fileName%>" target="_blank"><%=post.fileOriginalName%></a>
+                    File: <a href="/images/<%=post.fileName%>" target="_blank" class="fileLink"><%=post.fileOriginalName%></a>
                     <% if(post.fileSize < 1000 ){ %>
                     (<%=post.fileSize%> Bytes, 
                     <%} else { %>
@@ -158,11 +147,11 @@
 <div class="boardNav"> 
    [ <%allBoards.forEach(function(board){%>
         
-       / <a href="/boards/<%=board.boardCode%>" title="<%=board.boardCode%> - <%=board.boardTitle%>" class="boardLink"><%=board.boardCode%></a> 
+       / <a href="/boards/<%=board.boardCode%>" title="<%=board.boardCode%> - <%=board.boardTitle%>" class="boardCodes"><%=board.boardCode%></a> 
         
     <% }) %> ]
 </div>
-    <hr class="abovePostForm">
-
-
+<div class="footer">
+All works posted on here are artistic works of fiction and falsehood. Only a fool would take anything posted here as fact.
+</div>
 </body>

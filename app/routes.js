@@ -26,24 +26,29 @@ module.exports = (function(app){
 
     //Get Home page
     app.get('/', (req,res)=>{
-        res.send('Build this, yo')
+        res.send('Home Page Coming soon!')
     })
 
     //Get board page
-    app.get('/:board/:page*?', (req,res,next) => {
+    app.get('/boards/:board/:page*?', (req,res,next) => {
+        
         var page;
-        req.params.page ? page = req.params.page : page = 1; 
+        req.params.page ? page = Number(req.params.page) : page = 1; 
         if(page=='thread'){next();return}
-        if(page>10){
-            res.redirect('/404')
+        if(page>-1 && page < 10){
+            var board = req.params.board;
+            postManager.getPage(board,page,req,res)
+        } else if(page>10){
+            console.log('redirecting because page requested is >10')
+            res.redirect('/error/404')
             return
-        }
-        var board = req.params.board;
-        postManager.getPage(board,page,req,res)
+        } else {
+            res.redirect('/error/404')
+        } 
 });
 
     //Post New thread on :board
-    app.post('/:board', upload.any(), (req,res) => {
+    app.post('/boards/:board', upload.any(), (req,res) => {
         if(req.files.length===0){
             res.send('Error: You forgot to upload an image')
             return;
@@ -76,26 +81,21 @@ module.exports = (function(app){
 
     // Delete a thread or post from a board
     app.post('/:board/delete', (req,res)=>{
-        var board = req.body.board 
+        var board = req.params.board 
+        console.log('req.body: '+req.body)
+        console.log('board: '+board)
         var id = Number(req.body.id.slice(7))
         var OP = req.body.OP 
         var fo = req.body.fo; // fileOnly delete
         var IP = req.connection.remoteAddress;
         console.log(req.body)
-        if(fo=='true'){
+        if(fo=='true'){ //Only deleting file
             console.log('fo==true')
             Post.find({board:board,postID:id},function(err,post){
                 console.log(post)
                 var file = post[0].fileName
                 imageManager.deleteImage(file)
-                post.fileName = 'deleted'
-                post.fileOriginalName = 'deleted'
-                post.fileSize = 0
-                post.fileDimensions = '0 x 0'
-                post.save(function(err){
-                    if(err) console.log(err)
-                })
-                
+                res.send('OK')
             })
         }else{
             console.log('fo==false')
@@ -107,6 +107,7 @@ module.exports = (function(app){
                 board: board
             }
             postManager.deletePost(myObj)
+            res.send('OK')
         }
     });
 }); 

@@ -7,7 +7,8 @@ to the MongoDB in line 10 of app.js :
 
 `var configURL = "mongodb://@127.0.0.1:27017/nodechan"`
 
-You will also need to make 2 folders in the `public/` folder, `public/temporary` and `public/images`
+You will also need to make 3 folders in the `public/` folder, `public/temporary`, `public/images`, and `public/staticImages/banners`, the latter of which must contain banner images.
+
 
 ## Currently Functional Features:
 
@@ -31,6 +32,7 @@ You will also need to make 2 folders in the `public/` folder, `public/temporary`
 + Frontend architecture for deleting threads, updating, etc
 + Custom 404 for invalid paths
 + Deleting a post/thread (modules to handle this are in place)
++ Rotating Banners
 
 ## To Implement:
 1. User-facing front end:
@@ -41,7 +43,6 @@ You will also need to make 2 folders in the `public/` folder, `public/temporary`
 + Flags based on Location
 + Reporting a post !NEEDS ADMINS/MODS
 + Home Page
-+ Rotating Banners
 + Update thread via ajax without updating the page
 + Catalog view
 
@@ -61,3 +62,6 @@ You will also need to make 2 folders in the `public/` folder, `public/temporary`
     + Update thread metadata
     + Get board data
     + Get thread data
+
+## To Be fixed:
+1. Using the Delete function on the boards.ejs page doesn't delete the entire thread, just OP

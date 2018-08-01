@@ -12,11 +12,14 @@ exports.getThread = (function getPosts(board,OP,res){
         Post.find({board:board,OP:OP}, function(error,posts){
             if(error){console.log(error)};
             if(posts.length === 0){
+                console.log('redirecting bc posts.length')
                 res.redirect('/404')
             } else {
                 var sorted = toolbox.sortByPost(posts)
                 var metadata = toolbox.threadMetaData(posts)
+                var banner = imageManager.getBanners()
                 res.render('thread.ejs', {
+                    banner: banner,
                     allBoards: boards,
                     thisBoard: thisBoard,
                     posts: sorted,
@@ -36,23 +39,31 @@ exports.getCatalog = (function getCatalog(board,page){
 //get a specific page of threads on a board
 exports.getPage = (function getPage(board,page,req,res){
     Board.find({},function(err,boards){
-        var thisBoard = boards.filter(b=>b.boardCode==board)
-        if(thisBoard==""){
-            res.redirect('/404')
-            return
+        var thisBoard = {}
+        for(var k=0;k<boards.length;k++){
+            if(boards[k].boardCode==board){
+                thisBoard = boards[k];
+                console.log('thisBoard:')
+                console.log(thisBoard)
+                Post.find({board:board},function(err,posts){
+                    if(err) throw err;
+                    var OPs = toolbox.getUnique(posts,'OP')       
+                    var sortedOPs = toolbox.getThreadBumps(OPs,posts)
+                    var banner = imageManager.getBanners()
+                    if(sortedOPs!=undefined){var pageArr = toolbox.trimToPage(sortedOPs,page)} else {var pageArr=""}
+                    res.render('board.ejs', {
+                        banner: banner,
+                        allBoards: boards,
+                        thisBoard: thisBoard,
+                        OPs: pageArr,
+                        page: page
+                    });
+                });
+            }
+            if(k==boards.length-1 && thisBoard == {}) {
+                res.redirect('/404')
+            }
         }
-        Post.find({board:board},function(err,posts){
-            if(err) throw err;
-            var OPs = toolbox.getUnique(posts,'OP')       
-            var sortedOPs = toolbox.getThreadBumps(OPs,posts)
-            if(sortedOPs!=undefined){var pageArr = toolbox.trimToPage(sortedOPs,page)} else {var pageArr=""}
-            res.render('board.ejs', {
-                allBoards: boards,
-                thisBoard: thisBoard[0],
-                OPs: pageArr,
-                page: page
-            });
-        });
     })    
 });
 
@@ -67,8 +78,9 @@ exports.deletePost = (function deletePost(obj){
     var postID = obj.postID;
     var IP = obj.IP;
     var OP = obj.OP;
-    console.log
+    console.log(`postID: ${postID}\nOP: ${OP}\nboard: ${board}`)
     if(postID != OP){
+        console.log('deleting one post...')
         Post.findOneAndRemove({board:board,postID:postID},function(err,post){
             if (err) throw err
             if(post){
@@ -77,6 +89,7 @@ exports.deletePost = (function deletePost(obj){
             }
         })
     } else if(postID == OP){
+        console.log('scrubbing thread...')
         Post.remove({board:board,OP:OP},function(err,posts){
             if (err) throw err
             if(posts){

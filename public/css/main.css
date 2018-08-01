@@ -73,6 +73,22 @@ table#newPost>tbody>tr>td:first-child {
     width: 90%;
 }
 
+#newThread{
+    margin: auto;
+    width: 468px;
+}
+
+#newThread textarea{
+    width: 292px;
+}
+
+table#newThread>tbody>tr>td:first-child {
+    background-color: #ea8;
+    color: #800;
+    border: 1px solid #800;
+    padding: 0 5px;
+}
+    
 div.postContainer {
     max-width: 75%;
     margin: 0;
@@ -201,6 +217,14 @@ a.pageLink:clicked{
     margin-bottom: 5px;
 }
 
+a.fileLink{
+    color: blue;
+}
+
+a.fileLink:clicked{
+    color: blue;
+}
+
 a.boardCodes{
     color: maroon;
     text-decoration: none;
@@ -220,7 +244,6 @@ hr{
     height: 0;
     border-top: 1px solid #d9bfb7;
     clear: both;
-
 }
 
 div.footer{
@@ -252,4 +275,17 @@ div.footer{
 
 .pageTab button{
     color: black;
+}
+
+.error-message{
+    margin-bottom: 5%;
+}
+
+.topBanner{
+    margin: auto;
+    text-align: center;
+}
+
+img.banner{
+    border: 1px solid maroon;
 }
