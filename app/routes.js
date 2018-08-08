@@ -21,11 +21,13 @@ if(!Array.prototype.last){
         return this[this.length-1]
     }
 }
+var express = require('express');
+var router = express.Router();
 
 module.exports = (function(app){
 
     //Get Home page
-    app.get('/', (req,res)=>{
+    router.get('/', (req,res)=>{
 
         Board.find({},function(err,boards){
             if(err){console.log(err)}

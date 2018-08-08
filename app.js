@@ -21,7 +21,12 @@ app.use(function(req,res,next){
     });
     next();
 });
-require('./app/routes.js')(app,passport);
+
+var routes = require('./app/routes');
+var api = require('./app/api');
+
+app.use('/', routes);
+app.use('/api',api);
 
 
 app.engine('html', require('ejs').renderFile);
