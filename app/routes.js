@@ -24,97 +24,96 @@ if(!Array.prototype.last){
 var express = require('express');
 var router = express.Router();
 
-module.exports = (function(app){
+//Get Home page
+router.get('/', (req,res)=>{
 
-    //Get Home page
-    router.get('/', (req,res)=>{
-
-        Board.find({},function(err,boards){
-            if(err){console.log(err)}
-            res.render('home.ejs',{boards:boards})
-        })
-
+    Board.find({},function(err,boards){
+        if(err){console.log(err)}
+        res.render('home.ejs',{boards:boards})
     })
 
-    //Get board page
-    app.get('/boards/:board/:page*?', (req,res,next) => {
-        
-        var page;
-        req.params.page ? page = Number(req.params.page) : page = 1; 
-        if(page=='thread'){next();return}
-        if(page>-1 && page < 10){
-            var board = req.params.board;
-            postManager.getPage(board,page,req,res)
-        } else if(page>10){
-            console.log('redirecting because page requested is >10')
-            res.redirect('/error/404')
-            return
-        } else {
-            res.redirect('/error/404')
-        } 
+})
+
+//Get board page
+router.get('/boards/:board/:page*?', (req,res,next) => {
+    
+    var page;
+    req.params.page ? page = Number(req.params.page) : page = 1; 
+    if(page=='thread'){next();return}
+    if(page>-1 && page < 10){
+        var board = req.params.board;
+        postManager.getPage(board,page,req,res)
+    } else if(page>10){
+        console.log('redirecting because page requested is >10')
+        res.redirect('/error/404')
+        return
+    } else {
+        res.redirect('/error/404')
+    } 
 });
 
-    //Post New thread on :board
-    app.post('/boards/:board', upload.any(), (req,res) => {
-        if(req.files.length===0){
-            res.send('Error: You forgot to upload an image')
-            return;
-        }
-        var time = new Date().getTime();
-        var imgInfo = imageManager.uploadImage(req.files[0],time,true,req,res)
-        postManager.bumpAndGrind(req.params.board)
-    })
+//Post New thread on :board
+router.post('/boards/:board', upload.any(), (req,res) => {
+    if(req.files.length===0){
+        res.send('Error: You forgot to upload an image')
+        return;
+    }
+    var time = new Date().getTime();
+    var imgInfo = imageManager.uploadImage(req.files[0],time,true,req,res)
+    postManager.bumpAndGrind(req.params.board)
+})
 
-    //Get thread by ID
-    app.get('/:board/thread/:id', (req,res)=>{
-        var threadID = req.params.id;
-        var board = req.params.board;
-        postManager.getThread(board,threadID,res);
-    });
+//Get thread by ID
+router.get('/:board/thread/:id', (req,res)=>{
+    var threadID = req.params.id;
+    var board = req.params.board;
+    postManager.getThread(board,threadID,res);
+});
 
-    //Reply to thread ID on BOARD
-    app.post('/:board/thread/:id', upload.any(), (req,res)=>{
-        console.log(req.body)
-        if(req.files.length===0 && req.body.text== ""){
-            res.send('Error: Response cannot be empty')
-        }
-        var time = new Date().getTime();
-        if(req.files.length>0){
-            var imgInfo = imageManager.uploadImage(req.files[0],time,false,req,res);
-        } else {
-            postManager.writePost(req.params,req.body,req.connection.remoteAddress,{time:new Date().getTime()},req,res);
-        }
-    });
+//Reply to thread ID on BOARD
+router.post('/:board/thread/:id', upload.any(), (req,res)=>{
+    console.log(req.body)
+    if(req.files.length===0 && req.body.text== ""){
+        res.send('Error: Response cannot be empty')
+    }
+    var time = new Date().getTime();
+    if(req.files.length>0){
+        var imgInfo = imageManager.uploadImage(req.files[0],time,false,req,res);
+    } else {
+        postManager.writePost(req.params,req.body,req.connection.remoteAddress,{time:new Date().getTime()},req,res);
+    }
+});
 
-    // Delete a thread or post from a board
-    app.post('/:board/delete', (req,res)=>{
-        var board = req.params.board 
-        console.log('req.body: '+req.body)
-        console.log('board: '+board)
-        var id = Number(req.body.id.slice(7))
-        var OP = req.body.OP 
-        var fo = req.body.fo; // fileOnly delete
-        var IP = req.connection.remoteAddress;
-        console.log(req.body)
-        if(fo=='true'){ //Only deleting file
-            console.log('fo==true')
-            Post.find({board:board,postID:id},function(err,post){
-                console.log(post)
-                var file = post[0].fileName
-                imageManager.deleteImage(file)
-                res.send('OK')
-            })
-        }else{
-            console.log('fo==false')
-            console.log(fo)
-            var myObj = {
-                postID: id,
-                OP: OP,
-                IP: IP,
-                board: board
-            }
-            postManager.deletePost(myObj)
+// Delete a thread or post from a board
+router.post('/:board/delete', (req,res)=>{
+    var board = req.params.board 
+    console.log('req.body: '+req.body)
+    console.log('board: '+board)
+    var id = Number(req.body.id.slice(7))
+    var OP = req.body.OP 
+    var fo = req.body.fo; // fileOnly delete
+    var IP = req.connection.remoteAddress;
+    console.log(req.body)
+    if(fo=='true'){ //Only deleting file
+        console.log('fo==true')
+        Post.find({board:board,postID:id},function(err,post){
+            console.log(post)
+            var file = post[0].fileName
+            imageManager.deleteImage(file)
             res.send('OK')
+        })
+    }else{
+        console.log('fo==false')
+        console.log(fo)
+        var myObj = {
+            postID: id,
+            OP: OP,
+            IP: IP,
+            board: board
         }
-    });
-}); 
+        postManager.deletePost(myObj)
+        res.send('OK')
+    }
+});
+
+module.exports = router 
