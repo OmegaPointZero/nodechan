@@ -6,10 +6,24 @@ const bodyParser = require('body-parser')
 const passport = require('passport');
 const app = express();
 const Board = require('./app/models/boards')
+const promise = require('rsvp').Promise;
+require('dotenv').config()
+
 
 //Declare configURL
-var configURL = "mongodb://@127.0.0.1:27017/nodechan"
+var configURL = process.env.MONGO;
 
+var cors = (function(req,res,next){
+    if (req.method === "OPTIONS") {
+        res.header('Access-Control-Allow-Origin', req.headers.origin);
+      } else {
+        res.header('Access-Control-Allow-Origin', '*');
+      }
+    next();
+});
+
+app.use(cors)
+//app.use(promise)
 mongoose.connect(configURL);
 app.use(morgan('dev'));
 app.use(express.static('public'));
