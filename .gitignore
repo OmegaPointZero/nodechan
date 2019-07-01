@@ -1,2 +1,4 @@
 public/images
 public/temporary
+.env
+/node_modules/
