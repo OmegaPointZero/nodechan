@@ -1,0 +1,126 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="/css/main.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> <!-- add JQuery -->
+<script src="/js/main.js"></script>
+
+    <title>
+        /<%=thisBoard.boardCode%>/ - <%=thisBoard.boardTitle%>
+    </title>
+</head>
+<body class="main">
+<div class="main-container">
+<div class="boardNav"> 
+   [ <%allBoards.forEach(function(board){%>
+        
+       / <a href="/boards/<%=board.boardCode%>" title="<%=board.boardCode%> - <%=board.boardTitle%>" class="boardCodes"><%=board.boardCode%></a>
+        
+    <% }) %> / ]
+</div>
+<div class="topBanner">
+    <hr class="abovePostForm">
+    <img src="/<%=banner%>" class="banner">
+    <h1 class="boardTitle">/<%=thisBoard.boardCode%>/ - <%=thisBoard.boardTitle%></h1>
+
+</div>
+
+    <hr class="abovePostForm">
+    <form enctype='multipart/form-data' action='/boards/<%=thisBoard.boardCode%>' method='POST'>
+        <table id="newThread" style="display:table;">
+            <tbody>
+            <tr data-type="Name">
+                <td>Name</td>
+                <td><input type="text" name="name" placeholder="name"></input></td>
+            </tr>
+            <tr data-type="Subject">
+                <td>Subject</td>
+                <td><input type="text" name="subject" placeholder="subject"></input> <button type="submit">Submit</button></td>
+            </tr>
+            <tr data-type="Text">
+                <td>Comment</td>
+                <td><textarea name="text" cols="48" rows="4" warp="soft"></textarea></td>
+            </tr>
+            <tr data-type="file">
+                <td>File</td>
+                <td><input type="file" name="post-image"/></td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+    <hr>
+    [<a href="/board/<%=thisBoard.boardCode%>">Return</a>] [<a href="#footer">Bottom</a>] [<a href="/board/<%=thisBoard.boardCode%>/catalog">Refresh</a>]
+    <hr>
+
+    <div class="catalogContainer">
+<%if(OPs.length>0){%>
+    <%OPs.forEach(function(OP){%>
+    <div class="catalogPreviewContainer">
+        <% var preview = OP.preview %>
+        <% preview.forEach(function(post){ %>
+        <div class="catalogContainer" id="p<%=post.postID%>">
+            <div id="<%=post.postID%>" class=<post OP">
+            <div class="file">
+                <div class="FileInfo">
+
+                </div>
+                <div class="thumbnail">
+                    <a href="/<%=thisBoard.boardCode%>/thread/<%=post.OP%>" target="_blank">
+                    <img src="/images/s<%=post.time%>.png" alt="<%=post.fileSize%> Bytes" class="catalogThumb">
+                    </a>
+                </div>
+            </div>
+                <div class="catalogMessage">
+                    <%var body = post.body%>
+                    <%var mySplit = body.split('\r\n')%>
+                    <% mySplit.forEach(function(lines){%>
+                    <div class='catContents' <% if(/^&gt;/.test(lines)){%>style="color:#789922"<%}%>>
+                    <div style="font-size:11px">R: <b><%=OP.posts%></b> / I: <b><%=OP.images%></b></div>
+                    <% if(post.subject) { %>
+                        <b><%=post.subject%>: </b>
+                    <% } %>
+                    <% var lArr = lines.split(' ')%>
+                    <% for(var i=0;i<lArr.length;i++) { %>
+                    <% var word = lArr[i]%>
+                    <% if(/^&gt;&gt;\d+$/.test(word)){%> 
+                    <% lArr[i] = '<a href="#'+word.slice(8)+'" class="postLink">'+word+'</a>' %>
+                    <% } %>
+                    <% } %>
+                    <%-lArr.join(' ')%>
+                    </div><br/>
+                    <%})%>
+                </div>
+            </div>
+        </div>
+        <% })%>
+    </div>
+    <%})%>
+<%} else {%>
+    <div class="blankBoard">This board is valid but there's nothing here! Make the first post!</div>
+<% } %>
+
+</div>
+<hr>
+<div class="footMenu">
+    <div class="bottomMenu">
+    [<a href="/boards/<%=thisBoard.boardCode%>">Return</a>] [<a href="#top">Top</a>] [<a href="/board/<%=thisBoard.boardCode%>/catalog">Refresh</a>]
+    </div>
+    <div class="bottomCtrl">
+        <span class="deleteForm">
+            Delete Post: [ <input type="hidden" name="mode" value="userDelete">
+                <input type="checkbox" name="deleteImageOnly" class="deleteImageOnly" value=true> File Only]
+            <input type="submit" id="delete" value="Delete">
+        </span>
+    </div>
+</div> 
+<hr>
+<div class="boardNav"> 
+   [ <%allBoards.forEach(function(board){%>
+       
+       / <a href="/boards/<%=board.boardCode%>" title="<%=board.boardCode%> - <%=board.boardTitle%>" class="boardCodes"><%=board.boardCode%></a> 
+        
+    <% }) %> / ]
+</div>
+<div class="footer" id="footer">
+All works posted on here are artistic works of fiction and falsehood. Only a fool would take anything posted here as fact.
+</div>
+</body>

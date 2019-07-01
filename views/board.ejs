@@ -133,9 +133,9 @@
 </div>
 <div class="pageTab">
 <%for(var n=1;n<=10;n++){ %> 
-    [<a href="/<%=thisBoard.boardCode%>/<%=n%>" class="pageLink" <%if(n==page){%>style="font-weight:bold"<%}%> ><%=n%></a>] 
+    [<a href="/boards/<%=thisBoard.boardCode%>/<%=n%>" class="pageLink" <%if(n==page){%>style="font-weight:bold"<%}%> ><%=n%></a>] 
 <% } %>
-<button id="nextPage">Next</button><a href="/<%=thisBoard.boardCode%>/catalog" class="catalogLink pageLink" >Catalog</a>
+<button id="nextPage">Next</button><a href="/boards/<%=thisBoard.boardCode%>/catalog" class="catalogLink pageLink" >Catalog</a>
 </div>
 <div class="bottomCtrl">
     <span class="deleteForm">

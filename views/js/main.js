@@ -1,6 +1,4 @@
-alert('shitfuck')    
 $(document).ready(function(){
-        alert('fuck')
         $("a.highlightThisPost").click(function(){
             var str = String(this)
             var post = str.split('#')[1]
