@@ -16,6 +16,13 @@ exports.threadMetaData = (function threadMetaData(posts){
     return obj;
 })
 
+
+// Replies / Images in each thread to display on Catalog
+exports.boardMetaData = (function boardMetaData(boardPosts){
+    
+    
+})
+
 //Get number of images for thread
 exports.countImages = (function countImages(posts){
     var images = 0;
@@ -107,6 +114,7 @@ exports.getThreadBumps = (function getThreadBumps(OPs,posts){
         var myObj ={
             OP : OPs[i],
             lastBump : 0,
+            images: 0,
             posts: 0,
             preview: []
         }
@@ -114,6 +122,11 @@ exports.getThreadBumps = (function getThreadBumps(OPs,posts){
         thread = exports.sortByPost(thread,'time')
         myObj.lastBump = thread[thread.length-1].time
         var len = thread.length
+        for(var j=0;j<len;j++){
+            if(thread[j].fileName){
+                myObj.images++;
+            }
+        }
         myObj.posts = len
         opArr[i] = myObj;   
         if(len<5){
@@ -122,11 +135,25 @@ exports.getThreadBumps = (function getThreadBumps(OPs,posts){
             myObj.preview = exports.trimPreview(thread)
         }
         opArr[i] = myObj
+        console.log(myObj)
         if(i==OPs.length-1){
             return exports.sortByUpdate(opArr,'lastBump')
         } 
     }
 })
+
+exports.trimCatalog = (function trimCatalog(threads){
+    var catalog = []
+    for(var i=0;i<threads.length;i++){
+        catalog[i] = threads[i];
+        var prev = threads[i].preview
+        catalog[i].preview = prev.filter(function(posts){return posts.postID == posts.OP})
+        if(i==threads.length-1){
+            return catalog;
+        }
+    }
+
+});
 
 //get threads relevent to page number from sorted array of all
 exports.trimToPage = (function trimToPage(arr,page){

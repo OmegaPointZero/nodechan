@@ -24,6 +24,8 @@ if(!Array.prototype.last){
 
 module.exports = (function(app){
 
+
+
     //Get Home page
     app.get('/', (req,res)=>{
 
@@ -33,6 +35,12 @@ module.exports = (function(app){
         })
 
     })
+
+
+    app.get('/boards/:board/catalog', (req,res)=>{
+        var board = req.params.board
+        postManager.getCatalog(board,req,res)
+    });
 
     //Get board page
     app.get('/boards/:board/:page*?', (req,res,next) => {
@@ -51,6 +59,8 @@ module.exports = (function(app){
             res.redirect('/error/404')
         } 
 });
+
+
 
     //Post New thread on :board
     app.post('/boards/:board', upload.any(), (req,res) => {
@@ -115,4 +125,27 @@ module.exports = (function(app){
             res.send('OK')
         }
     });
+
+    //API REQUESTS BEGIN HERE
+
+    app.get('/api/boardlist', (req,res)=>{
+        Board.find({},function(err,boards){
+            res.send(boards)
+        });
+    });
+
+    app.get('/api/board/:board/:page*?', (req,res)=>{
+        var page;
+        req.params.page ? page = Number(req.params.page) : page = 1
+        if(page>-1 && page < 10){
+            var board = req.params.board;
+            postManager.getAPIPage(board,page,req,res)
+        } else if(page>10){
+            console.log('redirecting because page requested is >10')
+            res.redirect('/error/404')
+            return
+        } else {
+            res.redirect('/error/404')
+        } 
+    }); 
 }); 

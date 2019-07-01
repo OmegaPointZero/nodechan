@@ -12,7 +12,7 @@ exports.getThread = (function getPosts(board,OP,res){
         Post.find({board:board,OP:OP}, function(error,posts){
             if(error){console.log(error)};
             if(posts.length === 0){
-                console.log('redirecting bc posts.length')
+                console.log('redirecting b/c posts.length')
                 res.redirect('/404')
             } else {
                 var sorted = toolbox.sortByPost(posts)
@@ -31,22 +31,22 @@ exports.getThread = (function getPosts(board,OP,res){
 })
 
 
-//Get catalog of a board
-exports.getCatalog = (function getCatalog(board,page){
-
-})
-
 //get a specific page of threads on a board
 exports.getPage = (function getPage(board,page,req,res){
+    //For normal page function, we get all board info at once for the top/bottom
+    //banners listing all of the boards. We don't for the API
     Board.find({},function(err,boards){
+        if(err){
+            throw(err);
+        }
         var thisBoard = {}
         for(var k=0;k<boards.length;k++){
             if(boards[k].boardCode==board){
                 thisBoard = boards[k];
-                console.log('thisBoard:')
-                console.log(thisBoard)
-                Post.find({board:board},function(err,posts){
-                    if(err) throw err;
+                Post.find({board:board},function(error,posts){
+                    if(error){
+                        throw(error);
+                    }
                     var OPs = toolbox.getUnique(posts,'OP')       
                     var sortedOPs = toolbox.getThreadBumps(OPs,posts)
                     var banner = imageManager.getBanners()
@@ -57,14 +57,59 @@ exports.getPage = (function getPage(board,page,req,res){
                         thisBoard: thisBoard,
                         OPs: pageArr,
                         page: page
-                    });
-                });
+                   }); 
+               });
             }
             if(k==boards.length-1 && thisBoard == {}) {
                 res.redirect('/404')
             }
         }
-    })    
+    })  
+});
+
+exports.getCatalog = (function getPage(board,req,res){
+    //For normal page function, we get all board info at once for the top/bottom
+    //banners listing all of the boards. We don't for the API
+    Board.find({},function(err,boards){
+        if(err){
+            throw(err);
+        }
+        var thisBoard = {}
+        for(var k=0;k<boards.length;k++){
+            if(boards[k].boardCode==board){
+                thisBoard = boards[k];
+                Post.find({board:board},function(error,posts){
+                    if(error){
+                        throw(error);
+                    }
+                    var OPs = toolbox.getUnique(posts,'OP') 
+                    var sortedOPs = toolbox.getThreadBumps(OPs,posts)
+                    var banner = imageManager.getBanners()
+                    sortedOPs = toolbox.trimCatalog(sortedOPs)
+                    console.log(sortedOPs)
+                    res.render('catalog.ejs', {
+                        banner: banner,
+                        allBoards: boards,
+                        thisBoard: thisBoard,
+                        OPs: sortedOPs,
+                   }); 
+               });
+            }
+        }
+    })  
+});
+
+exports.getAPIPage = (function getPage(board,page,req,res){
+    console.log('uh oh')
+        Post.find({board:board},function(error,posts){
+            if(error){
+                throw(error);
+            }
+            var OPs = toolbox.getUnique(posts,'OP')       
+            var sortedOPs = toolbox.getThreadBumps(OPs,posts)
+            if(sortedOPs!=undefined){var pageArr = toolbox.trimToPage(sortedOPs,page)} else {var pageArr=""}
+            res.send(pageArr)
+       });
 });
 
 
