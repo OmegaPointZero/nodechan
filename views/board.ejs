@@ -51,6 +51,15 @@
 
 <%if(OPs.length>0){%>
     <%OPs.forEach(function(OP){%>
+    <% var tp = 0 /* # of pictures in preview thread*/ %>
+    <% var prev = OP.preview; for(var i=0;i<prev.length;i++){ %>
+        <% if(prev[i].fileName) {%>
+            <% tp++; %>        
+        <% } %>
+    <% } %>
+    <% var omittedPosts; prev.length < OP.posts ? omittedPosts= OP.posts-prev.length : omittedPosts = 0 %>
+
+
     <div class="thread-preview-container">
         <% var preview = OP.preview %>
         <% preview.forEach(function(post){ %>
@@ -121,6 +130,11 @@
                     <%})%>
                 </div>
             </div>
+            <% if(post.postID==post.OP) { %>
+                <% if(omittedPosts!=0){ %>
+                    <div class="threadmeta"><%=omittedPosts%> Replies and <%=(OP.images-tp)%> Pictures Omitted. <a href="/<%=thisBoard.boardCode%>/thread/<%=post.OP%>"">Click here</a> to view.</div>
+                <% } %>
+            <% } %>
         </div>
         <% })%>
     </div>
@@ -131,27 +145,29 @@
 <% } %>
 
 </div>
-<div class="pageTab">
-<%for(var n=1;n<=10;n++){ %> 
-    [<a href="/boards/<%=thisBoard.boardCode%>/<%=n%>" class="pageLink" <%if(n==page){%>style="font-weight:bold"<%}%> ><%=n%></a>] 
-<% } %>
-<button id="nextPage">Next</button><a href="/boards/<%=thisBoard.boardCode%>/catalog" class="catalogLink pageLink" >Catalog</a>
-</div>
-<div class="bottomCtrl">
-    <span class="deleteForm">
-        <input type="hidden" name="mode" value="userDelete">
-            Delete Post: [<input type="checkbox" name="deleteImageOnly" class="deleteImageOnly" value=true> File Only]
-        <input type="submit" id="delete" value="Delete">
-    </span>
-</div>
+
+<hr>
+<div class="footMenu">
+    <div class="bottomMenu">
+    [<a href="/boards/<%=thisBoard.boardCode%>">Return</a>] [<a href="#top">Top</a>] [<a href="/boards/<%=thisBoard.boardCode%>/catalog">Refresh</a>]
+    </div>
+    <div class="bottomCtrl">
+        <span class="deleteForm">
+            Delete Post: [ <input type="hidden" name="mode" value="userDelete">
+                <input type="checkbox" name="deleteImageOnly" class="deleteImageOnly" value=true> File Only]
+            <input type="submit" id="delete" value="Delete">
+        </span>
+    </div>
+</div> 
+<hr>
 <div class="boardNav"> 
    [ <%allBoards.forEach(function(board){%>
-        
+       
        / <a href="/boards/<%=board.boardCode%>" title="<%=board.boardCode%> - <%=board.boardTitle%>" class="boardCodes"><%=board.boardCode%></a> 
         
     <% }) %> / ]
 </div>
-<div class="footer">
+<div class="footer" id="footer">
 All works posted on here are artistic works of fiction and falsehood. Only a fool would take anything posted here as fact.
 </div>
 </body>

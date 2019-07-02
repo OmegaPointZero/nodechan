@@ -56,12 +56,12 @@ You will also need to make 3 folders in the `public/` folder, `public/temporary`
         + Reported Threads
             + Gets notification for reported thread
         + Banners
+
+
 + API endpoints to:
     + Update Thread replies
     + Get thread's page number
     + Update thread metadata
-    + Get board data
-    + Get thread data
 
 ## To Be fixed:
 1. Using the Delete function on the boards.ejs page doesn't delete the entire thread, just OP

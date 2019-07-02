@@ -20,6 +20,10 @@ body.main {
     overflow-x: hidden;
 }
 
+.OP{
+    display: inline !important;
+}
+
 .post{
     display: table;
     margin-top: 2px!important;

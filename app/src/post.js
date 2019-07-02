@@ -86,7 +86,6 @@ exports.getCatalog = (function getPage(board,req,res){
                     var sortedOPs = toolbox.getThreadBumps(OPs,posts)
                     var banner = imageManager.getBanners()
                     sortedOPs = toolbox.trimCatalog(sortedOPs)
-                    console.log(sortedOPs)
                     res.render('catalog.ejs', {
                         banner: banner,
                         allBoards: boards,
@@ -100,18 +99,25 @@ exports.getCatalog = (function getPage(board,req,res){
 });
 
 exports.getAPIPage = (function getPage(board,page,req,res){
-    console.log('uh oh')
-        Post.find({board:board},function(error,posts){
-            if(error){
-                throw(error);
-            }
-            var OPs = toolbox.getUnique(posts,'OP')       
-            var sortedOPs = toolbox.getThreadBumps(OPs,posts)
-            if(sortedOPs!=undefined){var pageArr = toolbox.trimToPage(sortedOPs,page)} else {var pageArr=""}
-            res.send(pageArr)
-       });
+    Post.find({board:board},function(error,posts){
+        if(error){
+            throw(error);
+        }
+        var OPs = toolbox.getUnique(posts,'OP')       
+        var sortedOPs = toolbox.getThreadBumps(OPs,posts)
+        if(sortedOPs!=undefined){var pageArr = toolbox.trimToPage(sortedOPs,page)} else {var pageArr=""}
+        res.send(pageArr)
+   });
 });
 
+exports.APIgetThread = (function APIgetThread(board,thread,req,res){
+    Post.find({board:board,OP:thread},function(err,posts){
+        if(err){
+            throw(err);
+        }
+        res.send(posts);
+    });
+})
 
 //Deletes post with specified postID for one post, or OP for a thread
 

@@ -82,7 +82,6 @@ module.exports = (function(app){
 
     //Reply to thread ID on BOARD
     app.post('/:board/thread/:id', upload.any(), (req,res)=>{
-        console.log(req.body)
         if(req.files.length===0 && req.body.text== ""){
             res.send('Error: Response cannot be empty')
         }
@@ -97,24 +96,17 @@ module.exports = (function(app){
     // Delete a thread or post from a board
     app.post('/:board/delete', (req,res)=>{
         var board = req.params.board 
-        console.log('req.body: '+req.body)
-        console.log('board: '+board)
         var id = Number(req.body.id.slice(7))
         var OP = req.body.OP 
         var fo = req.body.fo; // fileOnly delete
         var IP = req.connection.remoteAddress;
-        console.log(req.body)
         if(fo=='true'){ //Only deleting file
-            console.log('fo==true')
             Post.find({board:board,postID:id},function(err,post){
-                console.log(post)
                 var file = post[0].fileName
                 imageManager.deleteImage(file)
                 res.send('OK')
             })
         }else{
-            console.log('fo==false')
-            console.log(fo)
             var myObj = {
                 postID: id,
                 OP: OP,
@@ -125,6 +117,9 @@ module.exports = (function(app){
             res.send('OK')
         }
     });
+
+    //ADMIN FUNCTIONS
+    app.get('/login',
 
     //API REQUESTS BEGIN HERE
 
@@ -146,6 +141,12 @@ module.exports = (function(app){
             return
         } else {
             res.redirect('/error/404')
-        } 
+        }
     }); 
+
+    app.get('/api/thread/:board/:thread', (req,res)=>{
+        var board = req.params.board;
+        var thread = req.params.thread;
+        postManager.APIgetThread(board,thread,req,res);
+    });
 }); 

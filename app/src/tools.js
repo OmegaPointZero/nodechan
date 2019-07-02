@@ -135,7 +135,6 @@ exports.getThreadBumps = (function getThreadBumps(OPs,posts){
             myObj.preview = exports.trimPreview(thread)
         }
         opArr[i] = myObj
-        console.log(myObj)
         if(i==OPs.length-1){
             return exports.sortByUpdate(opArr,'lastBump')
         } 

@@ -9,7 +9,6 @@ const glob = require('glob')
 exports.getBanners = (function getBanners(){
     var banners = glob.sync('public/staticImages/banners/*')
     var banner = banners[Math.floor(Math.random()*banners.length)];
-    console.log('this banner:' + banner)
     return(banner.slice(7,))
 })
 
