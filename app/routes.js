@@ -22,7 +22,7 @@ if(!Array.prototype.last){
     }
 }
 
-module.exports = (function(app){
+module.exports = (function(app,passport){
 
 
 
@@ -118,8 +118,43 @@ module.exports = (function(app){
         }
     });
 
+    app.post('/report', (req,res)=>{
+        /*  Post REPORT to server, record in DB, use websockets
+            to send notification to admins */
+    });
+
     //ADMIN FUNCTIONS
-    app.get('/login',
+    app.get('/login', (req,res)=>{
+        res.render('login.ejs');
+    });
+
+    /* Route for logging in existing admin */
+    app.post('/login', passport.authenticate('local-login', {
+        successRedirect : '/admin',
+        failureRedirect : '/login',
+    }));
+
+    /*  If it's the first time this database is saving and admin, comment out
+        the above POST /login route, and uncomment this one, to register a 
+        new user 
+    */
+
+    /*
+    app.post('/login', passport.authenticate('local-signup', {
+        successRedirect: '/admin',
+        failureRedirect: '/login'})
+    ); */
+
+    app.get('/admin', isAdmin, (req,res)=>{
+        res.render('admin.ejs');
+    });
+
+    app.post('/admin', isAdmin, (req,res)=>{
+        /*  Allow admins to interact with/monitor DB, delete threads, lock
+            threads, move thread to a new board (build function to re-number
+            posts), ban by IP address, view reports, sort/view posts by user 
+            IP address */
+    });
 
     //API REQUESTS BEGIN HERE
 
@@ -149,4 +184,10 @@ module.exports = (function(app){
         var thread = req.params.thread;
         postManager.APIgetThread(board,thread,req,res);
     });
+
+    function isAdmin(req,res,next){
+        if(req.isAuthenticated())
+            return next();
+        res.redirect('/login');
+    }
 }); 

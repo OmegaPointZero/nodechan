@@ -48,6 +48,11 @@
         </table>
     </form>
     <hr>
+    <div class="bottomMenu">
+        [<a href="/boards/<%=thisBoard.boardCode%>">Refresh</a>] [<a href="#footer">Bottom</a>] [<a href="/boards/<%=thisBoard.boardCode%>/catalog">Catalog</a>]
+        </div>
+
+    <hr>
 
 <%if(OPs.length>0){%>
     <%OPs.forEach(function(OP){%>
@@ -149,7 +154,7 @@
 <hr>
 <div class="footMenu">
     <div class="bottomMenu">
-    [<a href="/boards/<%=thisBoard.boardCode%>">Return</a>] [<a href="#top">Top</a>] [<a href="/boards/<%=thisBoard.boardCode%>/catalog">Refresh</a>]
+    [<a href="/boards/<%=thisBoard.boardCode%>">Refresh</a>] [<a href="#top">Top</a>] [<a href="/boards/<%=thisBoard.boardCode%>/catalog">Catalog</a>]
     </div>
     <div class="bottomCtrl">
         <span class="deleteForm">
