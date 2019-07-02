@@ -134,7 +134,7 @@ module.exports = (function(app,passport){
         failureRedirect : '/login',
     }));
 
-    /*  If it's the first time this database is saving and admin, comment out
+    /*  If it's the first time this database is saving an admin, comment out
         the above POST /login route, and uncomment this one, to register a 
         new user 
     */
@@ -146,7 +146,8 @@ module.exports = (function(app,passport){
     ); */
 
     app.get('/admin', isAdmin, (req,res)=>{
-        res.render('admin.ejs');
+        console.log(req.user)
+        res.render('admin.ejs', {user:req.user.username});
     });
 
     app.post('/admin', isAdmin, (req,res)=>{
@@ -157,6 +158,16 @@ module.exports = (function(app,passport){
     });
 
     //API REQUESTS BEGIN HERE
+
+    app.post('/api/users', isAdmin, (req,res)=>{
+        console.log(req.body)
+        var board = req.body.board;
+        var IP = req.body.IP;
+        Post.find({board:board,IP:IP},function(err,posts){
+            if(err){throw(err)}
+            res.send(posts)
+        });
+    })
 
     app.get('/api/boardlist', (req,res)=>{
         Board.find({},function(err,boards){

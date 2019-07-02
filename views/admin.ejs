@@ -1,6 +1,57 @@
 <html>
+<head>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script> <!-- load jQuery -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/js/admin.js"></script>
+    <script src="/js/main.js"></script>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="css/main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<body>
-YOU ARE ADMIN
+</head>
+<title>Nodechan - Admin Panel</title>
+<body class="main">
+<div class="main-container">
+
+    <p>Hi. Welcome to the Admin Panel, <%=user%></p>
+  <div class="row" id="admin-panel">
+    	<div style="width:100%;">
+            <div class="panel with-nav-tabs panel-default">
+                <div class="panel-heading">
+                        <ul class="nav nav-tabs">
+                        <!--  Allow admins to interact with/monitor DB, delete threads, lock
+                            threads, move thread to a new board (build function to re-number
+                            posts), ban by IP address, view reports, sort/view posts by user 
+                            IP address -->
+                            <li class="active"><a href="#tab1default" data-toggle="tab">Add/Delete Boards</a></li>
+                            <li><a href="#tab2default" data-toggle="tab">Stickied Threads</a></li>
+                            <li><a href="#tab3default" data-toggle="tab">IP Bans</a></li>
+                            <li><a href="#tab4default" data-toggle="tab">Reported Threads</a></li>
+                            <li><a href="#tab5default" data-toggle="tab">Posts By User</a></li>
+                        </ul>
+                </div>
+                <div class="panel-body">
+                    <div class="tab-content">
+                        <div class="tab-pane fade in active" id="tab1default">Render the Boards here by default</div>
+                        <div class="tab-pane fade" id="tab2default">Send API request for stickied threads</div>
+                        <div class="tab-pane fade" id="tab3default">Make DB Entry for banned IPs, API request to get them</div>
+                        <div class="tab-pane fade" id="tab4default">Make DB Entry for reported threads, API req for DB, back-end will pull thread ID's/board from DB, then pull threads from the threads DB</div>
+                        <div class="tab-pane fade" id="tab5default">
+                          Board: <input type="text" id="getUserByIPBoard" name="board" placeholder="Board"><br>
+                          IP: <input type="text" id="getUserByIPAddress" name="IP" placeholder="IP"><br>
+                          <button id="postByIP">Submit</button>
+                            <hr>
+                        <div id="pulledPostsByIP"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+	</div>
+</div>
 </body>
+</html>
+
 </html>

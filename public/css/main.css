@@ -19,6 +19,16 @@ body.main {
     max-width: 100%;
 }
 
+.panel-heading{
+    padding-bottom: 0px;
+    border-bottom-style: none;
+}
+
+#admin-panel{
+    width: 75%;
+    margin:0 auto;
+}
+
 .OP{
     display: inline !important;
 }
