@@ -147,7 +147,12 @@ module.exports = (function(app,passport){
 
     app.get('/admin', isAdmin, (req,res)=>{
         console.log(req.user)
-        res.render('admin.ejs', {user:req.user.username});
+        Board.find({}, function(err,boards){
+            if(err){
+                throw err;
+            }
+            res.render('admin.ejs', {boards: boards, user:req.user.username});
+        });
     });
 
     app.post('/admin', isAdmin, (req,res)=>{

@@ -33,6 +33,13 @@ You will also need to make 3 folders in the `public/` folder, `public/temporary`
 + Custom 404 for invalid paths
 + Deleting a post/thread (modules to handle this are in place)
 + Rotating Banners
++ Catalog view
+
+Admin Properties
++ Has an admin panel where admins can log in
++ Skeleton of Admin panel has a place to add/delete boards, manage stickied threads, manage bans based on IP address, manage reported threads, and view all posts by the same IP address
++ Posts by IP Address is functional
+
 
 ## To Implement:
 1. User-facing front end:
@@ -41,21 +48,19 @@ You will also need to make 3 folders in the `public/` folder, `public/temporary`
     + Open images in new tab/open in page/fit to page
     + WebM's play with/without sound
 + Flags based on Location
-+ Reporting a post !NEEDS ADMINS/MODS
-+ Home Page
++ Reporting a post 
 + Update thread via ajax without updating the page
-+ Catalog view
+
 
 2. Back-End server-side:
-+ Admin/Mod login
-    + Admins can manage:    
-        + Wordfilters
-        + IP Bans
-        + Sticky
-        + Lock threads        
-        + Reported Threads
-            + Gets notification for reported thread
-        + Banners
++ Admins can manage:    
+    + Wordfilters
+    + IP Bans
+    + Sticky
+    + Lock threads        
+    + Reported Threads
+        + Gets notification for reported thread
+    + Banners
 
 
 + API endpoints to:

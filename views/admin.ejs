@@ -35,8 +35,23 @@
                 </div>
                 <div class="panel-body">
                     <div class="tab-content">
-                        <div class="tab-pane fade in active" id="tab1default">Render the Boards here by default</div>
-                        <div class="tab-pane fade" id="tab2default">Send API request for stickied threads</div>
+                        <div class="tab-pane fade in active" id="tab1default"><%=JSON.stringify(boards)%></div>
+                        <div class="tab-pane fade" id="tab2default">
+                            <%boards.forEach(function(board){%>
+                                <h4>/<%=board.boardCode%>/ - <%=board.boardTitle%></h4> 
+                                <% var stickied = board.stickyThreads %>
+                                    <% if(stickied.length==0){%>
+                                        <ul><li>No Stickied threads</li></ul>
+                                    <% } else { %>
+                                        <ul>
+                                        <%stickied.forEach(function(sticky){%>
+                                            <li><a href="/boards/<%=board.boardCode%>/<%=sticky%>"><%=sticky%></a> [Add option to unsticky] </li> 
+                                        <% }) %>
+                                        </ul>
+                                    <% } %>
+                                [Add option to add sticky by post#] 
+                            <% }) %>
+                        </div>
                         <div class="tab-pane fade" id="tab3default">Make DB Entry for banned IPs, API request to get them</div>
                         <div class="tab-pane fade" id="tab4default">Make DB Entry for reported threads, API req for DB, back-end will pull thread ID's/board from DB, then pull threads from the threads DB</div>
                         <div class="tab-pane fade" id="tab5default">
