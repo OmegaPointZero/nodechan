@@ -18,9 +18,18 @@ $(document).ready(function(){
             var P = posts[i]
             var postClass=""
             postClass="post reply"
-            post += "<div id=\""+P.postID+"\" class=\""+postClass+"\"><div class=\"postInfo\"><span class=\"subject\">"+P.subject+"</span><span class=\"nameBlock\"><span class=\"name\">"+P.name+"</span><span class=\"posteruid id_"+P.userID+">(ID:<span class=\"hand\" title=\"Highlight posts by this ID\" style=\"background-color:"+P.userIDColor+";\"><a class=\"hand\">"+P.userID+"</a></span>)</span>"
+            post += "<div class=\"postContainer\" id=\"p"+P.postID+"\">"
+            post += "<div id=\""+P.postID+"\" class=\""+postClass+"\">"
+            post += "<div class=\"postInfo\">"
+            post += "<span class=\"subject\">"+P.subject+"</span>"
+            post += "<span class=\"nameBlock\">"
+            post += "<span class=\"name\">"+P.name+"</span>"
+            post += "<span class=\"posteruid id_"+P.userID+"\">"
+            post += "(ID: <span class=\"hand\" title=\"Highlight posts by this ID\" style=\"background-color:"+P.userIDColor+";\"><a class=\"hand\">"+P.userID+"</a></span>)</span>"
+            post += "<span title=\"United States\" class=\"flag flag-us\"></span></span>"
             post += "<span class=\"postTime\">"+parseTime(P.time)+"</span> "
-            post += "<span class=\"postNumber\"><a href=\"#"+P.postID+"\" class=\"highlightThisPost\" id=\""+P.postID+"\">No. </a><a href=\"#\" class=\"quotePostNumber\" id=\""+P.postID+"\">"+P.postID+"</a></span></div>"
+            post += "<span class=\"postNumber\">"
+            post += "<a href=\"#"+P.postID+"\" class=\"highlightThisPost\" id=\""+P.postID+"\">No.</a> <a href=\"#\" class=\"quotePostNumber\" id=\""+P.postID+"\">"+P.postID+"</a></span></div>"
             if(P.fileSize){
                 post += "<div class=\"file\"><div class=\"fileInfo\">File: <a href=\"/images/"+P.fileName+"\" target=\"_blank\" class=\"fileLink\">"+P.fileOriginalName+"</a>"
                 var fs = P.fileSize
@@ -48,10 +57,12 @@ $(document).ready(function(){
                     if(/^&gt;&gt;\d+$/.test(word)){
                         lArr[i] = '<a href="#'+word.slice(8)+'" class=\"postLink\">'+word+'</a>'
                     }
-                post += lArr.join(' ')
-                post += "</span></br></div></div></div></div>"
                 }
+                post += lArr.join(' ')
+                console.log('lArr:'+lArr.join(' '))
+                post += "</span></br>"
             });
+            post+="</div></div></div></div>"
             console.log(post)
             if(i==posts.length-1){$(target).html(post)}
         }
