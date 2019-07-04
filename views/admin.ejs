@@ -1,5 +1,6 @@
 <html>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script> <!-- load jQuery -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -18,53 +19,85 @@
 
     <p>Hi. Welcome to the Admin Panel, <%=user%></p>
   <div class="row" id="admin-panel">
-    	<div style="width:100%;">
-            <div class="panel with-nav-tabs panel-default">
-                <div class="panel-heading">
-                        <ul class="nav nav-tabs">
-                        <!--  Allow admins to interact with/monitor DB, delete threads, lock
-                            threads, move thread to a new board (build function to re-number
-                            posts), ban by IP address, view reports, sort/view posts by user 
-                            IP address -->
-                            <li class="active"><a href="#tab1default" data-toggle="tab">Add/Delete Boards</a></li>
-                            <li><a href="#tab2default" data-toggle="tab">Stickied Threads</a></li>
-                            <li><a href="#tab3default" data-toggle="tab">IP Bans</a></li>
-                            <li><a href="#tab4default" data-toggle="tab">Reported Threads</a></li>
-                            <li><a href="#tab5default" data-toggle="tab">Posts By User</a></li>
-                        </ul>
-                </div>
-                <div class="panel-body">
-                    <div class="tab-content">
-                        <div class="tab-pane fade in active" id="tab1default"><%=JSON.stringify(boards)%></div>
-                        <div class="tab-pane fade" id="tab2default">
-                            <%boards.forEach(function(board){%>
-                                <h4>/<%=board.boardCode%>/ - <%=board.boardTitle%></h4> 
-                                <% var stickied = board.stickyThreads %>
-                                    <% if(stickied.length==0){%>
-                                        <ul><li>No Stickied threads</li></ul>
-                                    <% } else { %>
-                                        <ul>
-                                        <%stickied.forEach(function(sticky){%>
-                                            <li><a href="/boards/<%=board.boardCode%>/<%=sticky%>"><%=sticky%></a> [Add option to unsticky] </li> 
-                                        <% }) %>
-                                        </ul>
-                                    <% } %>
-                                [Add option to add sticky by post#] 
-                            <% }) %>
-                        </div>
-                        <div class="tab-pane fade" id="tab3default">Make DB Entry for banned IPs, API request to get them</div>
-                        <div class="tab-pane fade" id="tab4default">Make DB Entry for reported threads, API req for DB, back-end will pull thread ID's/board from DB, then pull threads from the threads DB</div>
-                        <div class="tab-pane fade" id="tab5default">
-                          Board: <input type="text" id="getUserByIPBoard" name="board" placeholder="Board"><br>
-                          IP: <input type="text" id="getUserByIPAddress" name="IP" placeholder="IP"><br>
-                          <button id="postByIP">Submit</button>
-                            <hr>
-                        <div id="pulledPostsByIP"></div>
-                        </div>
+	<div style="width:100%;">
+    <div class="panel with-nav-tabs panel-default">
+        <div class="panel-heading">
+            <ul class="nav nav-tabs">
+            <!--  Allow admins to interact with/monitor DB, delete threads, lock
+                threads, move thread to a new board (build function to re-number
+                posts), ban by IP address, view reports, sort/view posts by user 
+                IP address -->
+                <li class="active"><a href="#tab1default" data-toggle="tab">Add/Delete Boards</a></li>
+                <li><a href="#tab2default" data-toggle="tab">Stickied Threads</a></li>
+                <li><a href="#tab3default" data-toggle="tab">IP Bans</a></li>
+                <li><a href="#tab4default" data-toggle="tab">Reported Threads</a></li>
+                <li><a href="#tab5default" data-toggle="tab">Posts By User</a></li>
+            </ul>
+        </div>
+        <div class="panel-body">
+            <div class="tab-content">
+
+                <!-- 
+                    BOARDS LIST TAB CONTENTS
+                -->
+                <div class="tab-pane fade in active" id="tab1default">
+                    <div class="add-boards-panel">
+                        <% var categories = boards.map(b=>b.category).filter((value,index,self) => self.indexOf(value) === index) %>
+
+                        Add boards with a panel here
+                        Here's the categories: <%=categories%>
                     </div>
+                    <div class="edit-boards-panel">
+                        
+
+
+                        <% boards.forEach(function(board){ %>
+                            <hr>
+                                <h4><%=board.boardTitle%> - /<%=board.boardCode%>/</h4>
+                                <span>Category: <%=board.category%></span><br>
+                                Rename Board: <input class="newBoardTitle" id="newcode-<%=board.boardTitle%>" placeholder="New Board Title"></input><button class="newBoardTitle" id="submitcode-<%=board.boardTitle%>">Update</button><br>
+                                Change Board Title: <input class="newBoardCode" id="newcode-<%=board.boardCode%>" placeholder="New Board Code"></input><button class="newBoardCode" id="submitcode-<%=board.boardCode%>">Update</button><br>
+
+                                Change Category: <select name="category"><%categories.forEach(function(cat){%><option value="<%=cat%>"><%=cat%></option><%})%></select> <button>Update</button><br>
+                                New Category: <input class="newBoardCat" id="newcode-<%=board.category%>" placeholder="New Board Category"></input><button class="newBoardCat" id="submitcode-<%=board.category%>">Update</button><br>
+                                <button class="delete" id="deleteboard-<%=board.boardCode%>">Delete</button>
+                            <hr>
+                        <% }) %>
+                    </div>
+                </div> 
+
+                <!-- 
+                    STICKY THREAD TAB CONTENTS
+                -->
+                <div class="tab-pane fade" id="tab2default"> 
+                    <%boards.forEach(function(board){%> 
+                        <h4>/<%=board.boardCode%>/ - <%=board.boardTitle%></h4>  
+                        <% var stickied = board.stickyThreads %> 
+                            <% if(stickied.length==0){%> 
+                                <ul><li>No Stickied threads</li></ul> 
+                            <% } else { %> 
+                                <ul> 
+                                <%stickied.forEach(function(sticky){%> 
+                                    <li><a href="/<%=board.boardCode%>/thread/<%=sticky%>"><%=sticky%></a> <button class="unsticky" id="unsticky-<%=board.boardCode%>-<%=sticky%>">Unsticky</button></li>  
+                                <% }) %> 
+                                </ul> 
+                            <% } %> 
+                        <div class="addSticky" id="sticky-<%=board.boardCode%>"><input class="addSticky" type="text" id="addSticky-<%=board.boardCode%>"></input><button class="addSticky" id="sticky-<%=board.boardCode%>">Add</button></div> 
+                    <% }) %>
+                </div>
+                <div class="tab-pane fade" id="tab3default">Make DB Entry for banned IPs, API request to get them</div> 
+                <div class="tab-pane fade" id="tab4default">Make DB Entry for reported threads, API req for DB, back-end will pull thread ID's/board from DB, then pull threads from the threads DB</div> 
+                <div class="tab-pane fade" id="tab5default">
+                  Board: <input type="text" id="getUserByIPBoard" name="board" placeholder="Board"><br>
+                  IP: <input type="text" id="getUserByIPAddress" name="IP" placeholder="IP"><br>
+                  <button id="postByIP">Submit</button>
+                    <hr>
+                <div id="pulledPostsByIP"></div>
                 </div>
             </div>
         </div>
+    </div>
+    </div>
 	</div>
 </div>
 </body>

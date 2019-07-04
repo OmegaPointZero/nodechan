@@ -39,7 +39,8 @@ Admin Properties
 + Has an admin panel where admins can log in
 + Skeleton of Admin panel has a place to add/delete boards, manage stickied threads, manage bans based on IP address, manage reported threads, and view all posts by the same IP address
 + Posts by IP Address is functional
-
++ Sticky is semi-functional
+    + Can get ist of all stickies per board
 
 ## To Implement:
 1. User-facing front end:
@@ -50,19 +51,17 @@ Admin Properties
 + Flags based on Location
 + Reporting a post 
 + Update thread via ajax without updating the page
-
++ Added viewport for mobile viewing, need to make a div that holds background color in fixed place that isn't the actual body tab. Position: fixed fixes mobile viewport rendering but doesn't let you scroll.
 
 2. Back-End server-side:
-+ Admins can manage:    
-    + Wordfilters
-    + IP Bans
-    + Sticky
-    + Lock threads        
-    + Reported Threads
-        + Gets notification for reported thread
-    + Banners
-
-
++ Wordfilters
++ IP Bans
++ Sticky
+    + Add/Delete stickies from admin panel
++ Lock threads        
++ Reported Threads
+    + Gets notification for reported thread
++ Banners
 + API endpoints to:
     + Update Thread replies
     + Get thread's page number
@@ -70,3 +69,4 @@ Admin Properties
 
 ## To Be fixed:
 1. Using the Delete function on the boards.ejs page doesn't delete the entire thread, just OP
+2. Incorrect Login Credentials cause a crash.

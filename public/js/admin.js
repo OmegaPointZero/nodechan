@@ -11,7 +11,8 @@ $(document).ready(function(){
         return month+"/"+day+"/"+year+" ("+time[0]+") "+time[4] 
     });
         
-
+    /*  takes posts as an array from DB entries, renders them
+        in the target div#id */
     var renderPosts = (function(posts,target){
         var post = ""
         for(var i=0;i<posts.length;i++){
@@ -79,7 +80,6 @@ $(document).ready(function(){
             data: obj,
             success: function(data){
                 var target = "#pulledPostsByIP"
-                //$('#pulledPostsByIP').html(JSON.stringify(data))
                 renderPosts(data,target)
            }
         });
@@ -101,5 +101,55 @@ $(document).ready(function(){
         }
     });
 
+    $('input.addSticky').on("keypress", function (e){     
+        var id = this.id;
+        var board = id.slice(10,)       
+        if (e.keyCode == 13) {
+            // Cancel the default action on keypress event
+            e.preventDefault(); 
+            $('button#sticky-'+board).click();
+        }
+    });
+
+    $('.unsticky').click(function(e){
+        var id = this.id;
+        var s = id.split('-');
+        var board = s[1]
+        var thread = s[2]
+        var obj = {
+            action: 'unsticky',
+            board: board,
+            thread: thread
+        }
+        $.ajax({
+            type: "POST",
+            url: '/admin/sticky',
+            data: obj,
+            success: function(data){
+                console.log('received data: ')
+                console.log(data)
+           }
+        });
+    });
+
+    $('button.addSticky').click(function(e){
+        var thisID = this.id;
+        var board = thisID.slice(7,)
+        var target = $('#addSticky-'+board).val()
+        var obj = {
+            action: 'sticky',
+            board: board,
+            thread: target            
+        }
+        $.ajax({
+            type: "POST",
+            url: '/admin/sticky',
+            data: obj,
+            success: function(data){
+                console.log('received data: ')
+                console.log(data)
+           }
+        });
+    });
 
 });

@@ -24,8 +24,6 @@ if(!Array.prototype.last){
 
 module.exports = (function(app,passport){
 
-
-
     //Get Home page
     app.get('/', (req,res)=>{
 
@@ -137,16 +135,13 @@ module.exports = (function(app,passport){
     /*  If it's the first time this database is saving an admin, comment out
         the above POST /login route, and uncomment this one, to register a 
         new user 
-    */
 
-    /*
     app.post('/login', passport.authenticate('local-signup', {
         successRedirect: '/admin',
         failureRedirect: '/login'})
     ); */
 
     app.get('/admin', isAdmin, (req,res)=>{
-        console.log(req.user)
         Board.find({}, function(err,boards){
             if(err){
                 throw err;
@@ -162,10 +157,15 @@ module.exports = (function(app,passport){
             IP address */
     });
 
+    app.post('/admin/sticky', isAdmin, (req,res)=>{
+        var body = req.body;
+        console.log(req.body);
+        res.send('GOT A REQUEST: '+body)
+    });
+
     //API REQUESTS BEGIN HERE
 
     app.post('/api/users', isAdmin, (req,res)=>{
-        console.log(req.body)
         var board = req.body.board;
         var IP = req.body.IP;
         Post.find({board:board,IP:IP},function(err,posts){

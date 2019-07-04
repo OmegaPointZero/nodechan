@@ -4,7 +4,8 @@ p {
 }
 
 body.main {
-    height: 200px;
+    top: 0;
+    bottom: 0;
     background: linear-gradient(#fed6af, #ffebcf, #ffffee) no-repeat;
     background-size:auto 175px;
     background-color: #ffffee;
@@ -16,7 +17,8 @@ body.main {
     margin-right: 0px;
     margin-bottom: 10px;
     padding-right: 5px;
-    max-width: 100%;
+    width: 100%;
+    overflow-y: scroll;
 }
 
 .panel-heading{
