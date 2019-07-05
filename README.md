@@ -53,12 +53,11 @@ Admin Properties
 + Update thread via ajax without updating the page
 + Added viewport for mobile viewing, need to make a div that holds background color in fixed place that isn't the actual body tab. Position: fixed fixes mobile viewport rendering but doesn't let you scroll.
 
+
 2. Back-End server-side:
 + Wordfilters
 + IP Bans
-+ Sticky
-    + Add/Delete stickies from admin panel
-+ Lock threads        
++ Locked threads        
 + Reported Threads
     + Gets notification for reported thread
 + Banners
@@ -66,6 +65,8 @@ Admin Properties
     + Update Thread replies
     + Get thread's page number
     + Update thread metadata
++ If thread is locked, do not allow user to reply
++ Sticky threads: if thread is stickied, sticky to top of the board
 
 ## To Be fixed:
 1. Using the Delete function on the boards.ejs page doesn't delete the entire thread, just OP

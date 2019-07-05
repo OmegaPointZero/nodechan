@@ -152,9 +152,13 @@
 <% } %>
 
 </div>
-
-<hr>
 <div class="footMenu">
+    <div class="pageTab">	
+    <%for(var n=1;n<=10;n++){ %>
+        [<a href="/boards/<%=thisBoard.boardCode%>/<%=n%>" class="pageLink" <%if(n==page){%>style="font-weight:bold"<%}%> ><%=n%></a>]
+    <% } %>	 
+    <button id="nextPage"><a class="nextPgButton" href="/boards/<%=thisBoard.boardCode%>/<%if(page<10){%><%=page+1%><%} else {%>10<% } %>">Next</a></button></div><hr>
+
     <div class="bottomMenu">
     [<a href="/boards/<%=thisBoard.boardCode%>">Refresh</a>] [<a href="#top">Top</a>] [<a href="/boards/<%=thisBoard.boardCode%>/catalog">Catalog</a>]
     </div>
@@ -167,6 +171,7 @@
     </div>
 </div> 
 <hr>
+
 <div class="boardNav"> 
    [ <%allBoards.forEach(function(board){%>
        

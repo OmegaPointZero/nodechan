@@ -316,6 +316,11 @@ div.footer{
     margin-left: 7px;
 }
 
+.nextPgButton{
+    text-decoration: none;
+    color: black;
+}
+
 .pageTab{
     float: left;
     background-color:#f0e0d6;
@@ -324,7 +329,10 @@ div.footer{
     margin-left: 5px;
     max-width: 25%;
     padding: 2px;
+    margin-bottom: 6px;
     color: #b86;
+    display: block;
+    min-height: 20px;
 }
 
 .pageTab button{

@@ -45,7 +45,6 @@
                         <% var categories = boards.map(b=>b.category).filter((value,index,self) => self.indexOf(value) === index) %>
 
                         Add boards with a panel here
-                        Here's the categories: <%=categories%>
                     </div>
                     <div class="edit-boards-panel">
                         
@@ -53,7 +52,7 @@
 
                         <% boards.forEach(function(board){ %>
                             <hr>
-                                <h4><%=board.boardTitle%> - /<%=board.boardCode%>/</h4>
+                                <h4>/<%=board.boardCode%>/ - <%=board.boardTitle%></h4>
                                 <span>Category: <%=board.category%></span><br>
                                 Rename Board: <input class="newBoardTitle" id="newcode-<%=board.boardTitle%>" placeholder="New Board Title"></input><button class="newBoardTitle" id="submitcode-<%=board.boardTitle%>">Update</button><br>
                                 Change Board Title: <input class="newBoardCode" id="newcode-<%=board.boardCode%>" placeholder="New Board Code"></input><button class="newBoardCode" id="submitcode-<%=board.boardCode%>">Update</button><br>

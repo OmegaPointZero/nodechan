@@ -46,7 +46,7 @@ module.exports = (function(app,passport){
         var page;
         req.params.page ? page = Number(req.params.page) : page = 1; 
         if(page=='thread'){next();return}
-        if(page>-1 && page < 10){
+        if(page>-1 && page <= 10){
             var board = req.params.board;
             postManager.getPage(board,page,req,res)
         } else if(page>10){
@@ -118,7 +118,19 @@ module.exports = (function(app,passport){
 
     app.post('/report', (req,res)=>{
         /*  Post REPORT to server, record in DB, use websockets
-            to send notification to admins */
+            to send notification to admins 
+            Need to make database of reported posts
+            obj = {
+                board: boardCode
+                post: postID
+                reportingIP: String
+                reason: reason for report
+                reviewed: Boolean
+                admin: String
+                action: String
+            }
+            Once reviewed, it records which admin marked it reviewed and what action they took (ban, warning, disregard)
+        */
     });
 
     //ADMIN FUNCTIONS
@@ -150,11 +162,29 @@ module.exports = (function(app,passport){
         });
     });
 
-    app.post('/admin', isAdmin, (req,res)=>{
-        /*  Allow admins to interact with/monitor DB, delete threads, lock
-            threads, move thread to a new board (build function to re-number
-            posts), ban by IP address, view reports, sort/view posts by user 
-            IP address */
+    app.post('/admin/boards', isAdmin, (req,res)=>{
+        /*  Add boards and manage them 
+            Expect an object: 
+            obj = {
+                action: String (changeCode, changeTitle, Change Category, Delete)
+                code: current board code
+                target: String (new code, new title, new category)
+            }
+            Parse object, locate in Boards database, and update
+            If new board:
+            obj = {
+                action: 'New Board',
+                code: new board code,
+                title: new board title,
+                category: new board category
+            }
+            Create and save in Database
+            */
+    });
+
+    app.post('/admin/bans', isAdmin, (req,res)=>{
+        /*  Send IP, board (either all or specific board)
+            and reason to banned IPs collection of DB */
     });
 
     app.post('/admin/sticky', isAdmin, (req,res)=>{
@@ -172,7 +202,15 @@ module.exports = (function(app,passport){
             if(err){throw(err)}
             res.send(posts)
         });
-    })
+    });
+
+    app.get('/api/reports', isAdmin, (req,res) => {
+        /* seek reported posts, reviewed or not reviewed, depending on the request */
+    });
+
+    app.get('/api/bans', (req,res) => {
+        /* return all banned IPs and reasons */
+    });
 
     app.get('/api/boardlist', (req,res)=>{
         Board.find({},function(err,boards){
