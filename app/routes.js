@@ -1,5 +1,6 @@
 const Post = require('./models/posts');
 const Board = require('./models/boards');
+const Report = require('./models/report');
 //const Admin = require('./models/admin'); //administrative stuff
 //const AdminUsers = require('./models/mods');
 const postManager = require('./src/post');
@@ -119,16 +120,6 @@ module.exports = (function(app,passport){
     app.post('/report', (req,res)=>{
         /*  Post REPORT to server, record in DB, use websockets
             to send notification to admins 
-            Need to make database of reported posts
-            obj = {
-                board: boardCode
-                post: postID
-                reportingIP: String
-                reason: reason for report
-                reviewed: Boolean
-                admin: String
-                action: String
-            }
             Once reviewed, it records which admin marked it reviewed and what action they took (ban, warning, disregard)
         */
     });
@@ -205,7 +196,13 @@ module.exports = (function(app,passport){
     });
 
     app.get('/api/reports', isAdmin, (req,res) => {
-        /* seek reported posts, reviewed or not reviewed, depending on the request */
+        var rev = req.body.reviewed;
+        Report.find({reviewed:rev},function(err,reps){
+            if(err){
+                throw err
+            }
+            res.send(reps)
+        }); 
     });
 
     app.get('/api/bans', (req,res) => {
