@@ -8,7 +8,8 @@ var reportSchema = new mongoose.Schema({
     reason: String,
     reviewed: Boolean,
     admin: String,
-    action: String
+    action: String,
+    time: Number
 },{collection:'reports'});
 
 module.exports = mongoose.model('Reports', reportSchema);

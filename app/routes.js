@@ -1,8 +1,6 @@
 const Post = require('./models/posts');
 const Board = require('./models/boards');
 const Report = require('./models/report');
-//const Admin = require('./models/admin'); //administrative stuff
-//const AdminUsers = require('./models/mods');
 const postManager = require('./src/post');
 const toolbox = require('./src/tools');
 const imageManager = require('./src/images');
@@ -118,10 +116,23 @@ module.exports = (function(app,passport){
     });
 
     app.post('/report', (req,res)=>{
-        /*  Post REPORT to server, record in DB, use websockets
-            to send notification to admins 
-            Once reviewed, it records which admin marked it reviewed and what action they took (ban, warning, disregard)
-        */
+        var repo = new Report();
+        repo.board = req.body.board;
+        repo.post = req.body.post;
+        repo.reportingIP = req.connection.remoteAddress;
+        repo.reason = req.body.reason;
+        repo.reviewed = false;
+        repo.admin = '';
+        repo.action = '';
+        repo.time = new Date().getTime();
+        repo.save(function(err){
+            if(err){
+                throw(err);
+                res.send(err)
+            } else {
+                res.send('Report saved!')
+            }
+        })
     });
 
     //ADMIN FUNCTIONS
@@ -162,15 +173,40 @@ module.exports = (function(app,passport){
                 target: String (new code, new title, new category)
             }
             Parse object, locate in Boards database, and update
-            If new board:
-            obj = {
-                action: 'New Board',
-                code: new board code,
-                title: new board title,
-                category: new board category
-            }
-            Create and save in Database
             */
+            if(req.body.action=='New Board'){
+                var B = new Board();
+                B.boardCode = req.body.code;
+                B.boardTitle = req.body.title,
+                B.category = req.body.category;
+                B.stickyThreads = [];
+                B.lockedThreads = [];
+                B.save(function(err){
+                    if(err){throw(err);res.send(err)}else{
+                        res.send('Board Saved!');
+                    }
+                });
+            } else if(req.body.action=='changeCode'{
+                Board.findOneAndUpdate({boardCode:req.body.code},{$set{boardCode:req.body.target}},function(err,board)){
+                    if(err){
+                        throw err;
+                    }
+                });
+            } else if(req.body.action=='changeTitle'){
+                Board.findOneAndUpdate({boardTitle:req.body.code},{$set{boardTitle:req.body.target}},function(err,board)){
+                    if(err){
+                        throw err;
+                    }
+                });
+            } else if(req.body.action=='changeCategory'){
+                Board.findOneAndUpdate({category:req.body.code},{$set{category:req.body.target}},function(err,board)){
+                    if(err){
+                        throw err;
+                    }
+                });
+            } else if(req.body.action==''){
+                /* check the previous 3 functions first and make sure they work before adding a delete function */
+            }
     });
 
     app.post('/admin/bans', isAdmin, (req,res)=>{
