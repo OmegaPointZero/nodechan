@@ -152,4 +152,21 @@ $(document).ready(function(){
         });
     });
 
+    $('button.delete').click(function(e){
+        var thisID = this.id;
+        var board = thisID.slice(12,)
+        var obj = {
+            action: 'Delete',
+            board: board,
+        }
+        $.ajax({
+            type: "POST",
+            url: '/admin/boards',
+            data: obj,
+            success: function(data){
+                $('#be-'+board).html(data);
+           }
+        });
+    });
+
 });

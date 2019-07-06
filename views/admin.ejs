@@ -44,14 +44,25 @@
                     <div class="add-boards-panel">
                         <% var categories = boards.map(b=>b.category).filter((value,index,self) => self.indexOf(value) === index) %>
 
-                        Add boards with a panel here
+                        <h3>Add a new board</h3>
+                        <form method="POST" action="/admin/boards">
+                            <input name="action" value="New Board" type="hidden"></input>
+                            <!-- 
+                                code: new board code,
+                                title: new board title,
+                                category: new board category
+                            -->
+                            Board Code:     <input name="code" placeholder="New Board Code"></input><br>
+                            Board Title:    <input name="title" placeholder="New Board Title"></input><br>
+                            Board Category: <input name="category" placeholder="New Board Category"></input><br>
+                            <input type="submit" />
+                        </form>
                     </div>
                     <div class="edit-boards-panel">
-                        
-
-
+                        <hr>
+                        <h3>Edit Existing Boards</h3>
                         <% boards.forEach(function(board){ %>
-                            <hr>
+                                <div class="boards-editor" id="be-<%=board.boardCode%>">
                                 <h4>/<%=board.boardCode%>/ - <%=board.boardTitle%></h4>
                                 <span>Category: <%=board.category%></span><br>
                                 Rename Board: <input class="newBoardTitle" id="newcode-<%=board.boardTitle%>" placeholder="New Board Title"></input><button class="newBoardTitle" id="submitcode-<%=board.boardTitle%>">Update</button><br>
@@ -61,6 +72,7 @@
                                 New Category: <input class="newBoardCat" id="newcode-<%=board.category%>" placeholder="New Board Category"></input><button class="newBoardCat" id="submitcode-<%=board.category%>">Update</button><br>
                                 <button class="delete" id="deleteboard-<%=board.boardCode%>">Delete</button>
                             <hr>
+                            </div>
                         <% }) %>
                     </div>
                 </div> 

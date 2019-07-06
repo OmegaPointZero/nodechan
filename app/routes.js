@@ -164,6 +164,10 @@ module.exports = (function(app,passport){
         });
     });
 
+    app.post('/admin/test', (req,res)=>{
+        console.log(req.body)
+    });
+
     app.post('/admin/boards', isAdmin, (req,res)=>{
         /*  Add boards and manage them 
             Expect an object: 
@@ -186,26 +190,32 @@ module.exports = (function(app,passport){
                         res.send('Board Saved!');
                     }
                 });
-            } else if(req.body.action=='changeCode'{
-                Board.findOneAndUpdate({boardCode:req.body.code},{$set{boardCode:req.body.target}},function(err,board)){
+            } else if(req.body.action=='changeCode'){
+                Board.findOneAndUpdate({boardCode:req.body.code},{$set:{boardCode:req.body.target}},function(err,board){
                     if(err){
                         throw err;
                     }
                 });
             } else if(req.body.action=='changeTitle'){
-                Board.findOneAndUpdate({boardTitle:req.body.code},{$set{boardTitle:req.body.target}},function(err,board)){
+                Board.findOneAndUpdate({boardTitle:req.body.code},{$set:{boardTitle:req.body.target}},function(err,board){
                     if(err){
                         throw err;
                     }
                 });
             } else if(req.body.action=='changeCategory'){
-                Board.findOneAndUpdate({category:req.body.code},{$set{category:req.body.target}},function(err,board)){
+                Board.findOneAndUpdate({category:req.body.code},{$set:{category:req.body.target}},function(err,board){
                     if(err){
                         throw err;
                     }
                 });
-            } else if(req.body.action==''){
-                /* check the previous 3 functions first and make sure they work before adding a delete function */
+            } else if(req.body.action=='Delete'){
+                Board.findOneAndRemove({boardCode:req.body.board},function(err){
+                    if(err){
+                        throw(err)
+                    } else {
+                        res.send('Deleted')
+                    }
+                })
             }
     });
 

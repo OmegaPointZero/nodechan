@@ -42,6 +42,10 @@ Admin Properties
 + Sticky is semi-functional
     + Can get ist of all stickies per board
 
+## Immediate to-do:
++ Set 'update' buttons to send data to server on boards editor
++ Make pop-up to prevent accidental 'delete' button mashing
+
 ## To Implement:
 1. User-facing front end:
 + Cookie to keep track of options
@@ -71,3 +75,4 @@ Admin Properties
 ## To Be fixed:
 1. Using the Delete function on the boards.ejs page doesn't delete the entire thread, just OP
 2. Incorrect Login Credentials cause a crash.
+3. Refreshing Authenticated Page after restarting server logs "incorrect password"
