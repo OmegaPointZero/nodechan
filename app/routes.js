@@ -169,54 +169,51 @@ module.exports = (function(app,passport){
     });
 
     app.post('/admin/boards', isAdmin, (req,res)=>{
-        /*  Add boards and manage them 
-            Expect an object: 
-            obj = {
-                action: String (changeCode, changeTitle, Change Category, Delete)
-                code: current board code
-                target: String (new code, new title, new category)
-            }
-            Parse object, locate in Boards database, and update
-            */
-            if(req.body.action=='New Board'){
-                var B = new Board();
-                B.boardCode = req.body.code;
-                B.boardTitle = req.body.title,
-                B.category = req.body.category;
-                B.stickyThreads = [];
-                B.lockedThreads = [];
-                B.save(function(err){
-                    if(err){throw(err);res.send(err)}else{
-                        res.send('Board Saved!');
-                    }
-                });
-            } else if(req.body.action=='changeCode'){
-                Board.findOneAndUpdate({boardCode:req.body.code},{$set:{boardCode:req.body.target}},function(err,board){
-                    if(err){
-                        throw err;
-                    }
-                });
-            } else if(req.body.action=='changeTitle'){
-                Board.findOneAndUpdate({boardTitle:req.body.code},{$set:{boardTitle:req.body.target}},function(err,board){
-                    if(err){
-                        throw err;
-                    }
-                });
-            } else if(req.body.action=='changeCategory'){
-                Board.findOneAndUpdate({category:req.body.code},{$set:{category:req.body.target}},function(err,board){
-                    if(err){
-                        throw err;
-                    }
-                });
-            } else if(req.body.action=='Delete'){
-                Board.findOneAndRemove({boardCode:req.body.board},function(err){
-                    if(err){
-                        throw(err)
-                    } else {
-                        res.send('Deleted')
-                    }
-                })
-            }
+        if(req.body.action=='New Board'){
+            var B = new Board();
+            B.boardCode = req.body.code;
+            B.boardTitle = req.body.title,
+            B.category = req.body.category;
+            B.stickyThreads = [];
+            B.lockedThreads = [];
+            B.save(function(err){
+                if(err){throw(err);res.send(err)}else{
+                    res.send('Board Saved!');
+                }
+            });
+        } else if(req.body.action=='changeCode'){
+            Board.findOneAndUpdate({"boardCode":req.body.board},{$set:{"boardCode":req.body.target}},function(err,board){
+                if(err){
+                    throw err;
+                } else {
+                    res.send(req.body.target);
+                }
+            });
+        } else if(req.body.action=='changeTitle'){
+            Board.findOneAndUpdate({"boardCode":req.body.board},{$set:{"boardTitle":req.body.target}},function(err,board){
+                if(err){
+                    console.log(err);
+                } else {
+                    res.send(req.body.target);
+                }
+            });
+        } else if(req.body.action=='changeCategory'){
+            Board.findOneAndUpdate({"boardCode":req.body.board},{$set:{"category":req.body.target}},function(err,board){
+                if(err){
+                    throw err;
+                } else {
+                    res.send(req.body.target);
+                }
+            });
+        } else if(req.body.action=='Delete'){
+            Board.findOneAndRemove({boardCode:req.body.board},function(err){
+                if(err){
+                    throw(err)
+                } else {
+                    res.send('Deleted')
+                }
+            })
+        }
     });
 
     app.post('/admin/bans', isAdmin, (req,res)=>{

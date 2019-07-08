@@ -152,6 +152,79 @@ $(document).ready(function(){
         });
     });
 
+    $('button.newBoardTitle').click(function(e){
+        var thisID = this.id;
+        var board = thisID.slice(11,)
+        var obj = {
+            action: 'changeTitle',
+            board: board,
+            target: $('input#newTitle-'+board).val()
+        }
+        $.ajax({
+            type: "POST",
+            url: '/admin/boards',
+            data: obj,
+            success: function(data){
+                $('#bt-'+board).html(data);
+           }
+        });
+    });
+
+    $('button.newBoardCode').click(function(e){
+        var thisID = this.id;
+        var board = thisID.slice(11,)
+        var obj = {
+            action: 'changeCode',
+            board: board,
+            target: $('input#newCode-'+board).val()
+        }
+        $.ajax({
+            type: "POST",
+            url: '/admin/boards',
+            data: obj,
+            success: function(data){
+                $('#bc-'+board).html(data);
+           }
+        });
+    });
+
+    $('button.updateCategory').click(function(e){
+        var thisID = this.id;
+        var board = thisID.slice(10,)
+        var obj = {
+            action: 'changeCategory',
+            board: board,
+            target: $('select#uc-'+board).val()
+        }
+        $.ajax({
+            type: "POST",
+            url: '/admin/boards',
+            data: obj,
+            success: function(data){
+                $('#cs-'+board).html(data);
+           }
+        });
+    });
+
+    $('button.newCategory').click(function(e){
+        var thisID = this.id;
+        var board = thisID.slice(12,)
+        var obj = {
+            action: 'changeCategory',
+            board: board,
+            target: $('input#newCat-'+board).val()
+        }
+        $.ajax({
+            type: "POST",
+            url: '/admin/boards',
+            data: obj,
+            success: function(data){
+                $('#cs-'+board).html(data);
+           }
+        });
+    });
+
+
     $('button.delete').click(function(e){
         var thisID = this.id;
         var board = thisID.slice(12,)

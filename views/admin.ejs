@@ -63,13 +63,13 @@
                         <h3>Edit Existing Boards</h3>
                         <% boards.forEach(function(board){ %>
                                 <div class="boards-editor" id="be-<%=board.boardCode%>">
-                                <h4>/<%=board.boardCode%>/ - <%=board.boardTitle%></h4>
-                                <span>Category: <%=board.category%></span><br>
-                                Rename Board: <input class="newBoardTitle" id="newcode-<%=board.boardTitle%>" placeholder="New Board Title"></input><button class="newBoardTitle" id="submitcode-<%=board.boardTitle%>">Update</button><br>
-                                Change Board Title: <input class="newBoardCode" id="newcode-<%=board.boardCode%>" placeholder="New Board Code"></input><button class="newBoardCode" id="submitcode-<%=board.boardCode%>">Update</button><br>
+                                <h4>/<span class="boardCode" id="bc-<%=board.boardCode%>"><%=board.boardCode%></span>/ - <span  class="boardTitle" id="bt-<%=board.boardCode%>"> <%=board.boardTitle%></span></h4>
+                                Category: <span class="catspan" id="cs-<%-board.boardCode%>"><%=board.category%></span><br>
+                                Rename Board: <input class="newBoardTitle" id="newTitle-<%=board.boardCode%>" placeholder="New Board Title"></input><button class="newBoardTitle" id="submitcode-<%=board.boardCode%>">Update</button><br>
+                                Change Board Code: <input class="newBoardCode" id="newcode-<%=board.boardCode%>" placeholder="New Board Code"></input><button class="newBoardCode" id="submitcode-<%=board.boardCode%>">Update</button><br>
 
-                                Change Category: <select name="category"><%categories.forEach(function(cat){%><option value="<%=cat%>"><%=cat%></option><%})%></select> <button>Update</button><br>
-                                New Category: <input class="newBoardCat" id="newcode-<%=board.category%>" placeholder="New Board Category"></input><button class="newBoardCat" id="submitcode-<%=board.category%>">Update</button><br>
+                                Change Category: <select id="uc-<%=board.boardCode%>" name="category"><%categories.forEach(function(cat){%><option value="<%=cat%>"><%=cat%></option><%})%></select> <button class="updateCategory" id="updateCat-<%=board.boardCode%>" >Update</button><br>
+                                New Category: <input class="newBoardCat" id="newCat-<%=board.boardCode%>" placeholder="New Board Category"></input><button class="newCategory" id="newCategory-<%=board.boardCode%>">Update</button><br>
                                 <button class="delete" id="deleteboard-<%=board.boardCode%>">Delete</button>
                             <hr>
                             </div>
