@@ -1,11 +1,10 @@
 const mongoose = require('mongoose')
-const bcrypt = require('bcrypt-nodejs')
 
 var reportSchema = new mongoose.Schema({
     board: String,
     post: Number,
     reportingIP: String,
-    reason: String,
+    reason: Array,
     reviewed: Boolean,
     admin: String,
     action: String,

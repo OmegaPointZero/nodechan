@@ -191,6 +191,7 @@ exports.writePost = (function writePost(params,body,IP,imgInfo,req,res){
     var newBody = body.text
     
     var post = new Post();     
+    post.publicBan = false;
     post.IP = IP;
     post.name = escape(body.name);
     post.subject = escape(body.subject);

@@ -1,6 +1,7 @@
 const Post = require('./models/posts');
 const Board = require('./models/boards');
 const Report = require('./models/report');
+const Banned = require('./models/banned');
 const postManager = require('./src/post');
 const toolbox = require('./src/tools');
 const imageManager = require('./src/images');
@@ -21,18 +22,30 @@ if(!Array.prototype.last){
     }
 }
 
+const banUser = (function(options){
+    var Ban = new Banned()
+    Ban.IP = options.IP;
+    Ban.start = options.start;
+    Ban.end = options.end;
+    Ban.reason = options.reason;
+    Ban.offense['board'] = options.oBoard;
+    Ban.offense['post'] = options.oPost;
+    Ban.boards = options.boards;
+    Ban.reportingIP = options.reporting;
+    Ban.save(function(err){
+        if(err){throw(err)}
+    });
+});
+
 module.exports = (function(app,passport){
 
     //Get Home page
     app.get('/', (req,res)=>{
-
         Board.find({},function(err,boards){
             if(err){console.log(err)}
             res.render('home.ejs',{boards:boards})
         })
-
     })
-
 
     app.get('/boards/:board/catalog', (req,res)=>{
         var board = req.params.board
@@ -115,6 +128,14 @@ module.exports = (function(app,passport){
         }
     });
 
+    app.get('/report/:board/:post', (req,res)=>{
+        var b = req.params.board;
+        var p = req.params.post;
+        res.render('report.ejs', {
+            board: b, post: p
+        })
+    });
+
     app.post('/report', (req,res)=>{
         var repo = new Report();
         repo.board = req.body.board;
@@ -160,12 +181,15 @@ module.exports = (function(app,passport){
             if(err){
                 throw err;
             }
-            res.render('admin.ejs', {boards: boards, user:req.user.username});
+            Report.find({}, function(error,reports){
+                res.render('admin.ejs', {boards: boards, reports:reports, user:req.user.username});
+            })
         });
     });
 
     app.post('/admin/test', (req,res)=>{
-        console.log(req.body)
+        console.log(`test received: ${req.body}`)
+        res.send(req.body)
     });
 
     app.post('/admin/boards', isAdmin, (req,res)=>{
@@ -210,15 +234,48 @@ module.exports = (function(app,passport){
                 if(err){
                     throw(err)
                 } else {
-                    res.send('Deleted')
+                    res.redirect('/admin')
                 }
             })
         }
     });
 
-    app.post('/admin/bans', isAdmin, (req,res)=>{
-        /*  Send IP, board (either all or specific board)
-            and reason to banned IPs collection of DB */
+/* 
+    Ban.IP = options.IP;
+    Ban.start = options.start;
+    Ban.end = options.end;
+    Ban.reason = options.reason;
+    Ban.offense['board'] = options.oBoard;
+    Ban.offense['post'] = options.oPost;
+    Ban.boards = options.boards;
+    Ban.reportingIP = options.reporting;
+*/
+    app.post('/admin/repMgr', isAdmin, (req,res)=>{
+        var b = req.body.board;
+        var p = req.body.post;
+        var a = req.body.action;
+        var o = {board:b,post:p}
+        var quiet = /q$/.test(a)
+        if(a=='nothing'){
+            Report.remove({board:b,post:p},function(err,post){
+                res.send('success')
+            })
+        } else {
+            var obj = {
+                reportingIP: req.connection.remoteAddress,
+                offense: o,
+                /* CONTINUE WORK HERE */
+            }
+
+
+        }
+        if(quiet==false){
+            Post.findOneAndUpdate({board:b,postID:p},{$set:{"publicBan":true} function(err,post){
+                if(err){
+                    throw(err)
+                }
+            });
+        }
     });
 
     app.post('/admin/sticky', isAdmin, (req,res)=>{
@@ -238,9 +295,8 @@ module.exports = (function(app,passport){
         });
     });
 
-    app.get('/api/reports', isAdmin, (req,res) => {
-        var rev = req.body.reviewed;
-        Report.find({reviewed:rev},function(err,reps){
+    app.get('/api/admin/reports', isAdmin, (req,res) => {
+        Report.find({},function(err,reps){
             if(err){
                 throw err
             }
@@ -277,6 +333,15 @@ module.exports = (function(app,passport){
         var board = req.params.board;
         var thread = req.params.thread;
         postManager.APIgetThread(board,thread,req,res);
+    });
+
+    app.get('/api/post/:board/:post', (req,res)=>{
+        console.log(req.params)
+        var board = req.params.board;
+        var post = req.params.post;
+        Post.find({board:board,postID:post}, function(err,post){
+            res.send(post)
+        });
     });
 
     function isAdmin(req,res,next){

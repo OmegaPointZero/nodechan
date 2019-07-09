@@ -37,5 +37,13 @@ $(document).ready(function(){
             })
                 location.reload();
         });
+
+        $('.report').click(function(e) {
+            e.preventDefault();
+            var id = this.id;
+            console.log(id);
+            $('#m'+id).toggleClass('hidden')
+        });
+
     })
 

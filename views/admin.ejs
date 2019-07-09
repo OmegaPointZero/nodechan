@@ -43,15 +43,9 @@
                 <div class="tab-pane fade in active" id="tab1default">
                     <div class="add-boards-panel">
                         <% var categories = boards.map(b=>b.category).filter((value,index,self) => self.indexOf(value) === index) %>
-
                         <h3>Add a new board</h3>
                         <form method="POST" action="/admin/boards">
                             <input name="action" value="New Board" type="hidden"></input>
-                            <!-- 
-                                code: new board code,
-                                title: new board title,
-                                category: new board category
-                            -->
                             Board Code:     <input name="code" placeholder="New Board Code"></input><br>
                             Board Title:    <input name="title" placeholder="New Board Title"></input><br>
                             Board Category: <input name="category" placeholder="New Board Category"></input><br>
@@ -70,7 +64,7 @@
 
                                 Change Category: <select id="uc-<%=board.boardCode%>" name="category"><%categories.forEach(function(cat){%><option value="<%=cat%>"><%=cat%></option><%})%></select> <button class="updateCategory" id="updateCat-<%=board.boardCode%>" >Update</button><br>
                                 New Category: <input class="newBoardCat" id="newCat-<%=board.boardCode%>" placeholder="New Board Category"></input><button class="newCategory" id="newCategory-<%=board.boardCode%>">Update</button><br>
-                                <button class="delete" id="deleteboard-<%=board.boardCode%>">Delete</button>
+                               <form action="/admin/boards" method="POST"><input name="action" value="Delete" type="hidden"></input><input name="board" value="<%=board.boardCode%>" type="hidden"></input><button class="delete" id="deleteboard-<%=board.boardCode%>" onclick="return confirm('Are you sure you want to delete this board?')">Delete</button></form>
                             <hr>
                             </div>
                         <% }) %>
@@ -93,11 +87,45 @@
                                 <% }) %> 
                                 </ul> 
                             <% } %> 
-                        <div class="addSticky" id="sticky-<%=board.boardCode%>"><input class="addSticky" type="text" id="addSticky-<%=board.boardCode%>"></input><button class="addSticky" id="sticky-<%=board.boardCode%>">Add</button></div> 
+                        <div class="addStickyOption" id="addStickyOption-<%=board.boardCode%>">Click to Add Sticky</div>
+                        <div class="addSticky hidden" id="sticky-<%=board.boardCode%>"><input class="addSticky" type="text" id="addSticky-<%=board.boardCode%>"></input><button class="addSticky" id="sticky-<%=board.boardCode%>">Add</button></div> 
                     <% }) %>
                 </div>
+                <!-- 
+                    BANNED IP'S TAB CONTENTS
+                -->
                 <div class="tab-pane fade" id="tab3default">Make DB Entry for banned IPs, API request to get them</div> 
-                <div class="tab-pane fade" id="tab4default">Make DB Entry for reported threads, API req for DB, back-end will pull thread ID's/board from DB, then pull threads from the threads DB</div> 
+                <!-- 
+                    REPORTED POSTS/THREADS CONTENTS
+                -->
+                <div class="tab-pane fade" id="tab4default">
+                    <%for(var n=0;n<reports.length;n++){%>
+                        <% var thisReport = reports[n] %>
+                        <div class="reply" style="padding:5px;">
+                            <span>Board: <%=thisReport.board%></span><br>
+                            <span>Post: <%=thisReport.post%></span><br>
+                            <span>Reporting IP: <%=thisReport.reportingIP%></span><br>
+                            <span>Reason: <%=thisReport.reason%></span><br>
+                            <button class="getPost" id="gp-<%=thisReport.board%>-<%=thisReport.post%>-<%=n%>">Get Offending Post</button>
+                            <div class="offendingPost" id="ofp-<%=thisReport.board%>-<%=thisReport.post%>-<%=n%>"></div>
+                            <h5>Take Action:</h5>
+                            <select name="response" id="rep-<%=thisReport.board%>-<%=thisReport.post%>">
+                                <option value="1dayq">24 Hour Ban</option>
+                                <option value="3dayq">72 Hour Ban</option>
+                                <option value="permanentq">Indefinite Ban</option>
+                                <option value="1day">24 Hour Ban (PUBLIC)</option>
+                                <option value="3day">72 Hour Ban (PUBLIC)</option>
+                                <option value="permanent">Indefinite Ban (PUBLIC)</option>
+                                <option value="delete">Delete Post</option>
+                                <option value="deleteImgq">Delete Image And Permaban</option>
+                                <option value="deleteImg">Delete Image And Permaban (PUBLIC)</option>
+                                 <option value="falseRep">Ban Reporting IP (False Report)</option>
+                                <option value="nothing">Delete Report (do nothing)</option>
+                            </select>
+                            <button class="banHammer" id="bh-<%=thisReport.board%>-<%=thisReport.post%>">TAKE ACTION!</button>
+                        </div>
+                    <% } %>
+                </div> 
                 <div class="tab-pane fade" id="tab5default">
                   Board: <input type="text" id="getUserByIPBoard" name="board" placeholder="Board"><br>
                   IP: <input type="text" id="getUserByIPAddress" name="IP" placeholder="IP"><br>

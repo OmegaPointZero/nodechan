@@ -383,3 +383,12 @@ img.banner{
 .column h3{
     margin-top: 0px;
 }
+
+.hidden{
+    display: none;
+}
+
+.report{
+    color: #000080;
+    text-decoration: none;
+}

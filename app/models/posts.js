@@ -21,6 +21,7 @@ var postSchema = new mongoose.Schema({
     fileOriginalName: String,
     fileSize: String,
     fileDimensions: String,
+    publicBan: Boolean
 });
 
 module.exports = mongoose.model('Post', postSchema);

@@ -1,6 +1,7 @@
 $(document).ready(function(){
 
     var parseTime = (function(time){
+        console.log(time)
         var ptime = new Date(time);
         var time = String(ptime).split(" ");
         var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
@@ -17,6 +18,7 @@ $(document).ready(function(){
         var post = ""
         for(var i=0;i<posts.length;i++){
             var P = posts[i]
+            console.log(P)
             var postClass=""
             postClass="post reply"
             post += "<div class=\"postContainer\" id=\"p"+P.postID+"\">"
@@ -60,12 +62,14 @@ $(document).ready(function(){
                     }
                 }
                 post += lArr.join(' ')
-                console.log('lArr:'+lArr.join(' '))
                 post += "</span></br>"
             });
             post+="</div></div></div></div>"
-            console.log(post)
-            if(i==posts.length-1){$(target).html(post)}
+            if(i==posts.length-1){
+                console.log('target: '+target)
+                console.log('post: '+post)
+                $(target).html(post)
+            }
         }
     })
 
@@ -110,6 +114,15 @@ $(document).ready(function(){
             $('button#sticky-'+board).click();
         }
     });
+
+    $('div.addStickyOption').click(function(e){
+        var thisID = this.id;
+        var target = thisID.slice(16,)
+        var tgt = '#sticky-'+target;
+        $(this.id).toggleClass('hidden')
+        $(tgt).removeClass('hidden')
+    });
+
 
     $('.unsticky').click(function(e){
         var id = this.id;
@@ -224,22 +237,49 @@ $(document).ready(function(){
         });
     });
 
+    $('button.getPost').click(function(e){
+        var tid = this.id;
+        var s = tid.split('-')
+        var board = s[1]
+        var id = s[2]
+        var n = s[3]
+        var ofp = "#ofp-"+board+"-"+id+"-"+n
+        var url = "/api/post/"+board+"/"+id
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function(data){
+                renderPosts(data,ofp)
+            }
+        });
+    })
 
-    $('button.delete').click(function(e){
-        var thisID = this.id;
-        var board = thisID.slice(12,)
+    $('button.banHammer').click(function(e){
+        e.preventDefault(); 
+        var tid = this.id;
+        var s = tid.split('-')
+        var board = s[1]
+        var id = s[2]
+        var n = s[3]
+        var action = $('select#rep'+'-'+board+'-'+id).val()
+        var ofp = "#ofp-"+board+"-"+id+"-"+n
+        var url = "/admin/repMgr"
         var obj = {
-            action: 'Delete',
             board: board,
+            post: id,
+            action: action
         }
+        console.log(obj)
         $.ajax({
             type: "POST",
-            url: '/admin/boards',
+            url: url,
             data: obj,
             success: function(data){
-                $('#be-'+board).html(data);
-           }
+                if(data=='success'){
+                    location.reload();
+                }
+            }
         });
-    });
+    })
 
 });

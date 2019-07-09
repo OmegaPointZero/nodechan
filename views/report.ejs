@@ -1,0 +1,45 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script> <!-- load jQuery -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/js/main.js"></script>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+<title>Nodechan - Report A Post</title>
+<body class="main">
+<div class="main-container">
+    <h2>Report a post</h2>
+    <form method="POST" action="/report">
+        <h4>Reporting /<%=board%>/ - Post #<%=post%></h4>
+        <input class="hidden" name="board" value="<%=board%>" autocomplete="off"></input>
+        <input class="hidden" name="post" value="<%=post%>" autocomplete="off"></input>
+        <label id='LAW'>
+        <input class="report-button" type="radio" name="reason" value="law" autocomplete="off"> This post violates US Federal Law</input>
+        </label>
+        <br>
+        <div class="btn-group">
+        <input class="report-button" type="radio" name="reason" value="rule">
+        <label> This Post Violates a Rule
+            <select name="reason"> This Post Violates A Rule:
+              <option value="impersonation">Impersonating Staff</option>
+              <option value="ads">Advertising</option>
+              <option value="offtopic">Off-Topic</option>
+              <option value="spam">Spamming</option>
+              <option value="porn">Pornography</option>
+            </select>
+        </label>
+        </input>
+        <br>
+        <button>Submit</button>
+    </form>
+</div>
+</body>
+</html>
+
+</html>

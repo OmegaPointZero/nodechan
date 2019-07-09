@@ -81,7 +81,7 @@
             <% var year = time[3].slice(2)%>
             <span class="postTime"><%if(month<10){%><%=String("0"+month)%><%} else { %><%=month%><% } %>/<%=day%>/<%=year%> (<%=time[0]%>) <%=time[4]%></span>
             <span class="postNumber">
-                <a href="#<%=post.postID%>" class="highlightThisPost" id="<%=post.postID%>">No.</a> <a href="#" class="quotePostNumber" id="<%=post.postID%>"><%=post.postID%></a></span>
+                <a href="#<%=post.postID%>" class="highlightThisPost" id="<%=post.postID%>">No.</a> <a href="#" class="quotePostNumber" id="<%=post.postID%>"><%=post.postID%></a></span> <a href="#" class="report" id="rp-<%=post.postID%>"> ▶ </a><div class="reply hidden" id="mrp-<%=post.postID%>" style="width:5%;height:2%;font-size:8px;position:relative;z-index:0"><a class="report-link" id="report-link-<%=post.postID%>" target="_blank" href="/report/<%=thisBoard.boardCode%>/<%=post.postID%>">Report</a></div>
             <!-- <a href="#" class="postMenuBtn" title="Post menu" data-cmd="post-menu">▶</a> -->
         </div>
 
