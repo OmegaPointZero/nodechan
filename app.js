@@ -32,7 +32,7 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use(function(req,res,next){
     res.setTimeout(480000, function(){
         console.log('Request has timed out');
-        res.send(408);
+        res.sendStatus(408);
     });
     next();
 });

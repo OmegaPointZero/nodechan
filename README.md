@@ -42,19 +42,28 @@ Admin Properties
 + Can see all reported posts, actionable reponses being built
 
 ## Immediate to-do: 
-medium Priority: 
-+ Implement way for any user to report a thread 
-    + Let admin panel access from the DB, record which admin accesses it and which action they take 
-+ Implement IP bans:  
-    + Make schema for DB that holds IPs, time of ban, duration of ban, reason for ban, relevant boards 
+HIGH priority:
++ Fix local login procedure! Test extensively, be sure login only works with pwd, be sure wrong pwd rejects!
+
+Medium Priority: 
++ IP bans:  
     + Send ban information to relevant IP when banned IP tries to post 
-    + Do not let banned IP addresses post 
-    + Make middleware to check IPs before performing a POST? 
+    + Get all active bans from API
+    + Let Admins manage bans
+    + Flesh out '/banned' route to check IP for bans, if b&, then return duration and reason
+    + When reported post gets taken care of, return information from server, modify page based on returned information
+    + If new Date().getTime > ban.end { remove from active bans }
+    + Store only user NAME of admin, not entire object!
+    
++ Front End stuff:
+    + First of all, make sure all of the post/image information renders correctly
+    + Second, run tests of posts of various lengths render properly
+    + Figure out how to make posts appear aligned *properly*
+    + MAKE EVERYTHING RESPONSIVE AND LOOK GOOD ON MOBILE, that needs a lot of work
 
 Low Priority:
 + Shell script to check for the existence of folders that need to be created if freshly downloaded from github, create them if they don't exist, and then run `node app.js`; put this in the package.json as the startup script
 + Update 'To-Implement' list of README
-+ Determine whether visitor is using IPv4 or IPv6, use ONLY the relevant IP version in logging
 + Clean up/consolidate /admin/boards route action handler
 
 ## To Implement:
@@ -64,7 +73,6 @@ Low Priority:
     + Open images in new tab/open in page/fit to page
     + WebM's play with/without sound
 + Flags based on Location
-+ Reporting a post 
 + Update thread via ajax without updating the page
 + Added viewport for mobile viewing, need to make a div that holds background color in fixed place that isn't the actual body tab. Position: fixed fixes mobile viewport rendering but doesn't let you scroll.
 

@@ -1,7 +1,6 @@
 $(document).ready(function(){
 
     var parseTime = (function(time){
-        console.log(time)
         var ptime = new Date(time);
         var time = String(ptime).split(" ");
         var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
@@ -18,7 +17,6 @@ $(document).ready(function(){
         var post = ""
         for(var i=0;i<posts.length;i++){
             var P = posts[i]
-            console.log(P)
             var postClass=""
             postClass="post reply"
             post += "<div class=\"postContainer\" id=\"p"+P.postID+"\">"
@@ -66,8 +64,6 @@ $(document).ready(function(){
             });
             post+="</div></div></div></div>"
             if(i==posts.length-1){
-                console.log('target: '+target)
-                console.log('post: '+post)
                 $(target).html(post)
             }
         }
@@ -139,8 +135,6 @@ $(document).ready(function(){
             url: '/admin/sticky',
             data: obj,
             success: function(data){
-                console.log('received data: ')
-                console.log(data)
            }
         });
     });
@@ -252,7 +246,17 @@ $(document).ready(function(){
                 renderPosts(data,ofp)
             }
         });
-    })
+    });
+
+    $('button#getActiveBans').click(function(e){
+        $.ajax({
+            type: "GET",
+            url: '/api/bans',
+            success: function(data){
+                $('#activeBanContainers').html(JSON.stringify(data))
+            }
+        });
+    });
 
     $('button.banHammer').click(function(e){
         e.preventDefault(); 
@@ -262,12 +266,14 @@ $(document).ready(function(){
         var id = s[2]
         var n = s[3]
         var action = $('select#rep'+'-'+board+'-'+id).val()
+        var reason = $('input#reason-'+board+'-'+id).val()
         var ofp = "#ofp-"+board+"-"+id+"-"+n
         var url = "/admin/repMgr"
         var obj = {
             board: board,
             post: id,
-            action: action
+            action: action,
+            reason: reason
         }
         console.log(obj)
         $.ajax({

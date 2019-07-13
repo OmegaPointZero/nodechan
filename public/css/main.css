@@ -18,7 +18,6 @@ body.main {
     margin-bottom: 10px;
     padding-right: 5px;
     width: 100%;
-    overflow-y: scroll;
 }
 
 .panel-heading{
@@ -386,6 +385,11 @@ img.banner{
 
 .hidden{
     display: none;
+}
+
+.userBanned{
+    color: red;
+    font-weight: bold;
 }
 
 .report{

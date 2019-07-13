@@ -7,6 +7,7 @@ const toolbox = require('./src/tools');
 const imageManager = require('./src/images');
 const path = require('path');
 const multer = require('multer');
+
 var storage = multer.diskStorage({
     destination: function (req, file, cb){
         cb(null, 'public/temporary')
@@ -15,27 +16,13 @@ var storage = multer.diskStorage({
         cb(null, file.originalname)
     }
 });
+
 const upload = multer({storage: storage});
 if(!Array.prototype.last){
     Array.prototype.last = function(){
         return this[this.length-1]
     }
 }
-
-const banUser = (function(options){
-    var Ban = new Banned()
-    Ban.IP = options.IP;
-    Ban.start = options.start;
-    Ban.end = options.end;
-    Ban.reason = options.reason;
-    Ban.offense['board'] = options.oBoard;
-    Ban.offense['post'] = options.oPost;
-    Ban.boards = options.boards;
-    Ban.reportingIP = options.reporting;
-    Ban.save(function(err){
-        if(err){throw(err)}
-    });
-});
 
 module.exports = (function(app,passport){
 
@@ -47,6 +34,15 @@ module.exports = (function(app,passport){
         })
     })
 
+    app.get('/banned',(req,res)=>{
+        Board.find({},function(e,boards){
+            if(e){throw(e)}
+            Banned.find({},function(err,bans){
+                res.render('bans.ejs', {allBoards:boards,bans:bans});
+            });
+        });
+    })
+
     app.get('/boards/:board/catalog', (req,res)=>{
         var board = req.params.board
         postManager.getCatalog(board,req,res)
@@ -54,7 +50,6 @@ module.exports = (function(app,passport){
 
     //Get board page
     app.get('/boards/:board/:page*?', (req,res,next) => {
-        
         var page;
         req.params.page ? page = Number(req.params.page) : page = 1; 
         if(page=='thread'){next();return}
@@ -68,12 +63,10 @@ module.exports = (function(app,passport){
         } else {
             res.redirect('/error/404')
         } 
-});
-
-
+    });
 
     //Post New thread on :board
-    app.post('/boards/:board', upload.any(), (req,res) => {
+    app.post('/boards/:board', notBanned, upload.any(), (req,res) => {
         if(req.files.length===0){
             res.send('Error: You forgot to upload an image')
             return;
@@ -91,7 +84,7 @@ module.exports = (function(app,passport){
     });
 
     //Reply to thread ID on BOARD
-    app.post('/:board/thread/:id', upload.any(), (req,res)=>{
+    app.post('/:board/thread/:id', notBanned, upload.any(), (req,res)=>{
         if(req.files.length===0 && req.body.text== ""){
             res.send('Error: Response cannot be empty')
         }
@@ -136,7 +129,7 @@ module.exports = (function(app,passport){
         })
     });
 
-    app.post('/report', (req,res)=>{
+    app.post('/report', notBanned, (req,res)=>{
         var repo = new Report();
         repo.board = req.body.board;
         repo.post = req.body.post;
@@ -169,7 +162,7 @@ module.exports = (function(app,passport){
 
     /*  If it's the first time this database is saving an admin, comment out
         the above POST /login route, and uncomment this one, to register a 
-        new user 
+        new user. It's a dirty way to do it but it works
 
     app.post('/login', passport.authenticate('local-signup', {
         successRedirect: '/admin',
@@ -205,6 +198,14 @@ module.exports = (function(app,passport){
                     res.send('Board Saved!');
                 }
             });
+        } else if(req.body.action=='Delete'){
+            Board.findOneAndRemove({boardCode:req.body.board},function(err){
+                if(err){
+                    throw(err)
+                } else {
+                    res.redirect('/admin')
+                }
+            })
         } else if(req.body.action=='changeCode'){
             Board.findOneAndUpdate({"boardCode":req.body.board},{$set:{"boardCode":req.body.target}},function(err,board){
                 if(err){
@@ -229,48 +230,62 @@ module.exports = (function(app,passport){
                     res.send(req.body.target);
                 }
             });
-        } else if(req.body.action=='Delete'){
-            Board.findOneAndRemove({boardCode:req.body.board},function(err){
-                if(err){
-                    throw(err)
-                } else {
-                    res.redirect('/admin')
-                }
-            })
         }
     });
 
-/* 
-    Ban.IP = options.IP;
-    Ban.start = options.start;
-    Ban.end = options.end;
-    Ban.reason = options.reason;
-    Ban.offense['board'] = options.oBoard;
-    Ban.offense['post'] = options.oPost;
-    Ban.boards = options.boards;
-    Ban.reportingIP = options.reporting;
-*/
     app.post('/admin/repMgr', isAdmin, (req,res)=>{
+        console.log(req.body)
         var b = req.body.board;
         var p = req.body.post;
         var a = req.body.action;
+        var reason = req.body.reason;
         var o = {board:b,post:p}
         var quiet = /q$/.test(a)
         if(a=='nothing'){
-            Report.remove({board:b,post:p},function(err,post){
+            Report.remove(o,function(err,post){
                 res.send('success')
             })
-        } else {
-            var obj = {
-                reportingIP: req.connection.remoteAddress,
-                offense: o,
-                /* CONTINUE WORK HERE */
-            }
-
-
+        } else if(a=='falseRep'){
+            /* Ban reporting IP Address */ 
+        } else {  
+            Post.findOne({board:b,postID:p},function(error,post){   
+                console.log(post)
+                var start = new Date().getTime();
+                var end;
+                if(/^1/.test(a)){
+                    end = start + 86400000
+                }
+                if(/^3/.test(a)){
+                    end = start + 259200000
+                }
+                if(/^permanent/.test(a)){
+                    end = 3141592658979323
+                }
+                if(/^delete/.test(a)){
+                    end = 3141592658979323
+                    imageManager.deleteImage(post.fileName)
+                }
+                var Ban = new Banned()
+                Ban.IP = post.IP;
+                Ban.start = start;
+                Ban.end = end;
+                Ban.reason = reason;
+                Ban.offense = o;
+                Ban.reportingIP = req.connection.remoteAddress;
+                Ban.admin = req.user;
+                Ban.save(function(err){
+                    if(err){throw(err)}
+                });
+                res.send('Success!')
+            });
+        }
+        if(a=='delete'){
+            Post.remove({board:b,postID:p},function(e,d){
+                if(e){throw(e)}
+            });
         }
         if(quiet==false){
-            Post.findOneAndUpdate({board:b,postID:p},{$set:{"publicBan":true} function(err,post){
+            Post.findOneAndUpdate({board:b,postID:p},{$set:{"publicBan":true}}, function(err,post){
                 if(err){
                     throw(err)
                 }
@@ -304,16 +319,18 @@ module.exports = (function(app,passport){
         }); 
     });
 
-    app.get('/api/bans', (req,res) => {
-        /* return all banned IPs and reasons */
-    });
-
     app.get('/api/boardlist', (req,res)=>{
         Board.find({},function(err,boards){
             res.send(boards)
         });
     });
 
+    app.get('/api/bans', (req,res)=>{
+        Banned.find({},function(err,bans){
+            res.send(bans);
+        });
+    });
+    
     app.get('/api/board/:board/:page*?', (req,res)=>{
         var page;
         req.params.page ? page = Number(req.params.page) : page = 1
@@ -348,5 +365,20 @@ module.exports = (function(app,passport){
         if(req.isAuthenticated())
             return next();
         res.redirect('/login');
+    }
+
+    function notBanned(req,res,next){
+        var ipaddr = req.connection.remoteAddress
+        Banned.findOne({IP:ipaddr},function(err,banned){
+            if(banned==null){
+                return next();
+            }
+            var now = new Date().getTime();
+            if(now<banned.end){
+                res.redirect('/banned')
+            } else if(now>banned.end){
+                return next();
+            }
+        });
     }
 }); 

@@ -94,7 +94,10 @@
                 <!-- 
                     BANNED IP'S TAB CONTENTS
                 -->
-                <div class="tab-pane fade" id="tab3default">Make DB Entry for banned IPs, API request to get them</div> 
+                <div class="tab-pane fade" id="tab3default">
+                    <button id="getActiveBans">Get Current Bans</button><br />
+                    <div id="activeBanContainers">[Bans Will go here]</div>
+                </div> 
                 <!-- 
                     REPORTED POSTS/THREADS CONTENTS
                 -->
@@ -112,16 +115,17 @@
                             <select name="response" id="rep-<%=thisReport.board%>-<%=thisReport.post%>">
                                 <option value="1dayq">24 Hour Ban</option>
                                 <option value="3dayq">72 Hour Ban</option>
-                                <option value="permanentq">Indefinite Ban</option>
+                                <option value="permanentq">Permaban</option>
                                 <option value="1day">24 Hour Ban (PUBLIC)</option>
                                 <option value="3day">72 Hour Ban (PUBLIC)</option>
-                                <option value="permanent">Indefinite Ban (PUBLIC)</option>
-                                <option value="delete">Delete Post</option>
+                                <option value="permanent">Permaban (PUBLIC)</option>
+                                <option value="delete">Delete Post (Permaban)</option>
                                 <option value="deleteImgq">Delete Image And Permaban</option>
                                 <option value="deleteImg">Delete Image And Permaban (PUBLIC)</option>
-                                 <option value="falseRep">Ban Reporting IP (False Report)</option>
+                                <option value="falseRep">Ban Reporting IP (False Report)</option>
                                 <option value="nothing">Delete Report (do nothing)</option>
                             </select>
+                            Reason: <input id="reason-<%=thisReport.board%>-<%=thisReport.post%>"></input>
                             <button class="banHammer" id="bh-<%=thisReport.board%>-<%=thisReport.post%>">TAKE ACTION!</button>
                         </div>
                     <% } %>
