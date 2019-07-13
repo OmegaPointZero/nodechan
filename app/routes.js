@@ -151,23 +151,24 @@ module.exports = (function(app,passport){
 
     //ADMIN FUNCTIONS
     app.get('/login', (req,res)=>{
-        res.render('login.ejs');
+        res.render('login.ejs', { message: req.flash('loginMessage') });
     });
 
     /* Route for logging in existing admin */
     app.post('/login', passport.authenticate('local-login', {
         successRedirect : '/admin',
         failureRedirect : '/login',
-    }));
+        failureFlash: true,
+    })); 
 
     /*  If it's the first time this database is saving an admin, comment out
         the above POST /login route, and uncomment this one, to register a 
-        new user. It's a dirty way to do it but it works
+        new user. It's a dirty way to do it but it works 
 
     app.post('/login', passport.authenticate('local-signup', {
         successRedirect: '/admin',
         failureRedirect: '/login'})
-    ); */
+    );  */
 
     app.get('/admin', isAdmin, (req,res)=>{
         Board.find({}, function(err,boards){
@@ -272,7 +273,7 @@ module.exports = (function(app,passport){
                 Ban.reason = reason;
                 Ban.offense = o;
                 Ban.reportingIP = req.connection.remoteAddress;
-                Ban.admin = req.user;
+                Ban.admin = req.user.username;
                 Ban.save(function(err){
                     if(err){throw(err)}
                 });

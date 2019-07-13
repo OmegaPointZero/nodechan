@@ -48,12 +48,12 @@ HIGH priority:
 Medium Priority: 
 + IP bans:  
     + Send ban information to relevant IP when banned IP tries to post 
-    + Get all active bans from API
-    + Let Admins manage bans
-    + Flesh out '/banned' route to check IP for bans, if b&, then return duration and reason
-    + When reported post gets taken care of, return information from server, modify page based on returned information
-    + If new Date().getTime > ban.end { remove from active bans }
-    + Store only user NAME of admin, not entire object!
+    + Get all active bans from API 
+    + Let Admins manage bans 
+    + Flesh out '/banned' route to check IP for bans, if b&, then return duration and reason 
+    + When reported post gets taken care of, return information from server, modify page based on returned information 
+    + If new Date().getTime > ban.end { remove from active bans } 
+    + Store only user NAME of admin, not entire object! 
     
 + Front End stuff:
     + First of all, make sure all of the post/image information renders correctly

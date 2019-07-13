@@ -9,6 +9,7 @@ const Board = require('./app/models/boards');
 const promise = require('rsvp').Promise;
 require('dotenv').config();
 const session = require('express-session');
+const flash = require('connect-flash')
 
 //Declare configURL
 var configURL = process.env.MONGO;
@@ -23,12 +24,12 @@ var cors = (function(req,res,next){
 });
 
 app.use(cors)
-//app.use(promise)
 mongoose.connect(configURL);
 require('./config/passport')(passport);
 app.use(morgan('dev'));
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended:true}));
+app.use(flash())
 app.use(function(req,res,next){
     res.setTimeout(480000, function(){
         console.log('Request has timed out');
