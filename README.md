@@ -42,19 +42,7 @@ Admin Properties
 + Can see all reported posts, actionable reponses being built
 
 ## Immediate to-do: 
-HIGH priority:
-+ Fix local login procedure! Test extensively, be sure login only works with pwd, be sure wrong pwd rejects!
-
-Medium Priority: 
-+ IP bans:  
-    + Send ban information to relevant IP when banned IP tries to post 
-    + Get all active bans from API 
-    + Let Admins manage bans 
-    + Flesh out '/banned' route to check IP for bans, if b&, then return duration and reason 
-    + When reported post gets taken care of, return information from server, modify page based on returned information 
-    + If new Date().getTime > ban.end { remove from active bans } 
-    + Store only user NAME of admin, not entire object! 
-    
+Medium Priority:   
 + Front End stuff:
     + First of all, make sure all of the post/image information renders correctly
     + Second, run tests of posts of various lengths render properly

@@ -23,10 +23,6 @@
     <div class="panel with-nav-tabs panel-default">
         <div class="panel-heading">
             <ul class="nav nav-tabs">
-            <!--  Allow admins to interact with/monitor DB, delete threads, lock
-                threads, move thread to a new board (build function to re-number
-                posts), ban by IP address, view reports, sort/view posts by user 
-                IP address -->
                 <li class="active"><a href="#tab1default" data-toggle="tab">Add/Delete Boards</a></li>
                 <li><a href="#tab2default" data-toggle="tab">Stickied Threads</a></li>
                 <li><a href="#tab3default" data-toggle="tab">IP Bans</a></li>
@@ -95,8 +91,27 @@
                     BANNED IP'S TAB CONTENTS
                 -->
                 <div class="tab-pane fade" id="tab3default">
-                    <button id="getActiveBans">Get Current Bans</button><br />
-                    <div id="activeBanContainers">[Bans Will go here]</div>
+                    <%if(bans.length==0){%>
+                    <div class="banContainer">There are no active bans</div>
+                    <%} else { %>
+                        <% bans.forEach(function(ban){%>
+                            <div class="banContainer reply" id="bc-<%=ban._id%>">
+                                <div>IP Address: <span style="font-weight:bold"><%=ban.IP%></span></div>
+                                <div>Ban Start: <span style="font-weight:bold"><%=new Date(ban.start)%></span></div>
+                                <div>Ban End: <span style="font-weight:bold"><%=new Date(ban.end)%></span></div>
+                                <div>Reason: <span style="font-weight:bold"><%=ban.reason%></span></div>
+                                <div>Admin: <span style="font-weight:bold"><%=ban.admin%></span></div>
+                                <select name="ban-edit" id="ban-<%=ban._id%>">
+                                    <option value="1day">24 Hour Ban</option>
+                                    <option value="3day">72 Hour Ban</option>
+                                    <option value="permanent">Permaban</option>
+                                    <option value="unban">Unban</option>
+                                </select>
+                                <button class="banEditor" id="be-<%=ban._id%>">Edit Ban</button>
+                            </div><hr>
+                        <% }) %>
+                    <%}%>
+                    
                 </div> 
                 <!-- 
                     REPORTED POSTS/THREADS CONTENTS

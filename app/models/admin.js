@@ -13,8 +13,7 @@ adminSchema.methods.generateHash = function(password){
 
 //Compare and check if password is correct
 adminSchema.methods.validPassword = function(password){
-    var b = bcrypt.compareSync(password, this.password)
-    return b
+    return bcrypt.compareSync(password, this.password)
 }
 
 

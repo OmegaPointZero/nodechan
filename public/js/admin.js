@@ -248,16 +248,24 @@ $(document).ready(function(){
         });
     });
 
-    $('button#getActiveBans').click(function(e){
+    $('button.banEditor').click(function(e){
+        var url = "/admin/banMgr"
+        var tid = this.id;
+        var id = tid.slice(3,)
+        var obj = {
+            action : $('select#ban-'+id).val(),
+            id : id
+        }
         $.ajax({
-            type: "GET",
-            url: '/api/bans',
+            type: "POST",
+            url: url,
+            data: obj,
             success: function(data){
-                $('#activeBanContainers').html(JSON.stringify(data))
+                location.reload()
             }
         });
     });
-
+    
     $('button.banHammer').click(function(e){
         e.preventDefault(); 
         var tid = this.id;

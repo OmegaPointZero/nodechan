@@ -35,10 +35,28 @@ module.exports = (function(app,passport){
     })
 
     app.get('/banned',(req,res)=>{
+        var foundBan = false;
         Board.find({},function(e,boards){
             if(e){throw(e)}
             Banned.find({},function(err,bans){
-                res.render('bans.ejs', {allBoards:boards,bans:bans});
+                var userIP = req.connection.remoteAddress;
+                for(var i=0;i<bans.length;i++){
+                    var tb = bans[i]
+                    if(tb.IP==userIP){  
+                        foundBan = true;
+                        var now = new Date().getTime()
+                        if(tb.end<now){
+                            Banned.remove({IP:userIP},function(e,b){
+                                if(e){throw(e)}
+                                res.render('bans.ejs', {allBoards:boards,ban:null});
+                            });
+                        } else if(tb.end>=now){
+                            res.render('bans.ejs', {allBoards:boards,ban:tb});
+                        }
+                    } else if((i==bans.length-1) && (!foundBan)) {
+                        res.render('bans.ejs', {allBoards:boards,ban:null});
+                    } 
+                }
             });
         });
     })
@@ -172,11 +190,13 @@ module.exports = (function(app,passport){
 
     app.get('/admin', isAdmin, (req,res)=>{
         Board.find({}, function(err,boards){
-            if(err){
-                throw err;
-            }
+            if(err){throw err;}
             Report.find({}, function(error,reports){
-                res.render('admin.ejs', {boards: boards, reports:reports, user:req.user.username});
+                if(err){throw err;}
+                Banned.find({},function(e,bans){
+                    if(e){throw(e)}
+                    res.render('admin.ejs', {boards: boards, reports:reports, bans:bans, user:req.user.username});
+                });
             })
         });
     });
@@ -294,6 +314,32 @@ module.exports = (function(app,passport){
         }
     });
 
+    app.post('/admin/banMgr', isAdmin, (req,res)=>{
+        var a = req.body.action;
+        var id = req.body.id;
+        if(a=="unban"){
+            Banned.remove({_id:id},function(err,ban){
+                if(err){throw(err)}
+                res.send('removed')
+            });
+        } else {
+            Banned.findOne({_id:id},function(err,ban){
+                var newEnd;
+                if(a=="permanent"){
+                    newEnd = 3141592658979323;
+                } else if (a=="1day") {
+                    newEnd = ban.start + 86400000;
+                } else if (a=="3day"){
+                    newEnd = ban.start + 259200000;
+                }
+                Banned.findOneAndUpdate({_id:id},{$set:{"end":newEnd}},function(e,b){
+                    if(err){throw(err)}
+                    res.send('updated')
+                })
+            })
+        }
+    });
+
     app.post('/admin/sticky', isAdmin, (req,res)=>{
         var body = req.body;
         console.log(req.body);
@@ -378,7 +424,9 @@ module.exports = (function(app,passport){
             if(now<banned.end){
                 res.redirect('/banned')
             } else if(now>banned.end){
-                return next();
+                Banned.remove({IP:ipaddr},function(e,b){
+                    return next();
+                });
             }
         });
     }

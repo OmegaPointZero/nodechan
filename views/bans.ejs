@@ -19,7 +19,12 @@
     </div>
     <hr class="abovePostForm">
     <div class="yourBan">
-        <h1>You have been BANNED</h1>
+    <% if(ban==null){%>
+        <div>You are not currently banned!</div>
+    <% } else { %>
+        <h1>You have been BANNED!</h1>
+        Your recorded IP Address is <span style="font-weight:bold"><%=ban.IP%></span>, and you were banned for "<%=ban.reason%>", (post number <%=ban.offense['post']%> on /<%=ban.offense['board']%>/). Your ban began on <span style="font-weight:bold"><%=new Date(ban.start)%></span> and expires on <span style="font-weight:bold"><%=new Date(ban.end)%></span> (it is currently <span style="font-weight:bold"><%=new Date()%></span>)
+    <% } %> 
     </div>
     <hr class="abovePostForm">
     <div class="boardNav"> 
