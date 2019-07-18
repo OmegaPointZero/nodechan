@@ -15,7 +15,7 @@ $(document).ready(function(){
         });
 
         $('a.postLink').click(function(){
-            var post = $(this).attr('href').slice(1)
+           //b  var post = $(this).attr('href').slice(1)
             $('div.reply').removeClass('highlight')
             $('div.reply#'+post).addClass('highlight')
         });
@@ -26,16 +26,25 @@ $(document).ready(function(){
         })
 
         $('input#delete').click(function(){
-            var id =$('input.postDeleteBox:checkbox:checked').attr('id')
+            var id = Number($('input.postDeleteBox:checkbox:checked').attr('id').slice(7,))
             var fo = $('input.deleteImageOnly:checkbox:checked').attr('value')
-            fo == undefined ? fo = false : "";
-            var OP = window.location.pathname;
-            OP = OP.split('/thread/')[1];
-            var board = '<%=thisBoard.boardCode%>';
-            $.post('/<%=thisBoard.boardCode%>/delete',{board,id,fo,OP}, function(data,status){
+            fo == undefined ? fo = false : ""; // Image file only
+            var win = window.location.pathname
+            var w = win.split('/') // /b/thread/7 or /boards/b/
+            var OPs = $('div.OP').map(function(){return Number(this.id)}).toArray()
+            var index = OPs.indexOf(id)
+            var OP
+            index != -1 ? OP = OPs[index] : OP = 0;
+            var b = $('.boardTitle').html()
+            var board = b.split('/')[1]
+            $.post('/'+board+'/delete',{board,id,fo,OP}, function(data,status){
                 console.log("Status: "+status);
             })
-                location.reload();
+                if(w.length==3){
+                    location.reload();
+                } else if(w.length==4){
+                    index == -1 ? location.reload() : location.href='/boards/'+w[1] 
+                }
         });
 
         $('.report').click(function(e) {

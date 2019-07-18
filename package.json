@@ -1,9 +1,10 @@
 {
   "name": "nodechan",
-  "version": "1.0.0",
-  "description": "A MongoDB, NodeJS, and ExpressJS clone of 4chan",
+  "version": "1.1.0",
+  "description": "A chan-style image board built on Node.js, Express.js and MongoDB",
   "main": "app.js",
   "scripts": {
+    "start": "./init.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -11,7 +12,9 @@
     "url": "git+https://github.com/OmegaPointZero/nodechan.git"
   },
   "keywords": [
-    "4chan"
+    "4chan",
+    "chan",
+    "image board"
   ],
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",

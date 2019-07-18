@@ -117,7 +117,7 @@ module.exports = (function(app,passport){
     // Delete a thread or post from a board
     app.post('/:board/delete', (req,res)=>{
         var board = req.params.board 
-        var id = Number(req.body.id.slice(7))
+        var id = Number(req.body.id)
         var OP = req.body.OP 
         var fo = req.body.fo; // fileOnly delete
         var IP = req.connection.remoteAddress;
@@ -168,14 +168,14 @@ module.exports = (function(app,passport){
     });
 
     //ADMIN FUNCTIONS
-    app.get('/login', (req,res)=>{
+    app.get(process.env.LOGINROUTE, (req,res)=>{
         res.render('login.ejs', { message: req.flash('loginMessage') });
     });
 
     /* Route for logging in existing admin */
-    app.post('/login', passport.authenticate('local-login', {
-        successRedirect : '/admin',
-        failureRedirect : '/login',
+    app.post(process.env.LOGINROUTE, passport.authenticate('local-login', {
+        successRedirect : process.env.ADMINROUTE,
+        failureRedirect : process.env.LOGINROUTE,
         failureFlash: true,
     })); 
 
@@ -183,12 +183,12 @@ module.exports = (function(app,passport){
         the above POST /login route, and uncomment this one, to register a 
         new user. It's a dirty way to do it but it works 
 
-    app.post('/login', passport.authenticate('local-signup', {
-        successRedirect: '/admin',
-        failureRedirect: '/login'})
+    app.post(process.env.LOGINROUTE, passport.authenticate('local-signup', {
+        successRedirect: process.env.ADMINROUTE,
+        failureRedirect: process.env.LOGINROUTE})
     );  */
 
-    app.get('/admin', isAdmin, (req,res)=>{
+    app.get(process.env.ADMINROUTE, isAdmin, (req,res)=>{
         Board.find({}, function(err,boards){
             if(err){throw err;}
             Report.find({}, function(error,reports){
@@ -224,27 +224,19 @@ module.exports = (function(app,passport){
                 if(err){
                     throw(err)
                 } else {
-                    res.redirect('/admin')
+                    res.redirect(process.env.ADMINROUTE)
                 }
             })
-        } else if(req.body.action=='changeCode'){
-            Board.findOneAndUpdate({"boardCode":req.body.board},{$set:{"boardCode":req.body.target}},function(err,board){
-                if(err){
-                    throw err;
-                } else {
-                    res.send(req.body.target);
-                }
-            });
-        } else if(req.body.action=='changeTitle'){
-            Board.findOneAndUpdate({"boardCode":req.body.board},{$set:{"boardTitle":req.body.target}},function(err,board){
-                if(err){
-                    console.log(err);
-                } else {
-                    res.send(req.body.target);
-                }
-            });
-        } else if(req.body.action=='changeCategory'){
-            Board.findOneAndUpdate({"boardCode":req.body.board},{$set:{"category":req.body.target}},function(err,board){
+        } else {
+            var tgt;
+            if(req.body.action=='changeCode'){
+                tgt="boardCode"
+            } else if(req.body.action=='changeTitle'){
+                tgt="boardTitle"
+            } else if(req.body.action=='changeCategory'){
+                tgt="category"
+            }
+            Board.findOneAndUpdate({"boardCode":req.body.board},{$set:{tgt:req.body.target}},function(err,board){
                 if(err){
                     throw err;
                 } else {
@@ -342,12 +334,27 @@ module.exports = (function(app,passport){
 
     app.post('/admin/sticky', isAdmin, (req,res)=>{
         var body = req.body;
-        console.log(req.body);
-        res.send('GOT A REQUEST: '+body)
+        var action = req.body.action
+        var board = req.body.board
+        var thread = req.body.thread
+        var update = false
+        if(action=='sticky'){
+            update = true
+            Board.update({"boardCode":board},{$push:{stickyThreads:thread}},function(err,board){
+                if(err){throw(err)}
+            })
+        } else {
+            Board.update({"boardCode":board},{$pull:{stickyThreads:thread}},function(err,board){
+                if(err){throw(err)}
+            })
+        }
+        Post.update({"board":board,OP:thread},{$set:{sticky:update}},function(err,board){
+            if(err){throw(err)}
+            res.send('Updated')
+        })
     });
 
     //API REQUESTS BEGIN HERE
-
     app.post('/api/users', isAdmin, (req,res)=>{
         var board = req.body.board;
         var IP = req.body.IP;
@@ -411,7 +418,7 @@ module.exports = (function(app,passport){
     function isAdmin(req,res,next){
         if(req.isAuthenticated())
             return next();
-        res.redirect('/login');
+        res.redirect(process.env.LOGINROUTE);
     }
 
     function notBanned(req,res,next){

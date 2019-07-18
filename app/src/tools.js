@@ -45,12 +45,26 @@ exports.makeID = (function makeOP(OP,IP){
 })
 
 //sort threads by last bump, most recent at top
+
+exports.sortStickies = (function sortStickies(prelim){
+    for(var i=0;i<prelim.length;i++){
+        if(prelim[i].sticky==true){
+            var a = prelim.splice(i,1)
+            prelim.unshift(a[0])
+        }
+        if(i==prelim.length-1){
+            return prelim
+        }
+    }
+})
+
 exports.sortByUpdate = (function sortByUpdate(array,key){
-    return array.sort(function(a,b){
+    var prelimSort = array.sort(function(a,b){
         var x = a[key];
         var y = b[key];
         return ((x>y)? -1 : ((x<y)?1:0));
     })
+    return exports.sortStickies(prelimSort)
 })
 
 //resize picture for preview
@@ -116,10 +130,14 @@ exports.getThreadBumps = (function getThreadBumps(OPs,posts){
             lastBump : 0,
             images: 0,
             posts: 0,
-            preview: []
+            sticky: false,
+            locked: false,
+            preview: [],
         }
         var thread = posts.filter(function(post){return post.OP === OPs[i]})
         thread = exports.sortByPost(thread,'time')
+        myObj.sticky = thread[0].sticky
+        myObj.locked = thread[0].locked
         myObj.lastBump = thread[thread.length-1].time
         var len = thread.length
         for(var j=0;j<len;j++){

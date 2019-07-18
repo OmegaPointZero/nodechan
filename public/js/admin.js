@@ -135,6 +135,8 @@ $(document).ready(function(){
             url: '/admin/sticky',
             data: obj,
             success: function(data){
+                console.log(data)
+                location.reload();
            }
         });
     });
@@ -153,8 +155,8 @@ $(document).ready(function(){
             url: '/admin/sticky',
             data: obj,
             success: function(data){
-                console.log('received data: ')
                 console.log(data)
+                location.reload();
            }
         });
     });
