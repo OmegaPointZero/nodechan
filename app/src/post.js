@@ -4,6 +4,11 @@ const toolbox = require('./tools');
 const imageManager = require('./images');
 const escape = require('escape-html');
 
+exports.stripIP = (function stripIP(post){
+    post.IP = "stripped"
+    return post
+});
+
 //Get all posts for a single thread
 exports.getThread = (function getPosts(board,OP,res){
     Board.find({},function(err,boards){
@@ -98,16 +103,27 @@ exports.getCatalog = (function getPage(board,req,res){
     })  
 });
 
-exports.getAPIPage = (function getPage(board,page,req,res){
-    /*GET BOARDS INFORMATION, PASS TO getThreadBumps()*/
+exports.APIgetPage = (function getPage(board,page,req,res){
     Post.find({board:board},function(error,posts){
         if(error){
             throw(error);
         }
         var OPs = toolbox.getUnique(posts,'OP')       
         var sortedOPs = toolbox.getThreadBumps(OPs,posts)
-        if(sortedOPs!=undefined){var pageArr = toolbox.trimToPage(sortedOPs,page)} else {var pageArr=""}
-        res.send(pageArr)
+        var p = new Array()
+        if(sortedOPs!=undefined){
+            var pageArr = toolbox.trimToPage(sortedOPs,page)
+        } else {var pageArr=""}
+        pageArr.forEach(function(arr){
+            p = p.concat(arr.preview)
+            console.log(p)
+        });
+        for(var i=0;i<p.length;i++){
+            p[i] = exports.stripIP(p[i])
+            if(i==p.length-1){
+                res.send(p)
+            }
+        }
    });
 });
 
@@ -116,15 +132,15 @@ exports.APIgetThread = (function APIgetThread(board,thread,req,res){
         if(err){
             throw(err);
         }
-        res.send(posts);
+        var snipped = new Array()
+        posts.forEach(function(post){
+            snipped.push(exports.stripIP(post))
+        });
+        res.send(snipped);
     });
 })
 
-//Deletes post with specified postID for one post, or OP for a thread
 
-/*Currently this needs to be passed an object
-with either postID or OP. Maybe this needs a refactor */
-/* Need to handle deletion of undefined images */
 exports.deletePost = (function deletePost(obj){
     var board = obj.board;
     var postID = obj.postID;

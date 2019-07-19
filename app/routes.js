@@ -379,18 +379,19 @@ module.exports = (function(app,passport){
         });
     });
 
-    app.get('/api/bans', (req,res)=>{
+    app.get('/api/bans', isAdmin, (req,res)=>{
         Banned.find({},function(err,bans){
             res.send(bans);
         });
     });
     
+    //Get a page of a board
     app.get('/api/board/:board/:page*?', (req,res)=>{
         var page;
         req.params.page ? page = Number(req.params.page) : page = 1
         if(page>-1 && page < 10){
             var board = req.params.board;
-            postManager.getAPIPage(board,page,req,res)
+            postManager.APIgetPage(board,page,req,res)
         } else if(page>10){
             console.log('redirecting because page requested is >10')
             res.redirect('/error/404')
@@ -400,18 +401,34 @@ module.exports = (function(app,passport){
         }
     }); 
 
+    //Get thread data
     app.get('/api/thread/:board/:thread', (req,res)=>{
         var board = req.params.board;
         var thread = req.params.thread;
         postManager.APIgetThread(board,thread,req,res);
     });
 
+    //Get Post Data
     app.get('/api/post/:board/:post', (req,res)=>{
         console.log(req.params)
         var board = req.params.board;
         var post = req.params.post;
-        Post.find({board:board,postID:post}, function(err,post){
-            res.send(post)
+        Post.findOne({board:board,postID:post}, function(err,post){ 
+            var p = postManager.stripIP(post)
+            res.send(p)
+        });
+    });
+
+    // Get all posts made in a thread following :post
+    app.get('/api/update/:board/:thread/:post', (req,res)=>{
+        var board = req.params.board;
+        var post = req.params.post;
+        var thread = req.params.thread;
+        Post.find({board:board,OP:thread,postID: {$gt: post}}, function(err,posts){
+            posts.forEach(function(post){
+                postManager.stripIP(post)
+            });
+            res.send(posts);
         });
     });
 

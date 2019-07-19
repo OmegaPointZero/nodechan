@@ -24,12 +24,12 @@ exports.uploadImage = (function uploadImage(image,time,isOP,req,res){
         filepreview.generate(image.path, str, previewDimensions,function(err){
             if(err) console.log(err);
             fs.move(image.path, 'public/images/'+newName);
+            var retObj = image;
+            retObj.time = time;
+            retObj.fileName = newName;
+            retObj.fileDimensions = size.width + ' x ' + size.height;
+            postManager.writePost(req.params,req.body,req.connection.remoteAddress,retObj,req,res);
         })
-        var retObj = image;
-        retObj.time = time;
-        retObj.fileName = newName;
-        retObj.fileDimensions = size.width + ' x ' + size.height;
-        postManager.writePost(req.params,req.body,req.connection.remoteAddress,retObj,req,res);
     });
 
     var extension = image.originalname.split('.').last();

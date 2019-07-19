@@ -22,20 +22,19 @@ The init.sh script creates the necessary folders to hold uploaded files and run 
 + After 100 threads, new threads cause old ones to 404
 + Unique user ID's per thread
 + Color scheme for said IDs
-+ Highlight post by selecting No.
-+ Highlight all posts by same user in thread
-+ Greentext
++ Highlight post by selecting "No." next to post number
++ Ability to highlight all posts by same user in thread by clicking on user ID
++ Greentexting by starting a new line with ">"
 + 404 if attempting to access board that doesn't exist
 + 404 if attempting to access a valid board with invalid page
 + A way to serve a blank board, provided it exists in the DB, and 404 otherwise 
 + Quoting a post
 + Thread metadata: posts, unique posters, replies, image replies 
-+ Frontend architecture for deleting threads, updating, etc
 + Custom 404 path for invalid paths
-+ Deleting a post/thread now 100% operational
-+ Rotating Banners
++ Deleting a post/thread if coming from the same IP Address
++ Randomly served banners
 + Catalog view
-+ Users can report threads
++ Users can report threads to admins
 
 Admin Properties
 + Can add, delete and edit boards
@@ -45,15 +44,12 @@ Admin Properties
 + Can see all banned IP addresses, and edit/delete bans
 
 ## Immediate to-do: 
-+ Fix the following:
-    + If images are uploaded, server sends response often before they're done being processed, resulting in broken images
-
 + Front End stuff:
-    + First of all, make sure all of the post/image information renders correctly
-    + Second, run tests of posts of various lengths render properly
-    + Figure out how to make posts appear aligned *properly*
+    + Flesh out how the posts render when "update" button is hit (its missing elements)
+    + Make bottom border of previous last post red until user scrolls to bottom of page
+    + Realign the way post information is rendered and aligned
+    + Run tests of posts of various lengths render properly
     + MAKE EVERYTHING RESPONSIVE AND LOOK GOOD ON MOBILE, that needs a lot of work
-
 
 ## To Implement:
 1. User-facing front end:
@@ -61,16 +57,10 @@ Admin Properties
     + Color Scheme
     + Open images in new tab/open in page/fit to page
     + WebM's play with/without sound
-+ Flags based on Location
-+ Update thread via ajax without refreshing entire page
-+ Added viewport for mobile viewing, need to make a div that holds background color in fixed place that isn't the actual body tab. Position: fixed fixes mobile viewport rendering but doesn't let you scroll.
++ Country Flags based on IP Address location
++ When update button used, also update thread metadata
 
 2. Back-End server-side:
-+ Protect User IP Addresses in API requests, make it so ONLY admins get access to user IP's
 + Wordfilters
-+ Banners
-+ API endpoints to:
-    + Update Thread replies
-    + Get thread's page number
-    + Update thread metadata
-+ If thread is locked, do not allow user to reply
++ Manage Banners
++ Allow Admins to lock threads, don't let users reply, only admins
