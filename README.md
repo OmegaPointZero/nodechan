@@ -3,10 +3,10 @@ A chan-style imageboard and API built with Node.js, Express.js and MongoDB
 
 ## Before Running
 You will need to create a .env file:
-MONGO=linkToMongoURI
-SESSION_SECRET=secretForExpressSession
-LOGINROUTE=urlPathforLoginPage
-ADMINROUTE=urlPathforAdminPage
++ MONGO=linkToMongoURI
++ SESSION_SECRET=secretForExpressSession
++ LOGINROUTE=urlPathforLoginPage
++ ADMINROUTE=urlPathforAdminPage
 
 Login and Admin aren't just held as '/login' and '/admin' for security reasons; if the door is hidden hacker's cant try to break through it.
 
@@ -45,6 +45,7 @@ Admin Properties
 
 
 ## To Implement:
+
 ### User-facing front end:
 + Cookie to keep track of user-supplied options:
     + Color Scheme
@@ -63,7 +64,8 @@ Admin Properties
 + Posting an Empty response crashes server
 
 ## To fix:
-###Front End:
+
+### Front End:
 + Report Button doesn't work on dynamically loaded content
 
 ### Back end:
