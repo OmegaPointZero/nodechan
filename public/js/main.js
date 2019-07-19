@@ -9,25 +9,30 @@ var parseTime = (function(time){
     return month+"/"+day+"/"+year+" ("+time[0]+") "+time[4] 
 });
 
-var renderPosts = (function(posts,target){
+var renderPosts = (function(posts,target,board){
     var post = ""
     for(var i=0;i<posts.length;i++){
         var P = posts[i]
-        var postClass=""
+        var name = P.name
+        if(name.length==0){
+            name = "Anonymous"
+        }
         post += "<div class=\"postContainer\" id=\"p"+P.postID+"\">"
         post += "<div class=\"memearrows\">>></div>"
-        post += "<div id=\"p"+P.postID+"\" class=\"post reply\" >"
-        post += "<div id=\""+P.postID+"\" class=\""+postClass+"\">"
+        post += "<div id=\""+P.postID+"\" class=\"post reply\" >"
         post += "<div class=\"postInfo\">"
+        post += "<input type=\"checkbox\" id=\"delete_"+P.postID+"\" class=\"postDeleteBox\" value=\"delete\">"
         post += "<span class=\"subject\">"+P.subject+"</span>"
         post += "<span class=\"nameBlock\">"
-        post += "<span class=\"name\">"+P.name+"</span>"
+        post += "<span class=\"name\">"+name+"</span>"
         post += "<span class=\"posteruid id_"+P.userID+"\">"
         post += "(ID: <span class=\"hand\" title=\"Highlight posts by this ID\" style=\"background-color:"+P.userIDColor+";\"><a class=\"hand\">"+P.userID+"</a></span>)</span>"
         post += "<span title=\"United States\" class=\"flag flag-us\"></span></span>"
         post += "<span class=\"postTime\">"+parseTime(P.time)+"</span> "
         post += "<span class=\"postNumber\">"
-        post += "<a href=\"#"+P.postID+"\" class=\"highlightThisPost\" id=\""+P.postID+"\">No.</a> <a href=\"#\" class=\"quotePostNumber\" id=\""+P.postID+"\">"+P.postID+"</a></span></div>"
+        post += "<a href=\"#\" class=\"report\" id=\"rp-"+P.postID+"\">  ▶ </a>"
+        post += "<div class=\"reply hidden\" id=\"mrp-"+P.postID+" style=\"min-width:5%; height:2%;font-size:8px;position:relative;z-index:0\"><a class=\"report-link\" id=\"report-link-"+P.postID+" target=\"_blank\" href=\"/report/"+board+"/"+P.postID+"\">Report</a></div>"
+        post += "</div>"
         if(P.fileSize){
             post += "<div class=\"file\"><div class=\"fileInfo\">File: <a href=\"/images/"+P.fileName+"\" target=\"_blank\" class=\"fileLink\">"+P.fileOriginalName+"</a>"
             var fs = P.fileSize
@@ -67,49 +72,50 @@ var renderPosts = (function(posts,target){
 });
 
 $(document).ready(function(){
-        $("a.highlightThisPost").click(function(){
+        $(document).on('click',"a.highlightThisPost",(function(){
             var str = String(this)
             var post = str.split('#')[1]
             $('div.reply').removeClass('highlight')
             $('div.reply#'+post).addClass('highlight')
-        });
+        }));
 
-        $('.posteruid').click(function(){
+        $(document).on('click','.posteruid',(function(){
             var id = $(this).attr('class').split(' ')[1]
             $('div.reply').removeClass('highlight')
             $('.'+id).parent().parent().parent().addClass('highlight')
             $('.OP').removeClass('highlight')
             
-        });
+        }));
 
-        $('a#update').click(function(e){
+        $(document).on('click','a#update',(function(e){
                 e.preventDefault()
                 var OP = $('div.OP').attr('id')
-                var posts = $('div.post').map(function(){return Number(this.id)}).toArray()
+                var posts = $('div.post').map(function(){return this.id}).toArray()
+                console.log(posts)
                 var biggest = Math.max(...posts)
                 var board = $('.boardTitle').html().split('/')[1]
-                var url = '/api/update/'+board+'/'+OP+'/'+6
+                var url = '/api/update/'+board+'/'+OP+'/'+biggest
                 $.ajax({
                     type: "GET",
                     url: url,
                     success: function(data){
-                        renderPosts(data,'.thread')
+                        renderPosts(data,'.thread',board)
+                        $('div.post#'+biggest).css('border-bottom-color', 'red').css('border-bottom-width', 'initial')
                     }
                 })
-        });
+        }));
 
-        $('a.postLink').click(function(){
-           //b  var post = $(this).attr('href').slice(1)
+        $(document).on('click','a.postLink',(function(){
             $('div.reply').removeClass('highlight')
             $('div.reply#'+post).addClass('highlight')
-        });
+        }));
 
-        $('a.quotePostNumber').click(function(){
+        $(document).on('click','a.quotePostNumber',(function(){
             var post = $(this).attr('id')
             $('textarea.text').val($('textarea.text').val()+'>>'+post+'\r\n');       
-        })
+        }));
 
-        $('input#delete').click(function(){
+        $(document).on('click','input#delete',(function(){
             var id = Number($('input.postDeleteBox:checkbox:checked').attr('id').slice(7,))
             var fo = $('input.deleteImageOnly:checkbox:checked').attr('value')
             fo == undefined ? fo = false : ""; // Image file only
@@ -128,14 +134,23 @@ $(document).ready(function(){
                 } else if(w.length==4){
                     index == -1 ? location.reload() : location.href='/boards/'+w[1] 
                 }
-        });
+        }));
 
-        $('.report').click(function(e) {
+        $(document).on('click','.report',(function(e) {
             e.preventDefault();
-            var id = this.id;
-            console.log(id);
-            $('#m'+id).toggleClass('hidden')
-        });
+            var newTarget = '#m'+this.id
+            console.log($(newTarget).html())
+            $(newTarget).toggleClass('hidden')
+        }));
 
-    })
+})
 
+
+//        $('div.post').css('border-bottom','1px solid #d9bfb7')
+//        Do something when user scrolls past div
+
+$(window).on("scroll", function() {
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+        $('div.post').css('border-bottom','1px solid #d9bfb7')
+    }
+});

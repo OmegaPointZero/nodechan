@@ -43,24 +43,29 @@ Admin Properties
 + Can see all reported posts, and ban users based on reports
 + Can see all banned IP addresses, and edit/delete bans
 
-## Immediate to-do: 
-+ Front End stuff:
-    + Flesh out how the posts render when "update" button is hit (its missing elements)
-    + Make bottom border of previous last post red until user scrolls to bottom of page
-    + Realign the way post information is rendered and aligned
-    + Run tests of posts of various lengths render properly
-    + MAKE EVERYTHING RESPONSIVE AND LOOK GOOD ON MOBILE, that needs a lot of work
 
 ## To Implement:
-1. User-facing front end:
-+ Cookie to keep track of options
+### User-facing front end:
++ Cookie to keep track of user-supplied options:
     + Color Scheme
     + Open images in new tab/open in page/fit to page
     + WebM's play with/without sound
 + Country Flags based on IP Address location
 + When update button used, also update thread metadata
++ Realign the way post information is rendered and aligned
++ Run tests of posts of various lengths render properly
++ MAKE EVERYTHING RESPONSIVE AND LOOK GOOD ON MOBILE, that needs a lot of work
 
-2. Back-End server-side:
+### Back-End server-side:
 + Wordfilters
 + Manage Banners
 + Allow Admins to lock threads, don't let users reply, only admins
++ Posting an Empty response crashes server
+
+## To fix:
+###Front End:
++ Report Button doesn't work on dynamically loaded content
+
+### Back end:
++ Whenever the url contains a number parameter, if it's not a number, the server crashes. Fix this.
++ When a filename contains only a slash, it doesn't save the filename, and it also didn't generate a preview. Fix this.
