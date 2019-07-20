@@ -156,9 +156,16 @@ module.exports = (function(app,passport){
         var b = req.params.board;
         var p = req.params.post;
         if(isNumber.test(p)){
-            res.render('report.ejs', {
-                board: b, post: p
-            })
+            Post.findOne({board:b,postID:p},function(err,post){
+                if(err){throw(err)}
+                if(post){
+                    res.render('report.ejs', {
+                        board: b, post: p
+                    })
+                } else if(!post) {
+                    res.send('No such post')
+                }
+            });
         } else {
             res.send('Invalid post ID')
         }
