@@ -17,12 +17,6 @@ exports.threadMetaData = (function threadMetaData(posts){
 })
 
 
-// Replies / Images in each thread to display on Catalog
-exports.boardMetaData = (function boardMetaData(boardPosts){
-    
-    
-})
-
 //Get number of images for thread
 exports.countImages = (function countImages(posts){
     var images = 0;
@@ -33,6 +27,21 @@ exports.countImages = (function countImages(posts){
         }
     }
     return images
+})
+
+exports.filename = (function(file){
+    var fn = file.originalname
+    var fn = fn.split(' ').join('')
+    var splits = fn.split('.')
+    var ext = splits.pop()
+    var nn = fn.split(ext).join()
+    newname = nn.replace(/\W/g, '')
+    if(newname==""){
+        newname="file."+ext
+    } else {
+        newname = newname+"."+ext
+    }
+    return newname
 })
 
 //Make userID based on md5 of OP number and IP Address
@@ -89,7 +98,6 @@ exports.previewResize = (function previewResize(dimensions,imgMax){
         width: width,
         height: height,
     }
-
     return resized;
 
 })

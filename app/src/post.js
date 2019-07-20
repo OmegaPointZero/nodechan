@@ -193,7 +193,6 @@ exports.bumpAndGrind = (function bumpAndGrind(board){
 
 //Write new post to database
 exports.writePost = (function writePost(params,body,IP,imgInfo,req,res){
-    //if it's a reply, don't do it if the thread has 250+ replies
     if(params.id){
         Post.find({board:params.board,OP:params.id},function(err,posts){
             var len = posts.length;
@@ -203,9 +202,7 @@ exports.writePost = (function writePost(params,body,IP,imgInfo,req,res){
             }
         })
     }
-    //convert body.text into
     var newBody = body.text
-    
     var post = new Post();     
     post.publicBan = false;
     post.locked = false;
@@ -222,7 +219,7 @@ exports.writePost = (function writePost(params,body,IP,imgInfo,req,res){
     }
     if(imgInfo.size){
         post.fileName = imgInfo.fileName;
-        post.fileOriginalName = imgInfo.originalname;
+        post.fileOriginalName = toolbox.filename(imgInfo)
         post.fileSize = imgInfo.size;
         post.fileDimensions = imgInfo.fileDimensions;
     }
@@ -239,8 +236,7 @@ exports.writePost = (function writePost(params,body,IP,imgInfo,req,res){
                 OP = 1
             }
             post.OP = OP
-            var userID = toolbox.makeID(OP,IP)
-            post.userID = userID
+            post.userID = toolbox.makeID(OP,IP)
             post.userIDColor = toolbox.makeRGB(OP,IP)
             if(posts){
                 post.postID = posts.postID + 1;

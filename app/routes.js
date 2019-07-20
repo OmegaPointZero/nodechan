@@ -13,7 +13,8 @@ var storage = multer.diskStorage({
         cb(null, 'public/temporary')
     },
     filename: function(req, file, cb) {
-        cb(null, file.originalname)
+        var newname = toolbox.filename(file)
+        cb(null, newname)
     }
 });
 
@@ -118,6 +119,8 @@ module.exports = (function(app,passport){
             if(req.files.length>0){
                 var imgInfo = imageManager.uploadImage(req.files[0],time,false,req,res);
             } else {
+                /* this is an if/else because imageManager() will parse the 
+                image and attach it to the post, otherwise it doesn't attach */
                 postManager.writePost(req.params,req.body,req.connection.remoteAddress,{time:new Date().getTime()},req,res);
             }
         }

@@ -14,6 +14,8 @@ exports.getBanners = (function getBanners(){
 
 exports.uploadImage = (function uploadImage(image,time,isOP,req,res){
 
+    console.log('from Upload Image')
+    console.log(image)
     var generatePreview = (function(size){
         //generate preview image dimensions
         var newName = time+'.'+extension;
@@ -32,7 +34,17 @@ exports.uploadImage = (function uploadImage(image,time,isOP,req,res){
         })
     });
 
-    var extension = image.originalname.split('.').last();
+    var fn = image.originalname
+    var splits = fn.split('.')
+    var extension = splits.pop()
+    splits.pop()
+    var nn = splits.join()
+    nn = nn.replace(/\W/g, '')
+    if(nn==""){
+        nn="file."+ext
+    } else {
+        nn = nn+"."+ext
+    }
     var ext = exports.verifyExtension(extension);
     if(ext==false){
         console.log(`Bad file extension: ${extension}`)
