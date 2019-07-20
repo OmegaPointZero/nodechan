@@ -51,8 +51,6 @@ exports.uploadImage = (function uploadImage(image,time,isOP,req,res){
             generatePreview(dimensions);
         } else if(extension=='webm'){
             var info = getVideoInfo(image.path).then(info => {
-                console.log('info:')
-                console.log(info.streams[0].width)
                 var myObj = {
                     height: info.streams[0].height,
                     width: info.streams[0].width

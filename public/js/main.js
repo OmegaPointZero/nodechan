@@ -26,7 +26,7 @@ var renderPosts = (function(posts,target,board){
         post += "<span class=\"nameBlock\">"
         post += "<span class=\"name\">"+name+"</span>"
         post += "<span class=\"posteruid id_"+P.userID+"\">"
-        post += "(ID: <span class=\"hand\" title=\"Highlight posts by this ID\" style=\"background-color:"+P.userIDColor+";\"><a class=\"hand\">"+P.userID+"</a></span>)</span>"
+        post += "(ID: <span class=\"hand\" title=\"Highlight posts by this ID\" style=\"background-color:"+P.userIDColor+";\"><a class=\"userID\">"+P.userID+"</a></span>)</span>"
         post += "<span title=\"United States\" class=\"flag flag-us\"></span></span>"
         post += "<span class=\"postTime\">"+parseTime(P.time)+"</span> "
         post += "<span class=\"postNumber\">"
@@ -71,6 +71,55 @@ var renderPosts = (function(posts,target,board){
     }
 });
 
+var updatePosts = (function(){
+    var OP = $('div.OP').attr('id')
+    var posts = $('div.post').map(function(){return this.id}).toArray()
+    var biggest = Math.max(...posts)
+    var board = $('.boardTitle').html().split('/')[1]
+    var url = '/api/update/'+board+'/'+OP+'/'+biggest
+    $.ajax({
+        type: "GET",
+        url: url,
+        success: function(data){
+            if(data!=""){
+                renderPosts(data,'.thread',board)
+                /* update thread metadata */
+                var replies = $('.threadMetaData#replies').html()
+                replies = Number(replies) + data.length
+                var images = $('.threadMetaData#images').html()
+                images = Number(images)
+                var posters = $('.threadMetaData#posters').html()
+                posters = Number(posters)
+                $('.threadMetaData#replies').html(replies)
+                for(var i=0;i<data.length;i++){
+                    var d = data[i]
+                    if(d.fileSize != undefined){
+                        images += 1
+                    }
+                    if(i==data.length-1){
+                        $('.threadMetaData#images').html(images)
+                    }
+                }                
+                var IDs = []
+                $('.userID').each(function(){
+                    IDs.push($(this).html())
+                })
+                var unique = []
+                for(var n=0;n<IDs.length;n++){
+                    var current = IDs[n]
+                    if(unique.indexOf(current) == -1){
+                        unique.push(current)
+                    }
+                    if(n==IDs.length-1){
+                        $('.threadMetaData#posters').html(unique.length)
+                    }
+                }
+                $('div.post#'+biggest).css('border-bottom-color', 'red').css('border-bottom-width', 'initial')
+            }
+        }
+    })
+});
+
 $(document).ready(function(){
         $(document).on('click',"a.highlightThisPost",(function(){
             var str = String(this)
@@ -87,22 +136,9 @@ $(document).ready(function(){
             
         }));
 
-        $(document).on('click','a#update',(function(e){
-                e.preventDefault()
-                var OP = $('div.OP').attr('id')
-                var posts = $('div.post').map(function(){return this.id}).toArray()
-                console.log(posts)
-                var biggest = Math.max(...posts)
-                var board = $('.boardTitle').html().split('/')[1]
-                var url = '/api/update/'+board+'/'+OP+'/'+biggest
-                $.ajax({
-                    type: "GET",
-                    url: url,
-                    success: function(data){
-                        renderPosts(data,'.thread',board)
-                        $('div.post#'+biggest).css('border-bottom-color', 'red').css('border-bottom-width', 'initial')
-                    }
-                })
+        $(document).on('click','#update',(function(e){
+            e.preventDefault();
+            updatePosts();
         }));
 
         $(document).on('click','a.postLink',(function(){

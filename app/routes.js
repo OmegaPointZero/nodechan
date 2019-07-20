@@ -247,7 +247,6 @@ module.exports = (function(app,passport){
     });
 
     app.post('/admin/repMgr', isAdmin, (req,res)=>{
-        console.log(req.body)
         var b = req.body.board;
         var p = req.body.post;
         var a = req.body.action;
@@ -262,7 +261,6 @@ module.exports = (function(app,passport){
             /* Ban reporting IP Address */ 
         } else {  
             Post.findOne({board:b,postID:p},function(error,post){   
-                console.log(post)
                 var start = new Date().getTime();
                 var end;
                 if(/^1/.test(a)){
@@ -410,7 +408,6 @@ module.exports = (function(app,passport){
 
     //Get Post Data
     app.get('/api/post/:board/:post', (req,res)=>{
-        console.log(req.params)
         var board = req.params.board;
         var post = req.params.post;
         Post.findOne({board:board,postID:post}, function(err,post){ 

@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="/css/main.css">.
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> <!-- add JQuery -->
     <script src="https://code.jquery.com/jquery-migrate-1.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
     <script src="/js/main.js"></script>
 
 
@@ -49,8 +50,11 @@
             </table>
         </form> 
         <hr>
-    <div class="overboard" id="top"> <div class="threadNav">[<a class="threadNavItem" href="/boards/<%=thisBoard.boardCode%>">Return</a>] [<a class="threadNavItem" href="/boards/<%=thisBoard.boardCode%>/catalog">Catalog</a>] [<a class="threadNavItem" href="#bottom">Bottom</a>] [<a class="threadNavItem" href="#">Update</a>] </div><div class="metadata"> <span title="replies"><%=metadata.replies%></span> / <span title="images"><%=metadata.images%></span> / <span title="posters"><%=metadata.posters%></span>  </div></div>
-        <hr>
+    <div class="overboard" id="top"> <div class="threadNav">[<a class="threadNavItem" href="/boards/<%=thisBoard.boardCode%>">Return</a>] [<a class="threadNavItem" href="/boards/<%=thisBoard.boardCode%>/catalog">Catalog</a>] [<a class="threadNavItem" href="#bottom">Bottom</a>] [<a class="threadNavItem" id="update" href="#">Update</a>] </div>
+
+<div class="metadata"> 
+    <span class="threadMetaData" id="replies" title="Replies"><%=metadata.replies%></span> / <span class="threadMetaData" id="images" title="Images"><%=metadata.images%></span> / <span class="threadMetaData" id="posters" title="Posters"><%=metadata.posters%></span> / </div>
+</div>        <hr>
 <div class="thread" id="t<%=posts[0].OP%>"> 
 
 <!-- sort posts again, then loop --> 
@@ -70,7 +74,7 @@
             <span class="nameBlock">
                 <span class="name"><%if(post.name.length>0){%><%=post.name%><%}else{%>Anonymous<%}%></span> 
                 <span class="posteruid id_<%=post.userID%>"> 
-                    (ID: <span class="hand" title="Highlight posts by this ID" style="background-color: <%=post.userIDColor%>;"><a class="hand"><%=post.userID%></a></span>)
+                    (ID: <span class="hand" title="Highlight posts by this ID" style="background-color: <%=post.userIDColor%>;"><a class="userID"><%=post.userID%></a></span>)
                 </span> 
                 <span title="United States" class="flag flag-us"></span>
             </span> 
@@ -134,7 +138,10 @@
 </div>
 
 <hr>
-    <div class="overboard"> <div class="threadNav">[<a class="threadNavItem" href="/boards/<%=thisBoard.boardCode%>">Return</a>] [<a class="threadNavItem" href="/boards/<%=thisBoard.boardCode%>/catalog">Catalog</a>] [<a class="threadNavItem" href="#top">Top</a>] [<a class="threadNavItem" id="update" href="#">Update</a>] </div><div class="metadata"> <span title="Replies"><%=metadata.replies%></span> / <span title="Images"><%=metadata.images%></span> / <span title="Posters"><%=metadata.posters%></span> / </div></div>
+    <div class="overboard"> <div class="threadNav">[<a class="threadNavItem" href="/boards/<%=thisBoard.boardCode%>">Return</a>] [<a class="threadNavItem" href="/boards/<%=thisBoard.boardCode%>/catalog">Catalog</a>] [<a class="threadNavItem" href="#top">Top</a>] [<a class="threadNavItem" id="update" href="#">Update</a>] </div>
+<div class="metadata"> 
+    <span class="threadMetaData" id="replies" title="Replies"><%=metadata.replies%></span> / <span class="threadMetaData" id="images" title="Images"><%=metadata.images%></span> / <span class="threadMetaData" id="posters" title="Posters"><%=metadata.posters%></span> / </div>
+</div>
 <hr>
 
 <div class="bottomCtrl">

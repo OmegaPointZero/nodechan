@@ -52,7 +52,6 @@ Admin Properties
     + Open images in new tab/open in page/fit to page
     + WebM's play with/without sound
 + Country Flags based on IP Address location
-+ When update button used, also update thread metadata
 + Realign the way post information is rendered and aligned
 + Run tests of posts of various lengths render properly
 + MAKE EVERYTHING RESPONSIVE AND LOOK GOOD ON MOBILE, that needs a lot of work
@@ -67,6 +66,7 @@ Admin Properties
 
 ### Front End:
 + Report Button doesn't work on dynamically loaded content
++ Updated replies not loading with Post Number
 
 ### Back end:
 + Whenever the url contains a number parameter, if it's not a number, the server crashes. Fix this.

@@ -116,7 +116,6 @@ exports.APIgetPage = (function getPage(board,page,req,res){
         } else {var pageArr=""}
         pageArr.forEach(function(arr){
             p = p.concat(arr.preview)
-            console.log(p)
         });
         for(var i=0;i<p.length;i++){
             p[i] = exports.stripIP(p[i])
@@ -159,12 +158,8 @@ exports.deletePost = (function deletePost(obj){
         Post.find({board:board,OP:OP},function(err,posts){
             if (err) throw err
             if(posts){
-                console.log('posts\n')
-                console.log(posts)
                 for(var n=0;n<posts.length;n++){
                     var image = posts[n].fileName
-                    console.log('image: ')
-                    console.log(image)
                     imageManager.deleteImage(image)
                 }
                 Post.remove({board:board,OP:OP},function(error,posts){
