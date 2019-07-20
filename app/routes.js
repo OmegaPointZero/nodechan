@@ -24,6 +24,8 @@ if(!Array.prototype.last){
     }
 }
 
+const isNumber = new RegExp(/^\d+$/)
+
 module.exports = (function(app,passport){
 
     //Get Home page
@@ -69,7 +71,12 @@ module.exports = (function(app,passport){
     //Get board page
     app.get('/boards/:board/:page*?', (req,res,next) => {
         var page;
-        req.params.page ? page = Number(req.params.page) : page = 1; 
+        if(isNumber.test(req.params.page)){
+            page = req.params.page
+        } 
+        if(req.params.page==undefined){
+            page = 1; 
+        }
         if(page=='thread'){next();return}
         if(page>-1 && page <= 10){
             var board = req.params.board;
@@ -88,34 +95,37 @@ module.exports = (function(app,passport){
         if(req.files.length===0){
             res.send('Error: You forgot to upload an image')
             return;
+        } else {
+            var time = new Date().getTime();
+            var imgInfo = imageManager.uploadImage(req.files[0],time,true,req,res)
+            postManager.bumpAndGrind(req.params.board)
         }
-        var time = new Date().getTime();
-        var imgInfo = imageManager.uploadImage(req.files[0],time,true,req,res)
-        postManager.bumpAndGrind(req.params.board)
     })
 
     //Get thread by ID
     app.get('/:board/thread/:id', (req,res)=>{
         var threadID = req.params.id;
         var board = req.params.board;
-        postManager.getThread(board,threadID,res);
+        isNumber.test(threadID) ? postManager.getThread(board,threadID,res) : res.send('Invalid Thread ID')
     });
 
     //Reply to thread ID on BOARD
     app.post('/:board/thread/:id', notBanned, upload.any(), (req,res)=>{
         if(req.files.length===0 && req.body.text== ""){
             res.send('Error: Response cannot be empty')
-        }
-        var time = new Date().getTime();
-        if(req.files.length>0){
-            var imgInfo = imageManager.uploadImage(req.files[0],time,false,req,res);
         } else {
-            postManager.writePost(req.params,req.body,req.connection.remoteAddress,{time:new Date().getTime()},req,res);
+            var time = new Date().getTime();
+            if(req.files.length>0){
+                var imgInfo = imageManager.uploadImage(req.files[0],time,false,req,res);
+            } else {
+                postManager.writePost(req.params,req.body,req.connection.remoteAddress,{time:new Date().getTime()},req,res);
+            }
         }
     });
 
     // Delete a thread or post from a board
     app.post('/:board/delete', (req,res)=>{
+        // uhhh make it so the IP posting this req has to match IP of post being deleted, unless admin
         var board = req.params.board 
         var id = Number(req.body.id)
         var OP = req.body.OP 
@@ -142,9 +152,13 @@ module.exports = (function(app,passport){
     app.get('/report/:board/:post', (req,res)=>{
         var b = req.params.board;
         var p = req.params.post;
-        res.render('report.ejs', {
-            board: b, post: p
-        })
+        if(isNumber.test(p)){
+            res.render('report.ejs', {
+                board: b, post: p
+            })
+        } else {
+            res.send('Invalid post ID')
+        }
     });
 
     app.post('/report', notBanned, (req,res)=>{
@@ -386,7 +400,12 @@ module.exports = (function(app,passport){
     //Get a page of a board
     app.get('/api/board/:board/:page*?', (req,res)=>{
         var page;
-        req.params.page ? page = Number(req.params.page) : page = 1
+        if(/^(\s*|\d+)$/.test(req.params.page)){
+            page = req.params.page
+        } 
+        if(req.params.page==undefined){
+            page = 1; 
+        }
         if(page>-1 && page < 10){
             var board = req.params.board;
             postManager.APIgetPage(board,page,req,res)
@@ -395,7 +414,7 @@ module.exports = (function(app,passport){
             res.redirect('/error/404')
             return
         } else {
-            res.redirect('/error/404')
+            res.sendStatus(404)
         }
     }); 
 
@@ -403,17 +422,21 @@ module.exports = (function(app,passport){
     app.get('/api/thread/:board/:thread', (req,res)=>{
         var board = req.params.board;
         var thread = req.params.thread;
-        postManager.APIgetThread(board,thread,req,res);
+        isNumber.test(thread) ? postManager.APIgetThread(board,thread,req,res) : res.send('Invalid Thread ID')
     });
 
     //Get Post Data
     app.get('/api/post/:board/:post', (req,res)=>{
         var board = req.params.board;
         var post = req.params.post;
-        Post.findOne({board:board,postID:post}, function(err,post){ 
-            var p = postManager.stripIP(post)
-            res.send(p)
-        });
+        if(!isNumber.test(post)){
+            res.sendStatus('Invalid Post Number')
+        } else {
+            Post.findOne({board:board,postID:post}, function(err,post){ 
+                var p = postManager.stripIP(post)
+                res.send(p)
+            });
+        }
     });
 
     // Get all posts made in a thread following :post
@@ -421,13 +444,19 @@ module.exports = (function(app,passport){
         var board = req.params.board;
         var post = req.params.post;
         var thread = req.params.thread;
-        Post.find({board:board,OP:thread,postID: {$gt: post}}, function(err,posts){
-            posts.forEach(function(post){
-                postManager.stripIP(post)
+        if(!isNumber.test(post)){
+            res.send('Invalid Post Number')
+        } else if(!isNumber.test(thread)){
+            res.send('Invalid Thread Number')
+        } else {
+            Post.find({board:board,OP:thread,postID: {$gt: post}}, function(err,posts){
+                posts.forEach(function(post){
+                    postManager.stripIP(post)
+                });
+                res.send(posts);
             });
-            res.send(posts);
-        });
-    });
+        }
+    })
 
     function isAdmin(req,res,next){
         if(req.isAuthenticated())

@@ -60,14 +60,16 @@ Admin Properties
 + Wordfilters
 + Manage Banners
 + Allow Admins to lock threads, don't let users reply, only admins
-+ Posting an Empty response crashes server
++ Add API routes to post new threads and replies
 
 ## To fix:
 
 ### Front End:
 + Report Button doesn't work on dynamically loaded content
-+ Updated replies not loading with Post Number
 
 ### Back end:
-+ Whenever the url contains a number parameter, if it's not a number, the server crashes. Fix this.
 + When a filename contains only a slash, it doesn't save the filename, and it also didn't generate a preview. Fix this.
++ Make sure when getting a report page, the post acutally exists
++ Make sure a request to delete a post/file has to come from the SAME IP that posted it, or an Admin
++ Getting page request in API hangs if page is empty (wouldn't be worried about it once site is live, but should be fixed)
++ Perform thorough testing on API routes, make sure all requests are either VALID or return 404 or error 
