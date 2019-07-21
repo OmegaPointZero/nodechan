@@ -117,10 +117,14 @@ exports.APIgetPage = (function getPage(board,page,req,res){
         pageArr.forEach(function(arr){
             p = p.concat(arr.preview)
         });
-        for(var i=0;i<p.length;i++){
-            p[i] = exports.stripIP(p[i])
-            if(i==p.length-1){
-                res.send(p)
+        if(p.length==0){
+            res.send('')
+        } else {
+            for(var i=0;i<p.length;i++){
+                p[i] = exports.stripIP(p[i])
+                if(i==p.length-1){
+                    res.send(p)
+                }
             }
         }
    });

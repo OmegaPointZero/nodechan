@@ -69,8 +69,5 @@ Admin Properties
 + Report Button doesn't work on dynamically loaded content
 
 ### Back end:
-+ Make sure when getting a report page, the post acutally exists
-+ Make sure a request to delete a post/file has to come from the SAME IP that posted it, or an Admin
-+ Getting page request in API hangs if page is empty (wouldn't be worried about it once site is live, but should be fixed)
 + Perform thorough testing on API routes, make sure all requests are either VALID or return 404 or error 
 + Delete function only does first post, make sure if multiple posts selected, deletes them all

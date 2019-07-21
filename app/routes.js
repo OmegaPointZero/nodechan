@@ -128,28 +128,35 @@ module.exports = (function(app,passport){
 
     // Delete a thread or post from a board
     app.post('/:board/delete', (req,res)=>{
-        // uhhh make it so the IP posting this req has to match IP of post being deleted, unless admin
         var board = req.params.board 
         var id = Number(req.body.id)
         var OP = req.body.OP 
         var fo = req.body.fo; // fileOnly delete
         var IP = req.connection.remoteAddress;
-        if(fo=='true'){ //Only deleting file
-            Post.find({board:board,postID:id},function(err,post){
-                var file = post[0].fileName
-                imageManager.deleteImage(file)
-                res.send('OK')
-            })
-        }else{
-            var myObj = {
-                postID: id,
-                OP: OP,
-                IP: IP,
-                board: board
-            }
-            postManager.deletePost(myObj)
-            res.send('OK')
+        var isAuthenticated = false;
+        if(req.user!=undefined){
+            isAuthenticated = true;
         }
+        Post.findOne({board:board,postID:id},function(err,post){
+            var file = post.fileName
+            if(req.connection.remoteAddress==post.IP || isAuthenticated){
+                if(fo=="true"){
+                    imageManager.deleteImage(file)
+                    res.send('OK')
+                } else {
+                    var myObj = {
+                        postID: id,
+                        OP: OP,
+                        IP: IP,
+                        board: board
+                    }
+                    postManager.deletePost(myObj)
+                    res.send('OK')
+                }
+            } else {
+                res.send('Error: User not granted permission to delete this post')
+            }
+        })
     });
 
     app.get('/report/:board/:post', (req,res)=>{
@@ -420,9 +427,7 @@ module.exports = (function(app,passport){
             var board = req.params.board;
             postManager.APIgetPage(board,page,req,res)
         } else if(page>10){
-            console.log('redirecting because page requested is >10')
-            res.redirect('/error/404')
-            return
+            res.sendStatus(404)
         } else {
             res.sendStatus(404)
         }
