@@ -32,7 +32,7 @@ module.exports = (function(app,passport){
     //Get Home page
     app.get('/', (req,res)=>{
         Board.find({},function(err,boards){
-            if(err){console.log(err)}
+            if(err){throw(err)}
             res.render('home.ejs',{boards:boards})
         })
     })
@@ -417,6 +417,7 @@ module.exports = (function(app,passport){
     //Get a page of a board
     app.get('/api/board/:board/:page*?', (req,res)=>{
         var page;
+        var board = req.params.board;
         if(/^(\s*|\d+)$/.test(req.params.page)){
             page = req.params.page
         } 
@@ -424,8 +425,14 @@ module.exports = (function(app,passport){
             page = 1; 
         }
         if(page>-1 && page < 10){
-            var board = req.params.board;
-            postManager.APIgetPage(board,page,req,res)
+            Board.findOne({boardCode:board},function(err,brd){
+                if(err){throw(err)}
+                if(brd){
+                    postManager.APIgetPage(brd.boardCode,page,req,res)
+                } else if(!brd){
+                    res.send('Invalid board')
+                }
+            })
         } else if(page>10){
             res.sendStatus(404)
         } else {
@@ -445,12 +452,20 @@ module.exports = (function(app,passport){
         var board = req.params.board;
         var post = req.params.post;
         if(!isNumber.test(post)){
-            res.sendStatus('Invalid Post Number')
+            res.send('Invalid Post Number')
         } else {
-            Post.findOne({board:board,postID:post}, function(err,post){ 
-                var p = postManager.stripIP(post)
-                res.send(p)
-            });
+            Board.findOne({boardCode:board},function(err,brd){
+                if(brd){
+                    Post.findOne({board:board,postID:post}, function(err,post){ 
+                        if(post){
+                            var p = postManager.stripIP(post)
+                        }
+                        res.send(p)
+                    });
+                } else if(!brd){
+                    res.send('Invalid board code')
+                }
+            })
         }
     });
 
@@ -464,11 +479,14 @@ module.exports = (function(app,passport){
         } else if(!isNumber.test(thread)){
             res.send('Invalid Thread Number')
         } else {
-            Post.find({board:board,OP:thread,postID: {$gt: post}}, function(err,posts){
-                posts.forEach(function(post){
-                    postManager.stripIP(post)
+            Board.find({board:board},function(err,b){
+                if(err){throw(err)}
+                Post.find({board:board,OP:thread,postID: {$gt: post}}, function(err,posts){
+                    posts.forEach(function(post){
+                        postManager.stripIP(post)
+                    });
+                    res.send(posts);
                 });
-                res.send(posts);
             });
         }
     })

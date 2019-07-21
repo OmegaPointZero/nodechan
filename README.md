@@ -69,5 +69,4 @@ Admin Properties
 + Report Button doesn't work on dynamically loaded content
 
 ### Back end:
-+ Perform thorough testing on API routes, make sure all requests are either VALID or return 404 or error 
 + Delete function only does first post, make sure if multiple posts selected, deletes them all

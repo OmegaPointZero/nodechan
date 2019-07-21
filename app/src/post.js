@@ -104,7 +104,7 @@ exports.getCatalog = (function getPage(board,req,res){
 });
 
 exports.APIgetPage = (function getPage(board,page,req,res){
-    Post.find({board:board},function(error,posts){
+    Post.find({board:board},function(error,posts){ 
         if(error){
             throw(error);
         }
@@ -126,7 +126,7 @@ exports.APIgetPage = (function getPage(board,page,req,res){
                     res.send(p)
                 }
             }
-        }
+        } 
    });
 });
 
