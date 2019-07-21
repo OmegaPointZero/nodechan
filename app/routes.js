@@ -128,35 +128,44 @@ module.exports = (function(app,passport){
 
     // Delete a thread or post from a board
     app.post('/:board/delete', (req,res)=>{
-        var board = req.params.board 
-        var id = Number(req.body.id)
-        var OP = req.body.OP 
-        var fo = req.body.fo; // fileOnly delete
-        var IP = req.connection.remoteAddress;
-        var isAuthenticated = false;
-        if(req.user!=undefined){
-            isAuthenticated = true;
-        }
-        Post.findOne({board:board,postID:id},function(err,post){
-            var file = post.fileName
-            if(req.connection.remoteAddress==post.IP || isAuthenticated){
-                if(fo=="true"){
-                    imageManager.deleteImage(file)
-                    res.send('OK')
-                } else {
-                    var myObj = {
-                        postID: id,
-                        OP: OP,
-                        IP: IP,
-                        board: board
-                    }
-                    postManager.deletePost(myObj)
-                    res.send('OK')
-                }
-            } else {
-                res.send('Error: User not granted permission to delete this post')
-            }
+        var payload = req.body.payload;
+        var userIP = req.connection.remoteAddress
+
+        var validIP = (function(board,post,IP){
+            return new Promise (function(resolve,reject) {
+                Post.findOne({board:board,postID:post}, function(err,p){
+                    var isValid;
+                    p.IP == IP ? isValid = true : isValid = false;
+                    resolve(isValid)
+                })
+            })
         })
+        
+        var verifyValidIP = async (load,IP,final) => {
+            var board = load.board;
+            var post = load.id;
+            var result = await (validIP(board,post,IP));
+            if(result){
+                deleteLoad(load)
+            }
+            if(final){
+                res.send('complete')
+            }
+        };
+            
+        var deleteLoad = (function(load){
+            var myObj = {
+                postID: load.id,
+                OP: load.OP,
+                board: load.board
+            }
+            postManager.deletePost(myObj)
+        });
+
+        for(var i=0;i<payload.length;i++){
+            var load = payload[i]
+            verifyValidIP(load,userIP,(i==payload.length-1))
+        }
     });
 
     app.get('/report/:board/:post', (req,res)=>{
@@ -233,7 +242,7 @@ module.exports = (function(app,passport){
     });
 
     app.post('/admin/test', (req,res)=>{
-        console.log(`test received: ${req.body}`)
+        console.log(`test received: ${JSON.stringify(req.body)}`)
         res.send(req.body)
     });
 

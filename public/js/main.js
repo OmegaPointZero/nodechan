@@ -152,24 +152,43 @@ $(document).ready(function(){
         }));
 
         $(document).on('click','input#delete',(function(){
-            var id = Number($('input.postDeleteBox:checkbox:checked').attr('id').slice(7,))
-            var fo = $('input.deleteImageOnly:checkbox:checked').attr('value')
-            fo == undefined ? fo = false : ""; // Image file only
-            var win = window.location.pathname
-            var w = win.split('/') // /b/thread/7 or /boards/b/
-            var OPs = $('div.OP').map(function(){return Number(this.id)}).toArray()
-            var index = OPs.indexOf(id)
-            var OP
-            index != -1 ? OP = OPs[index] : OP = 0;
-            var board = $('.boardTitle').html().split('/')[1]
-            $.post('/'+board+'/delete',{board,id,fo,OP}, function(data,status){
-                console.log("Status: "+status);
-            })
-                if(w.length==3){
-                    location.reload();
-                } else if(w.length==4){
-                    index == -1 ? location.reload() : location.href='/boards/'+w[1] 
+            var targets = $('input.postDeletebox:checkbox:checked')
+            var payload = []
+            for(var i=0;i<targets.length;i++){
+                var t = targets[i]
+                var id = t.id.slice(7,)
+                var fo = $('input.deleteImageOnly:checkbox:checked').attr('value')
+                fo == undefined ? fo = false : ""; // Image file only
+                var win = window.location.pathname
+                var w = win.split('/') // /b/thread/7 or /boards/b/
+                var OPs = $('div.OP').map(function(){return Number(this.id)}).toArray()
+                var index = OPs.indexOf(id)
+                var OP
+                index != -1 ? OP = OPs[index] : OP = 0;
+                var board = $('.boardTitle').html().split('/')[1]
+                /*$.post('/'+board+'/delete',{board,id,fo,OP}, function(data,status){
+                    console.log("Status: "+status);
+                })
+                */ 
+                var obj = {
+                    board: board,
+                    id: id,
+                    fo: fo,
+                    OP: OP
                 }
+                payload.push(obj)
+                if(i==targets.length-1){
+                    $.post('/'+board+'/delete', {payload:payload}, function(data,status){
+                        console.log(`Status: ${status}`)
+                        console.log(data)
+                        if(w.length==3){
+                            location.reload();
+                        } else if(w.length==4){
+                            index == -1 ? location.reload() : location.href='/boards/'+w[1] 
+                        }
+                    })
+                }
+            }
         }));
 
         $(document).on('click','.report',(function(e) {

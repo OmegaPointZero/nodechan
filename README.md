@@ -67,6 +67,3 @@ Admin Properties
 
 ### Front End:
 + Report Button doesn't work on dynamically loaded content
-
-### Back end:
-+ Delete function only does first post, make sure if multiple posts selected, deletes them all

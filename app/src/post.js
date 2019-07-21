@@ -147,7 +147,6 @@ exports.APIgetThread = (function APIgetThread(board,thread,req,res){
 exports.deletePost = (function deletePost(obj){
     var board = obj.board;
     var postID = obj.postID;
-    var IP = obj.IP;
     var OP = obj.OP;
     if(postID != OP){
         Post.findOneAndRemove({board:board,postID:postID},function(err,post){
