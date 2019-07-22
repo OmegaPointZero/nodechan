@@ -62,8 +62,3 @@ Admin Properties
 + Manage Banners
 + Allow Admins to lock threads, don't let users reply, only admins
 + Add API routes to post new threads and replies
-
-## To fix:
-
-### Front End:
-+ Report Button doesn't work on dynamically loaded content

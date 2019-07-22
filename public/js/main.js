@@ -29,19 +29,19 @@ var renderPosts = (function(posts,target,board){
         post += "(ID: <span class=\"hand\" title=\"Highlight posts by this ID\" style=\"background-color:"+P.userIDColor+";\"><a class=\"userID\">"+P.userID+"</a></span>)</span>"
         post += "<span title=\"United States\" class=\"flag flag-us\"></span></span>"
         post += "<span class=\"postTime\">"+parseTime(P.time)+"</span> "
-        post += "<span class=\"postNumber\">"
+        post += "<span class=\"postNumber\"><a href=\"#"+P.postID+"\" class=\"highlightThisPost\" id=\""+P.postID+"\">No. </a><a href=\"#\" class=\"quotePostNumber\" id=\""+P.postID+"\">"+P.postID+"</a></span>"
         post += "<a href=\"#\" class=\"report\" id=\"rp-"+P.postID+"\">  ▶ </a>"
-        post += "<div class=\"reply hidden\" id=\"mrp-"+P.postID+" style=\"min-width:5%; height:2%;font-size:8px;position:relative;z-index:0\"><a class=\"report-link\" id=\"report-link-"+P.postID+" target=\"_blank\" href=\"/report/"+board+"/"+P.postID+"\">Report</a></div>"
+        post += "<div class=\"reply hidden\" id=\"mrp-"+P.postID+"\" style=\"min-width:5%; height:2%;font-size:8px;position:relative;z-index:0\"><a class=\"report-link\" id=\"report-link-"+P.postID+" target=\"_blank\" href=\"/report/"+board+"/"+P.postID+"\">Report</a></div>"
         post += "</div>"
         if(P.fileSize){
             post += "<div class=\"file\"><div class=\"fileInfo\">File: <a href=\"/images/"+P.fileName+"\" target=\"_blank\" class=\"fileLink\">"+P.fileOriginalName+"</a>"
             var fs = P.fileSize
             if(fs<1000){
-                post += "("+fs+" Bytes, "+P.fileDimensions;
+                post += "("+fs+" Bytes, "+P.fileDimensions+")";
             } else if(Math.floor(fs/1000 <= 1000)){
-                post += "("+Math.floor(fs/1000)+" KB, "+P.fileDimensions;
+                post += "("+Math.floor(fs/1000)+" KB, "+P.fileDimensions+")";
             } else if(Math.floor(fs/1000 >= 1000)){
-                post += "("+Math.floor(fs/1000000)+" MB, "+P.fileDimensions;
+                post += "("+Math.floor(fs/1000000)+" MB, "+P.fileDimensions+")";
             }
             post += "</div><div class=\"thumbnail\"><a href=\"/images/"+P.fileName+"\" target=\"_blank\"><img src=\"/images/s"+P.time+".png\" alt=\""+P.fileSize+" Bytes\"></a></div>"
         }
@@ -197,12 +197,7 @@ $(document).ready(function(){
             console.log($(newTarget).html())
             $(newTarget).toggleClass('hidden')
         }));
-
 })
-
-
-//        $('div.post').css('border-bottom','1px solid #d9bfb7')
-//        Do something when user scrolls past div
 
 $(window).on("scroll", function() {
     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
