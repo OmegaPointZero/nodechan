@@ -154,22 +154,19 @@ $(document).ready(function(){
         $(document).on('click','input#delete',(function(){
             var targets = $('input.postDeletebox:checkbox:checked')
             var payload = []
+            var OP = $('div.OP').attr('id')
+            console.log(OP)
             for(var i=0;i<targets.length;i++){
                 var t = targets[i]
                 var id = t.id.slice(7,)
                 var fo = $('input.deleteImageOnly:checkbox:checked').attr('value')
                 fo == undefined ? fo = false : ""; // Image file only
                 var win = window.location.pathname
-                var w = win.split('/') // /b/thread/7 or /boards/b/
+                var w = win.split('/') 
                 var OPs = $('div.OP').map(function(){return Number(this.id)}).toArray()
                 var index = OPs.indexOf(id)
                 var OP
-                index != -1 ? OP = OPs[index] : OP = 0;
                 var board = $('.boardTitle').html().split('/')[1]
-                /*$.post('/'+board+'/delete',{board,id,fo,OP}, function(data,status){
-                    console.log("Status: "+status);
-                })
-                */ 
                 var obj = {
                     board: board,
                     id: id,

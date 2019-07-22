@@ -48,9 +48,10 @@ Admin Properties
 
 ### User-facing front end:
 + User ID colors: detect if they're bright or dark, make ID *text* color contrast it
++ Shorten original filenames if too long
 + Cookie to keep track of user-supplied options:
     + Color Scheme
-    + Open images in new tab/open in page/fit to page
+    + Open images in new tab/open in pageboards/b/fit to page
     + WebM's play with/without sound
 + Country Flags based on IP Address location
 + Realign the way post information is rendered and aligned
@@ -61,4 +62,8 @@ Admin Properties
 + Wordfilters
 + Manage Banners
 + Allow Admins to lock threads, don't let users reply, only admins
-+ Add API routes to post new threads and replies
+
+## To Fix:
++ Delete button on boards.ejs doesn't function the same as from within the thread, not deleting the entire thread if the OP is selected
++ Upon deleting a thread, from the thread.ejs view, redirects to 40; should redirect to the main board page
++ rewrite the paths to progress linearly, like /:board, /:board/:page, /:board/thread/:threadID

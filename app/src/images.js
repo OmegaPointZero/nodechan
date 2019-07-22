@@ -12,10 +12,7 @@ exports.getBanners = (function getBanners(){
     return(banner.slice(7,))
 })
 
-exports.uploadImage = (function uploadImage(image,time,isOP,req,res){
-
-    console.log('from Upload Image')
-    console.log(image)
+exports.uploadImage = (function uploadImage(image,time,isOP,api,req,res){
     var generatePreview = (function(size){
         //generate preview image dimensions
         var newName = time+'.'+extension;
@@ -30,7 +27,7 @@ exports.uploadImage = (function uploadImage(image,time,isOP,req,res){
             retObj.time = time;
             retObj.fileName = newName;
             retObj.fileDimensions = size.width + ' x ' + size.height;
-            postManager.writePost(req.params,req.body,req.connection.remoteAddress,retObj,req,res);
+            postManager.writePost(req.params,req.body,req.connection.remoteAddress,retObj,api,req,res);
         })
     });
 

@@ -98,7 +98,7 @@ module.exports = (function(app,passport){
             return;
         } else {
             var time = new Date().getTime();
-            var imgInfo = imageManager.uploadImage(req.files[0],time,true,req,res)
+            var imgInfo = imageManager.uploadImage(req.files[0],time,true,false,req,res)
             postManager.bumpAndGrind(req.params.board)
         }
     })
@@ -117,11 +117,11 @@ module.exports = (function(app,passport){
         } else {
             var time = new Date().getTime();
             if(req.files.length>0){
-                var imgInfo = imageManager.uploadImage(req.files[0],time,false,req,res);
+                var imgInfo = imageManager.uploadImage(req.files[0],time,false,false,req,res);
             } else {
                 /* this is an if/else because imageManager() will parse the 
                 image and attach it to the post, otherwise it doesn't attach */
-                postManager.writePost(req.params,req.body,req.connection.remoteAddress,{time:new Date().getTime()},req,res);
+                postManager.writePost(req.params,req.body,req.connection.remoteAddress,{time:new Date().getTime()},false,req,res);
             }
         }
     });
@@ -130,7 +130,6 @@ module.exports = (function(app,passport){
     app.post('/:board/delete', (req,res)=>{
         var payload = req.body.payload;
         var userIP = req.connection.remoteAddress
-
         var validIP = (function(board,post,IP){
             return new Promise (function(resolve,reject) {
                 Post.findOne({board:board,postID:post}, function(err,p){
@@ -145,7 +144,7 @@ module.exports = (function(app,passport){
             var board = load.board;
             var post = load.id;
             var result = await (validIP(board,post,IP));
-            if(result){
+            if(result || req.user){
                 deleteLoad(load)
             }
             if(final){
@@ -422,7 +421,35 @@ module.exports = (function(app,passport){
             res.send(bans);
         });
     });
+
+    //Post New thread on :board
+    app.post('/api/boards/:board', notBanned, upload.any(), (req,res) => {
+        if(req.files.length===0){
+            res.send('Error: You forgot to upload an image')
+            return;
+        } else {
+            var time = new Date().getTime();
+            var imgInfo = imageManager.uploadImage(req.files[0],time,true,true,req,res)
+            postManager.bumpAndGrind(req.params.board)
+        }
+    })
     
+    //Reply to thread ID on BOARD
+    app.post('/api/:board/thread/:id', notBanned, upload.any(), (req,res)=>{
+        if(req.files.length===0 && req.body.text== ""){
+            res.send('Error: Response cannot be empty')
+        } else {
+            var time = new Date().getTime();
+            if(req.files.length>0){
+                var imgInfo = imageManager.uploadImage(req.files[0],time,false,true,req,res);
+            } else {
+                /* this is an if/else because imageManager() will parse the 
+                image and attach it to the post, otherwise it doesn't attach */
+                postManager.writePost(req.params,req.body,req.connection.remoteAddress,{time:new Date().getTime()},true,req,res);
+            }
+        }
+    });
+
     //Get a page of a board
     app.get('/api/board/:board/:page*?', (req,res)=>{
         var page;

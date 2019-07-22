@@ -195,7 +195,7 @@ exports.bumpAndGrind = (function bumpAndGrind(board){
 })
 
 //Write new post to database
-exports.writePost = (function writePost(params,body,IP,imgInfo,req,res){
+exports.writePost = (function writePost(params,body,IP,imgInfo,api,req,res){
     if(params.id){
         Post.find({board:params.board,OP:params.id},function(err,posts){
             var len = posts.length;
@@ -248,7 +248,11 @@ exports.writePost = (function writePost(params,body,IP,imgInfo,req,res){
             }
             post.save(function(err){
                 if(err) throw err;
-                res.redirect('/'+req.params.board+'/thread/'+OP+'#'+post.postID)
+                if(!api){
+                    res.redirect('/'+req.params.board+'/thread/'+OP+'#'+post.postID)
+                } else if(api){
+                    res.redirect('/api/thread/'+req.params.board+'/'+OP)
+                }
             });
         })
 })
