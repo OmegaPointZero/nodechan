@@ -4,15 +4,17 @@
     <title>
         /<%=thisBoard.boardCode%>/ - Thread <%=posts[0].OP%>
     </title>
-    <link rel="stylesheet" type="text/css" href="/css/main.css">.
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> <!-- add JQuery -->
     <script src="https://code.jquery.com/jquery-migrate-1.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
     <script src="/js/main.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
 </head>
-<body class="main">
+<body>
+<div class="main">
 
 <div class="boardNav"> 
    [ <%allBoards.forEach(function(board){%>
@@ -135,8 +137,6 @@
     </div>
 </div>
 <%}%>
-</div>
-
 <hr>
     <div class="overboard"> <div class="threadNav">[<a class="threadNavItem" href="/boards/<%=thisBoard.boardCode%>">Return</a>] [<a class="threadNavItem" href="/boards/<%=thisBoard.boardCode%>/catalog">Catalog</a>] [<a class="threadNavItem" href="#top">Top</a>] [<a class="threadNavItem" id="update" href="#">Update</a>] </div>
 <div class="metadata"> 
@@ -144,12 +144,14 @@
 </div>
 <hr>
 
+<div class="btmCtr">
 <div class="bottomCtrl">
     <span class="deleteForm">
         <input type="hidden" name="mode" value="userDelete">
             Delete Post: [<input type="checkbox" name="deleteImageOnly" class="deleteImageOnly" value=true> File Only]
         <input type="submit" id="delete" value="Delete">
     </span>
+</div>
 </div>
 <div class="boardNav" id="bottom"> 
    [ <%allBoards.forEach(function(board){%>
@@ -161,6 +163,7 @@
 </div>
 <div class="footer">
 All works posted on here are artistic works of fiction and falsehood. Only a fool would take anything posted here as fact.
+</div>
 </div>
 </body>
 </html>

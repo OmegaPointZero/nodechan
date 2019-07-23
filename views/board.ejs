@@ -6,12 +6,13 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> <!-- add JQuery -->
 <script src="https://code.jquery.com/jquery-migrate-1.4.1.min.js"></script>
 <script src="/js/main.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>
         /<%=thisBoard.boardCode%>/ - <%=thisBoard.boardTitle%>
     </title>
 </head>
-<body class="main">
+<body><div class="main">
 <div class="main-container">
 <div class="boardNav"> 
    [ <%allBoards.forEach(function(board){%>
@@ -185,4 +186,6 @@
 <div class="footer" id="footer">
 All works posted on here are artistic works of fiction and falsehood. Only a fool would take anything posted here as fact.
 </div>
+</div>
 </body>
+</html>

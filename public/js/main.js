@@ -154,6 +154,7 @@ $(document).ready(function(){
         $(document).on('click','input#delete',(function(){
             var targets = $('input.postDeletebox:checkbox:checked')
             var payload = []
+            var OPSelected = false;
             var OP = $('div.OP').attr('id')
             console.log(OP)
             for(var i=0;i<targets.length;i++){
@@ -164,7 +165,7 @@ $(document).ready(function(){
                 var win = window.location.pathname
                 var w = win.split('/') 
                 var OPs = $('div.OP').map(function(){return Number(this.id)}).toArray()
-                var index = OPs.indexOf(id)
+                var index = OPs.indexOf(Number(id))
                 var OP
                 var board = $('.boardTitle').html().split('/')[1]
                 var obj = {
@@ -183,7 +184,7 @@ $(document).ready(function(){
                         } else if(w.length==4){
                             index == -1 ? location.reload() : location.href='/boards/'+w[1] 
                         }
-                    })
+                    }) 
                 }
             }
         }));

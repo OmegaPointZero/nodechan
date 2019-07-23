@@ -282,9 +282,7 @@ Admin Properties
     + Open images in new tab/open in pageboards/b/fit to page
     + WebM's play with/without sound
 + Country Flags based on IP Address location
-+ Realign the way post information is rendered and aligned
 + Run tests of posts of various lengths render properly
-+ MAKE EVERYTHING RESPONSIVE AND LOOK GOOD ON MOBILE, that needs a lot of work
 
 ### Back-End server-side:
 + Wordfilters
@@ -298,6 +296,4 @@ Admin Properties
 + Add additional documentation of how to make proper calls, what responses should look like, and what errors one can get
 
 ## To Fix:
-+ Delete button on boards.ejs doesn't function the same as from within the thread, not deleting the entire thread if the OP is selected
-+ Upon deleting a thread, from the thread.ejs view, redirects to 404; should redirect to the main board page
-
++ Delete button on boards.ejs doesn't function the same as from within the thread, not deleting the entire thread if the OP is selected. Will need to rewrite delete function to differ between threads.ejs and board.ejs views.

@@ -3,7 +3,16 @@ p {
     white-space: pre;
 }
 
-body.main {
+html,body
+{
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    overflow-x: hidden; 
+}
+
+div.main {
     top: 0;
     bottom: 0;
     background: linear-gradient(#fed6af, #ffebcf, #ffffee) no-repeat;
@@ -13,11 +22,12 @@ body.main {
     font-size: 10pt;
     font-family: arial,helvetica,sans-serif;
     margin-left: 0px;
-    margin-top: 10px;
+    margin-top: 0px;
     margin-right: 0px;
-    margin-bottom: 10px;
+    margin-bottom: 0px;
     padding-right: 5px;
     width: 100%;
+    min-height: 100%;
 }
 
 .panel-heading{
@@ -72,10 +82,6 @@ span.subject{
     width: 468px;
 }
 
-#newPost textarea{
-    width: 292px;
-}
-
 table#newPost>tbody>tr>td:first-child {
     background-color: #ea8;
     color: #800;
@@ -92,8 +98,8 @@ table#newPost>tbody>tr>td:first-child {
     width: 468px;
 }
 
-#newThread textarea{
-    width: 292px;
+textarea{
+    max-width: 70%;
 }
 
 table#newThread>tbody>tr>td:first-child {
@@ -318,6 +324,12 @@ div.footer{
 .nextPgButton{
     text-decoration: none;
     color: black;
+}
+
+.btmCtr{
+    display: block;
+    width:100%;
+    height: 25px;
 }
 
 .pageTab{
