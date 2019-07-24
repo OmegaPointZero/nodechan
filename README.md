@@ -224,7 +224,7 @@ Future updates will allow existing administrators to register new administrators
 
     None
 
-** Bans **
+**Bans**
 ----
     Gets all active IP Bans, provided the Admin is logged in
     
@@ -292,7 +292,7 @@ Admin Properties
 + Manage Banners
 + Add helmet.js for security
 + Add new middleware for admins accessing the API endpoints for admins that doens't allow attackers to enumerate the login route
-+ Add middleware to prevent users from replying to locked threads (if thread is locked, renders w/o reply form, but updated threads can still reply and can still reply via api)
++ Add middleware to prevent users from replying to locked threads (if thread is locked, thread page renders w/o reply form, but updated threads can still reply and can still reply via api)
 
 ### API
 + Modify the /api/users to be /api/admin/users, to be consistent with admin route nomenclature
