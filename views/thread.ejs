@@ -29,6 +29,11 @@
     <h1 class="boardTitle">/<%=thisBoard.boardCode%>/ - <%=thisBoard.boardTitle%></h1>
 
 </div>
+
+        <% if(posts[0].locked==true){%>
+            <h1 class="lockedHeader">This thread is LOCKED. You cannot reply to it.</h1>
+        <% } else { %>
+
         <form action='/<%=thisBoard.boardCode%>/thread/<%=posts[0].OP%>' method='POST' enctype="multipart/form-data">
             <table id="newPost">
                 <tbody>
@@ -51,6 +56,7 @@
                 </tbody>
             </table>
         </form> 
+        <% } %>
         <hr>
     <div class="overboard" id="top"> <div class="threadNav">[<a class="threadNavItem" href="/boards/<%=thisBoard.boardCode%>">Return</a>] [<a class="threadNavItem" href="/boards/<%=thisBoard.boardCode%>/catalog">Catalog</a>] [<a class="threadNavItem" href="#bottom">Bottom</a>] [<a class="threadNavItem" id="update" href="#">Update</a>] </div>
 

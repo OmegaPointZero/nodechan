@@ -338,7 +338,7 @@ div.footer{
     border-right: 1px solid #d9bfb7;
     border-bottom: 1px solid #d9bfb7;
     margin-left: 5px;
-    max-width: 25%;
+    min-width: 25%;
     padding: 2px;
     margin-bottom: 6px;
     color: #b86;
@@ -361,6 +361,10 @@ div.footer{
 
 .topBanner{
     margin: auto;
+    text-align: center;
+}
+
+h1.lockedHeader{
     text-align: center;
 }
 

@@ -145,6 +145,8 @@ Future updates will allow existing administrators to register new administrators
     `thread=[integer]`
     
     `post=[integer]`
+    The thread parameter is the Post Number of the OP of the thread
+    The post parameter is the most recent post number in the thread; the api returns all posts in the thread after this post.
 
 **Post Thread**
 ----
@@ -279,21 +281,23 @@ Admin Properties
 + Shorten original filenames if too long
 + Cookie to keep track of user-supplied options:
     + Color Scheme
-    + Open images in new tab/open in pageboards/b/fit to page
+    + Open images in new tab/open in page and fit to page
     + WebM's play with/without sound
 + Country Flags based on IP Address location
 + Run tests of posts of various lengths render properly
++ Clicking on a post number on board.ejs should take user to the thread.ejs view of that thread
 
 ### Back-End server-side:
 + Wordfilters
 + Manage Banners
-+ Allow Admins to lock threads, don't let users reply, only admins
 + Add helmet.js for security
 + Add new middleware for admins accessing the API endpoints for admins that doens't allow attackers to enumerate the login route
++ Add middleware to prevent users from replying to locked threads (if thread is locked, renders w/o reply form, but updated threads can still reply and can still reply via api)
 
 ### API
 + Modify the /api/users to be /api/admin/users, to be consistent with admin route nomenclature
++ API isAdmin middleware needs to be replaced with something that doesn't expose the login route to non-admins via failed /api/admin/* call
 + Add additional documentation of how to make proper calls, what responses should look like, and what errors one can get
 
 ## To Fix:
-+ Delete button on boards.ejs doesn't function the same as from within the thread, not deleting the entire thread if the OP is selected. Will need to rewrite delete function to differ between threads.ejs and board.ejs views.
++ Delete button on boards.ejs doesn't function the same as from within the thread, not deleting the entire thread if the OP is selected. Will need to rewrite delete function to differ between threads.ejs and board.ejs views.p

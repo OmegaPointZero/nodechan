@@ -121,6 +121,7 @@ var updatePosts = (function(){
 });
 
 $(document).ready(function(){
+        
         $(document).on('click',"a.highlightThisPost",(function(){
             var str = String(this)
             var post = str.split('#')[1]

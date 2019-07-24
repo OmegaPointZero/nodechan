@@ -391,6 +391,29 @@ module.exports = (function(app,passport){
         })
     });
 
+    app.post('/admin/lock', isAdmin, (req,res)=>{
+        var body = req.body;
+        console.log(body)
+        var action = req.body.action
+        var board = req.body.board
+        var thread = req.body.thread
+        var update = false
+        if(action=='lock'){
+            update = true
+            Board.update({"boardCode":board},{$push:{lockedThreads:thread}},function(err,board){
+                if(err){throw(err)}
+            })
+        } else {
+            Board.update({"boardCode":board},{$pull:{lockedThreads:thread}},function(err,board){
+                if(err){throw(err)}
+            })
+        }
+        Post.update({"board":board,OP:thread},{$set:{locked:update}},function(err,board){
+            if(err){throw(err)}
+            res.send('Updated')
+        })
+    });
+
     //API REQUESTS BEGIN HERE
     app.post('/api/users', isAdmin, (req,res)=>{
         var board = req.body.board;

@@ -103,6 +103,7 @@ $(document).ready(function(){
 
     $('input.addSticky').on("keypress", function (e){     
         var id = this.id;
+        console.log(id)
         var board = id.slice(10,)       
         if (e.keyCode == 13) {
             // Cancel the default action on keypress event
@@ -113,12 +114,12 @@ $(document).ready(function(){
 
     $('div.addStickyOption').click(function(e){
         var thisID = this.id;
+        console.log(thisID)
         var target = thisID.slice(16,)
         var tgt = '#sticky-'+target;
         $(this.id).toggleClass('hidden')
         $(tgt).removeClass('hidden')
     });
-
 
     $('.unsticky').click(function(e){
         var id = this.id;
@@ -161,6 +162,25 @@ $(document).ready(function(){
         });
     });
 
+    $('input.addLock').on("keypress", function (e){     
+        var id = this.id;
+        console.log(id)
+        var board = id.slice(10,)       
+        if (e.keyCode == 13) {
+            e.preventDefault(); 
+            $('button#lock-'+board).click();
+        }
+    });
+
+    $('div.addLockOption').click(function(e){
+        var thisID = this.id;
+        console.log(thisID)
+        var target = thisID.slice(14,)
+        var tgt = '#lock-'+target;
+        $(this.id).toggleClass('hidden')
+        $(tgt).removeClass('hidden')
+    });
+
     $('button.newBoardTitle').click(function(e){
         var thisID = this.id;
         var board = thisID.slice(11,)
@@ -178,6 +198,49 @@ $(document).ready(function(){
            }
         });
     });
+
+    $('.unlock').click(function(e){
+        var id = this.id;
+        var s = id.split('-');
+        var board = s[1]
+        var thread = s[2]
+        var obj = {
+            action: 'unlock',
+            board: board,
+            thread: thread
+        }
+        $.ajax({
+            type: "POST",
+            url: '/admin/lock',
+            data: obj,
+            success: function(data){
+                console.log(data)
+                location.reload();
+           }
+        });
+    });
+
+    $('button.addLock').click(function(e){
+        var thisID = this.id;
+        console.log(thisID)
+        var board = thisID.slice(5,)
+        var target = $('#addLock-'+board).val()
+        var obj = {
+            action: 'lock',
+            board: board,
+            thread: target            
+        }
+        $.ajax({
+            type: "POST",
+            url: '/admin/lock',
+            data: obj,
+            success: function(data){
+                console.log(data)
+                location.reload();
+           }
+        });
+    });
+
 
     $('button.newBoardCode').click(function(e){
         var thisID = this.id;

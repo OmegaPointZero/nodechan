@@ -14,7 +14,7 @@
 
 </head>
 <title>Nodechan - Admin Panel</title>
-<body class="main">
+<body><div class="main">
 <div class="main-container">
 
     <p>Hi. Welcome to the Admin Panel, <%=user%></p>
@@ -25,9 +25,10 @@
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#tab1default" data-toggle="tab">Add/Delete Boards</a></li>
                 <li><a href="#tab2default" data-toggle="tab">Stickied Threads</a></li>
-                <li><a href="#tab3default" data-toggle="tab">IP Bans</a></li>
-                <li><a href="#tab4default" data-toggle="tab">Reported Threads</a></li>
-                <li><a href="#tab5default" data-toggle="tab">Posts By User</a></li>
+                <li><a href="#tab3default" data-toggle="tab">Locked Threads</a></li>
+                <li><a href="#tab4default" data-toggle="tab">IP Bans</a></li>
+                <li><a href="#tab5default" data-toggle="tab">Reported Threads</a></li>
+                <li><a href="#tab6default" data-toggle="tab">Posts By User</a></li>
             </ul>
         </div>
         <div class="panel-body">
@@ -87,10 +88,31 @@
                         <div class="addSticky hidden" id="sticky-<%=board.boardCode%>"><input class="addSticky" type="text" id="addSticky-<%=board.boardCode%>"></input><button class="addSticky" id="sticky-<%=board.boardCode%>">Add</button></div> 
                     <% }) %>
                 </div>
+
+                <!--
+                    LOCKED THREAD TAB CONTENTS
+                -->
+                <div class="tab-pane fade" id="tab3default"> 
+                    <%boards.forEach(function(board){%> 
+                        <h4>/<%=board.boardCode%>/ - <%=board.boardTitle%></h4>  
+                        <% var locked = board.lockedThreads %> 
+                            <% if(locked.length==0){%> 
+                                <ul><li>No Locked threads</li></ul> 
+                            <% } else { %> 
+                                <ul> 
+                                <%locked.forEach(function(lock){%> 
+                                    <li><a href="/<%=board.boardCode%>/thread/<%=lock%>"><%=lock%></a> <button class="unlcok" id="unlock-<%=board.boardCode%>-<%=lock%>">Unlock</button></li>  
+                                <% }) %> 
+                                </ul> 
+                            <% } %> 
+                        <div class="addLockOption" id="addLockOption-<%=board.boardCode%>">Click to Lock</div>
+                        <div class="addLock hidden" id="lock-<%=board.boardCode%>"><input class="addLock" type="text" id="addLock-<%=board.boardCode%>"></input><button class="addLock" id="lock-<%=board.boardCode%>">Add</button></div> 
+                    <% }) %>
+                </div>
                 <!-- 
                     BANNED IP'S TAB CONTENTS
                 -->
-                <div class="tab-pane fade" id="tab3default">
+                <div class="tab-pane fade" id="tab4default">
                     <%if(bans.length==0){%>
                     <div class="banContainer">There are no active bans</div>
                     <%} else { %>
@@ -116,7 +138,7 @@
                 <!-- 
                     REPORTED POSTS/THREADS CONTENTS
                 -->
-                <div class="tab-pane fade" id="tab4default">
+                <div class="tab-pane fade" id="tab5default">
                     <%for(var n=0;n<reports.length;n++){%>
                         <% var thisReport = reports[n] %>
                         <div class="reply" style="padding:5px;">
@@ -145,7 +167,7 @@
                         </div>
                     <% } %>
                 </div> 
-                <div class="tab-pane fade" id="tab5default">
+                <div class="tab-pane fade" id="tab6default">
                   Board: <input type="text" id="getUserByIPBoard" name="board" placeholder="Board"><br>
                   IP: <input type="text" id="getUserByIPAddress" name="IP" placeholder="IP"><br>
                   <button id="postByIP">Submit</button>
@@ -157,7 +179,7 @@
     </div>
     </div>
 	</div>
-</div>
+</div></div>
 </body>
 </html>
 
