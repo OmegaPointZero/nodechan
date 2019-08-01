@@ -415,33 +415,9 @@ module.exports = (function(app,passport){
     });
 
     //API REQUESTS BEGIN HERE
-    app.post('/api/users', isAdmin, (req,res)=>{
-        var board = req.body.board;
-        var IP = req.body.IP;
-        Post.find({board:board,IP:IP},function(err,posts){
-            if(err){throw(err)}
-            res.send(posts)
-        });
-    });
-
-    app.get('/api/admin/reports', isAdmin, (req,res) => {
-        Report.find({},function(err,reps){
-            if(err){
-                throw err
-            }
-            res.send(reps)
-        }); 
-    });
-
     app.get('/api/boardlist', (req,res)=>{
         Board.find({},function(err,boards){
             res.send(boards)
-        });
-    });
-
-    app.get('/api/bans', isAdmin, (req,res)=>{
-        Banned.find({},function(err,bans){
-            res.send(bans);
         });
     });
 
@@ -550,11 +526,43 @@ module.exports = (function(app,passport){
         }
     })
 
+    //Get all posts by user IP address
+    app.post('/api/admin/users', isAdminAPI, (req,res)=>{
+        var board = req.body.board;
+        var IP = req.body.IP;
+        Post.find({board:board,IP:IP},function(err,posts){
+            if(err){throw(err)}
+            res.send(posts)
+        });
+    });
+
+    app.get('/api/admin/reports', isAdminAPI, (req,res) => {
+        Report.find({},function(err,reps){
+            if(err){
+                throw err
+            }
+            res.send(reps)
+        }); 
+    });
+
+    app.get('/api/admin/bans', isAdminAPI, (req,res)=>{
+        Banned.find({},function(err,bans){
+            res.send(bans);
+        });
+    });
+
+
     function isAdmin(req,res,next){
         if(req.isAuthenticated())
             return next();
         res.redirect(process.env.LOGINROUTE);
     }
+
+    function isAdminAPI(req,res,next){
+        if(req.isAuthenticated())
+            return next();
+        res.status(401).send('Forbidden: You are not authorized')
+    })
 
     function notBanned(req,res,next){
         var ipaddr = req.connection.remoteAddress

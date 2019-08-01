@@ -322,7 +322,7 @@ Future updates will allow existing administrators to register new administrators
     
 * **URL**
 
-    /api/users
+    /api/admin/users
     
 * **Method**
 
@@ -340,7 +340,15 @@ Future updates will allow existing administrators to register new administrators
     
 **Sample Body POST**
 
-    `{ board: 'js', IP: '192.168.0.1'}`
+    ```
+    $.ajax({
+    type: "POST",
+    url: 'http://nodechan/api/admin/users',
+    data: { board: 'js', IP: '192.168.0.1'},
+    success: function(data){
+        console.log(data)
+    }
+    ```
     
 **Reports**
 ----
@@ -425,14 +433,10 @@ Admin Properties
 + Wordfilters
 + Manage Banners
 + Add helmet.js for security
-+ Add new middleware for admins accessing the API endpoints for admins that doens't allow attackers to enumerate the login route
 + Add middleware to prevent users from replying to locked threads (if thread is locked, thread page renders w/o reply form, but updated threads can still reply and can still reply via api)
 
 ### API
-+ Modify the /api/users to be /api/admin/users, to be consistent with admin route nomenclature
-+ API isAdmin middleware needs to be replaced with something that doesn't expose the login route to non-admins via failed /api/admin/* call
-+ Add additional documentation of how to make proper calls, what responses should look like, and what errors one can get
++ Need to fix API to respond with some sort of JSON data after POSTing to server, instead of responding with all of the regular pages' html.
 
 ## To Fix:
 + Delete button on boards.ejs doesn't function the same as from within the thread, not deleting the entire thread if the OP is selected. Will need to rewrite delete function to differ between threads.ejs and board.ejs views.p
-
