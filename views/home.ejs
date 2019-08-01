@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" type="text/css" href="/css/main.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> <!-- add JQuery -->
 <script src="/js/main.js"></script>
 
@@ -32,7 +32,7 @@
         <%unique.forEach(function(category){%>
             <table class="column">
                 <tbody>
-                <tr><td><h3><%=category%></h3></td></tr>
+                <tr><td><h3 style="color:maroon !important"><%=category%></h3></td></tr>
                 <% var filteredCategories = boards.filter(function(board){return board.category===category})%>
                 <%filteredCategories.forEach(function(b){ %> <tr><td><a href="/boards/<%=b.boardCode%>" class="boardCodes"><%=b.boardTitle%></a></td></tr> <% }) %>
                 </tbody>

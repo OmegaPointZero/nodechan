@@ -11,8 +11,6 @@ require('dotenv').config();
 const session = require('express-session');
 const flash = require('connect-flash');
 
-
-//Declare configURL
 var configURL = process.env.MONGO;
 
 var cors = (function(req,res,next){

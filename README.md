@@ -37,13 +37,43 @@ Future updates will allow existing administrators to register new administrators
 
     `GET`
 
+* **Sample AJAX Request**
+
+    ```
+    $.ajax({
+        type: "GET",
+        url: 'http://nodechan/api/boardlist',
+        success: function(data){
+            console.log(data)
+        }
+    });
+    ```
+* **Sample API Response**    
+
+    ```
+    [ 
+        {"stickyThreads":[],"lockedThreads":[],"_id":"5b612125fb6fc072a40d6bde","boardCode":"js","boardTitle":"Javascript","category":"Programming"}, 
+        {"stickyThreads":[],"lockedThreads":[],"_id":"5b61215ffb6fc072a40d6c0c","boardCode":"asm","boardTitle":"Assembly and Shellcoding","category":"Programming"},
+        {"stickyThreads":[],"lockedThreads":[],"_id":"5b612143fb6fc072a40d6bec","boardCode":"web","boardTitle":"Web Development General","category":"Programming"},
+        {"stickyThreads":[],"lockedThreads":[],"_id":"5b6121defb6fc072a40d6c34","boardCode":"gif","boardTitle":"Animated GIF and WEBM","category":"General"},
+        {"stickyThreads":[],"lockedThreads":[],"_id":"5b612213fb6fc072a40d6c44","boardCode":"meme","boardTitle":"Memes","category":"Internet Culture"},
+        {"stickyThreads":["1"],"lockedThreads":["1"],"_id":"5b612277fb6fc072a40d6c62","boardCode":"b","boardTitle":"Random","category":"General"},
+        {"stickyThreads":[],"lockedThreads":[],"_id":"5b61225ffb6fc072a40d6c59","boardCode":"art","boardTitle":"Art","category":"General"},
+        {"stickyThreads":[],"lockedThreads":[],"_id":"5b6121f6fb6fc072a40d6c37","boardCode":"rel","boardTitle":"Religion","category":"General"},
+        {"stickyThreads":[],"lockedThreads":[],"_id":"5b6121c7fb6fc072a40d6c33","boardCode":"k","boardTitle":"Weapons","category":"General"},
+        {"stickyThreads":[],"lockedThreads":[],"_id":"5b6120f6fb6fc072a40d6bd2","boardCode":"py","boardTitle":"Python","category":"Programming"},
+        {"stickyThreads":[],"lockedThreads":[],"_id":"5b6121abfb6fc072a40d6c2d","boardCode":"pol","boardTitle":"Politically Incorrect","category":"General"}
+    ]
+    
+        ```
+
 **Board Page**
 ----
     Returns json data about the posts on a board of a given page
     
 * **URL**
 
-    /api/:board/:page?
+    /api/board/:board/:page?
     
 * **Method**
 
@@ -61,6 +91,28 @@ Future updates will allow existing administrators to register new administrators
     
     Must be between pages 1-10; default is 1.
     
+    
+* **Sample AJAX Request**
+
+    ```
+    $.ajax({
+        type: "GET",
+        url: 'http://nodechan/api/board/b',
+        success: function(data){
+            console.log(data)
+        }
+    });
+    ```
+* **Sample API Response** 
+
+    ```
+    [   
+        {"_id":"5d37dbd36840925c87a48398","publicBan":false,"locked":true,"sticky":true,"IP":"stripped","name":"","subject":"","board":"b","body":"Testing it out!","fileName":"1563941842216.png","fileOriginalName":"dice.png","fileSize":"588421","fileDimensions":"598 x 600","time":1563941842216,"OP":1,"userID":"e12d9485","userIDColor":"rgb(45,148,133,1)","postID":1,"__v":0},
+        {"_id":"5d37de091bedae5df6f9a517","publicBan":false,"locked":false,"sticky":false,"IP":"stripped","name":"","subject":"","board":"b","body":"","fileName":"1563942409270.png","fileOriginalName":"apuhug.png","fileSize":"91948","fileDimensions":"820 x 500","time":1563942409270,"OP":2,"userID":"d3795d28","userIDColor":"rgb(121,93,40,1)","postID":2,"__v":0},
+        {"_id":"5d37de141bedae5df6f9a518","publicBan":false,"locked":false,"sticky":false,"IP":"stripped","name":"","subject":"","board":"b","body":"Derpa doo","fileName":"1563942420636.jpeg","fileOriginalName":"serveimage.jpeg","fileSize":"58909","fileDimensions":"1280 x 720","time":1563942420636,"OP":2,"userID":"d3795d28","userIDColor":"rgb(121,93,40,1)","postID":3,"__v":0}
+    ]
+    ```
+    
 
 **Thread**
 ----
@@ -68,7 +120,7 @@ Future updates will allow existing administrators to register new administrators
     
 * **URL**
 
-    /api/:board/thread/:thread
+    /api/thread/:board/:thread
     
 * **Method**
 
@@ -100,10 +152,43 @@ Future updates will allow existing administrators to register new administrators
     `subject=[string]`
     
     `thread=[integer]`
+       
+* **Sample AJAX GET Request**
+
+    ```
+    $.ajax({
+        type: "GET",
+        url: 'http://nodechan/api/thread/b/2',
+        success: function(data){
+            console.log(data)
+        }
+    });
+    ```
+* **Sample API GET Response** 
+    ```
+    [
+        {"_id":"5d37de091bedae5df6f9a517","publicBan":false,"locked":false,"sticky":false,"IP":"stripped","name":"","subject":"","board":"b","body":"","fileName":"1563942409270.png","fileOriginalName":"apuhug.png","fileSize":"91948","fileDimensions":"820 x 500","time":1563942409270,"OP":2,"userID":"d3795d28","userIDColor":"rgb(121,93,40,1)","postID":2,"__v":0},
+        {"_id":"5d37de141bedae5df6f9a518","publicBan":false,"locked":false,"sticky":false,"IP":"stripped","name":"","subject":"","board":"b","body":"Derpa doo","fileName":"1563942420636.jpeg","fileOriginalName":"serveimage.jpeg","fileSize":"58909","fileDimensions":"1280 x 720","time":1563942420636,"OP":2,"userID":"d3795d28","userIDColor":"rgb(121,93,40,1)","postID":3,"__v":0}
+    ]
+    ```
     
-    **Sample Body POST**
+* **Sample AJAX POST Request**
     
-    `{ name: 'Anon', subject: 'Thread', text: 'Sample text of a post' }`
+    ```
+    $.ajax({
+    type: "POST",
+    url: 'http://nodechan/api/thread/b/2',
+    data: `{ name: 'Anon', subject: 'Thread', text: 'Sample text of a post' }`,
+    success: function(data){
+        console.log(data)
+    }
+    ```
+    
+* **Sample AJAX POST Response**
+
+    ```
+    This currently requires a refactor of the function to adequately write the database appropriately to respond without the standard HTML response of the board.
+    ```
 
 **Post Data**
 ----
@@ -111,7 +196,7 @@ Future updates will allow existing administrators to register new administrators
     
 * **URL**
 
-    /api/:board/post/:post
+    /api/post/:board/:post
     
 * **Method**
 
@@ -123,6 +208,22 @@ Future updates will allow existing administrators to register new administrators
     `board=[string]`
     
     `post=[integer]`
+    
+    * **Sample AJAX GET Request**
+
+    ```
+    $.ajax({
+        type: "GET",
+        url: 'http://nodechan/api/post/b/2',
+        success: function(data){
+            console.log(data)
+        }
+    });
+    ```
+* **Sample API GET Response** 
+    ```
+        {"_id":"5d37de091bedae5df6f9a517","publicBan":false,"locked":false,"sticky":false,"IP":"stripped","name":"","subject":"","board":"b","body":"","fileName":"1563942409270.png","fileOriginalName":"apuhug.png","fileSize":"91948","fileDimensions":"820 x 500","time":1563942409270,"OP":2,"userID":"d3795d28","userIDColor":"rgb(121,93,40,1)","postID":2,"__v":0}
+    ```
     
 **Update Thread**
 ----
@@ -145,8 +246,27 @@ Future updates will allow existing administrators to register new administrators
     `thread=[integer]`
     
     `post=[integer]`
+    
     The thread parameter is the Post Number of the OP of the thread
     The post parameter is the most recent post number in the thread; the api returns all posts in the thread after this post.
+    
+* **Sample AJAX GET Request**
+
+    ```
+    $.ajax({
+        type: "GET",
+        url: 'http://nodechan/api/update/b/2/2',
+        success: function(data){
+            console.log(data)
+        }
+    });
+    ```
+* **Sample API GET Response** 
+    ```
+    [
+    {"_id":"5d37de141bedae5df6f9a518","publicBan":false,"locked":false,"sticky":false,"IP":"stripped","name":"","subject":"","board":"b","body":"Derpa doo","fileName":"1563942420636.jpeg","fileOriginalName":"serveimage.jpeg","fileSize":"58909","fileDimensions":"1280 x 720","time":1563942420636,"OP":2,"userID":"d3795d28","userIDColor":"rgb(121,93,40,1)","postID":3,"__v":0}
+    ]
+    ```
 
 **Post Thread**
 ----
@@ -154,7 +274,7 @@ Future updates will allow existing administrators to register new administrators
     
 * **URL**
 
-    /api/:board
+    /api/boards/:board
     
 * **Method**
 
@@ -172,13 +292,27 @@ Future updates will allow existing administrators to register new administrators
     
     `subject=[string]`
     
-    `thread=[integer]`
+    `text=[string]`
     
     <Must have an image uploaded as well, will expand documentation>
     
-    **Sample Body POST**
+* **Sample AJAX POST Request**
     
-    `{ name: 'Anon', subject: 'Thread', text: 'Sample text of a post' }`
+    ```
+    $.ajax({
+    type: "POST",
+    url: 'http://nodechan/api/boards/b',
+    data: `{ name: 'Anon', subject: 'Thread', text: 'Sample text of a post' }`,
+    success: function(data){
+        console.log(data)
+    }
+    ```
+    
+* **Sample AJAX POST Response**
+
+    ```
+    This currently requires a refactor of the function to adequately write the database appropriately to respond without the standard HTML response of the board.
+    ```
 
 ## Admin API Endpoints
 
@@ -301,3 +435,4 @@ Admin Properties
 
 ## To Fix:
 + Delete button on boards.ejs doesn't function the same as from within the thread, not deleting the entire thread if the OP is selected. Will need to rewrite delete function to differ between threads.ejs and board.ejs views.p
+

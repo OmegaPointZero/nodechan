@@ -458,7 +458,7 @@ module.exports = (function(app,passport){
     })
     
     //Reply to thread ID on BOARD
-    app.post('/api/:board/thread/:id', notBanned, upload.any(), (req,res)=>{
+    app.post('/api/thread/:board/:id', notBanned, upload.any(), (req,res)=>{
         if(req.files.length===0 && req.body.text== ""){
             res.send('Error: Response cannot be empty')
         } else {
