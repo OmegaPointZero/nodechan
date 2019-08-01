@@ -114,7 +114,7 @@ Future updates will allow existing administrators to register new administrators
     ```
     
 
-**Thread**
+**Thread Data**
 ----
     Returns json data about all posts in a thread for a GET, writes a post to the thread with POST
     
@@ -186,10 +186,8 @@ Future updates will allow existing administrators to register new administrators
     
 * **Sample AJAX POST Response**
 
-    ```
-    This currently requires a refactor of the function to adequately write the database appropriately to respond without the standard HTML response of the board.
-    ```
-
+    After POSTing data, the data returned is equal to a GET request to /api/thread/:board/:post of the relevant thread
+    
 **Post Data**
 ----
     Returns json data about a specified post
@@ -310,9 +308,7 @@ Future updates will allow existing administrators to register new administrators
     
 * **Sample AJAX POST Response**
 
-    ```
-    This currently requires a refactor of the function to adequately write the database appropriately to respond without the standard HTML response of the board.
-    ```
+    After POSTing data, the data returned is equal to a GET request to /api/thread/:board/:post of the relevant thread
 
 ## Admin API Endpoints
 
@@ -366,6 +362,23 @@ Future updates will allow existing administrators to register new administrators
 
     None
 
+* **Sample AJAX GET request**
+
+    ```
+    $.ajax({
+    type: "GET",
+    url: 'http://nodechan/api/admin/reports',
+    success: function(data){
+        console.log(data)
+    }
+    ``` 
+
+* **Sample API Response**
+
+    ```
+    [{"reason":["rule","spam"],"_id":"5d4306be448fef007e12b66b","board":"b","post":2,"reportingIP":"::ffff:127.0.0.1","reviewed":false,"admin":"","action":"","time":1564673726563,"__v":0}]
+    ```
+
 **Bans**
 ----
     Gets all active IP Bans, provided the Admin is logged in
@@ -382,7 +395,22 @@ Future updates will allow existing administrators to register new administrators
 
     None
 
+* **Sample AJAX Request**
 
+    ```
+    $.ajax({
+        type: "GET",
+        url: "http://nodechan/api/admin/bans",
+        success: function(data){
+            console.log(data)
+        }
+    })
+    ```
+
+* **Sample API Response**
+    ```
+    [{"_id":"5d43078b448fef007e12b66c","IP":"::ffff:127.0.0.1","start":1564673931022,"end":1564760331022,"reason":"Because Reasons","offense":{"board":"b","post":"2"},"reportingIP":"::ffff:127.0.0.1","admin":"Cimelody-3","__v":0}]
+    ```
 
 ## Currently Functional Features:
 
@@ -434,9 +462,6 @@ Admin Properties
 + Manage Banners
 + Add helmet.js for security
 + Add middleware to prevent users from replying to locked threads (if thread is locked, thread page renders w/o reply form, but updated threads can still reply and can still reply via api)
-
-### API
-+ Need to fix API to respond with some sort of JSON data after POSTing to server, instead of responding with all of the regular pages' html.
 
 ## To Fix:
 + Delete button on boards.ejs doesn't function the same as from within the thread, not deleting the entire thread if the OP is selected. Will need to rewrite delete function to differ between threads.ejs and board.ejs views.p
