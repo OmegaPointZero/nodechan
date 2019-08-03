@@ -1,0 +1,41 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script> <!-- load jQuery -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/js/main.js"></script>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+<title>Nodechan - Report A Post</title>
+<body><div class="main" style="position:fixed">
+<div class="main-container">
+    <h2>Report submitted!</h2>
+    <span>This window will close in <span id="timer"></span>...</span>
+</div>
+</div>
+</body>
+</html>
+<script>
+$(document).ready(function(){
+    var t = 4;
+    $('#timer').html(t)
+    const timer = function(time){
+        if(t>0){
+            setTimeout(function(){
+                t--
+                $('#timer').html(t)
+                timer(t)
+            }, 1000);
+        }
+        if(t===0){
+            window.close()
+        }
+    }
+    timer(t)
+})
+</script>

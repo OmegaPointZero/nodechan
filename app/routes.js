@@ -201,7 +201,7 @@ module.exports = (function(app,passport){
                 throw(err);
                 res.send(err)
             } else {
-                res.send('Report saved!')
+                res.render('reported.ejs')
             }
         })
     });
@@ -562,7 +562,7 @@ module.exports = (function(app,passport){
         if(req.isAuthenticated())
             return next();
         res.status(401).send('Forbidden: You are not authorized')
-    })
+    }
 
     function notBanned(req,res,next){
         var ipaddr = req.connection.remoteAddress
