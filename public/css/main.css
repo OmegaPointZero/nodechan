@@ -412,3 +412,8 @@ img.banner{
     color: #000080;
     text-decoration: none;
 }
+
+.report-button{
+    margin: 0;
+    padding:5px;
+}
