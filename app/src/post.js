@@ -72,7 +72,7 @@ exports.getPage = (function getPage(board,page,req,res){
     })  
 });
 
-exports.getCatalog = (function getPage(board,req,res){
+exports.getCatalog = (function getPage(board,api,req,res){
     //For normal page function, we get all board info at once for the top/bottom
     //banners listing all of the boards. We don't for the API
     Board.find({},function(err,boards){
@@ -89,14 +89,18 @@ exports.getCatalog = (function getPage(board,req,res){
                     }
                     var OPs = toolbox.getUnique(posts,'OP') 
                     var sortedOPs = toolbox.getThreadBumps(OPs,posts)
-                    var banner = imageManager.getBanners()
                     sortedOPs = toolbox.trimCatalog(sortedOPs)
-                    res.render('catalog.ejs', {
-                        banner: banner,
-                        allBoards: boards,
-                        thisBoard: thisBoard,
-                        OPs: sortedOPs,
-                   }); 
+                    if(!api){
+                        var banner = imageManager.getBanners()
+                        res.render('catalog.ejs', {
+                            banner: banner,
+                            allBoards: boards,
+                            thisBoard: thisBoard,
+                            OPs: sortedOPs,
+                       }); 
+                    } else {
+                        res.send(sortedOPs)
+                    }
                });
             }
         }

@@ -112,7 +112,42 @@ Future updates will allow existing administrators to register new administrators
         {"_id":"5d37de141bedae5df6f9a518","publicBan":false,"locked":false,"sticky":false,"IP":"stripped","name":"","subject":"","board":"b","body":"Derpa doo","fileName":"1563942420636.jpeg","fileOriginalName":"serveimage.jpeg","fileSize":"58909","fileDimensions":"1280 x 720","time":1563942420636,"OP":2,"userID":"d3795d28","userIDColor":"rgb(121,93,40,1)","postID":3,"__v":0}
     ]
     ```
+
+**Board Catalog**
+----
+    Returns JSON data to populate the catalog.
+
+* **URL**
+
+    /api/catalog/:board
+
+* **Method**
+
+    `GET`
+
+* **URL Params**
+
+    **Required**
     
+    `board=[string]`
+
+* **Sample AJAX Get Request**
+
+    ```
+    $.ajax({
+        type: "GET",
+        url: 'http://nodechan/api/catalog/b/',
+        success: function(data){
+            console.log(data)
+        }
+    });
+    ```
+
+* **Sample Server Response**
+
+    ```
+    [{"OP":1,"lastBump":1564806000308,"images":1,"posts":1,"sticky":false,"locked":false,"preview":[{"_id":"5d450b708f83290018dbac7e","publicBan":false,"locked":false,"sticky":false,"IP":"::ffff:10.5.168.154","name":"Admin","subject":"Welcome!","board":"b","body":"Hello friends! This is the random board! ","fileName":"1564806000308.png","fileOriginalName":"dice.png","fileSize":"588421","fileDimensions":"598 x 600","time":1564806000308,"OP":1,"userID":"4a69a882","userIDColor":"rgb(105,168,130,1)","postID":1,"__v":0}]}]
+    ```
 
 **Thread Data**
 ----

@@ -66,7 +66,7 @@ module.exports = (function(app,passport){
 
     app.get('/boards/:board/catalog', (req,res)=>{
         var board = req.params.board
-        postManager.getCatalog(board,req,res)
+        postManager.getCatalog(board,false,req,res)
     });
 
     //Get board page
@@ -419,6 +419,11 @@ module.exports = (function(app,passport){
         Board.find({},function(err,boards){
             res.send(boards)
         });
+    });
+
+    app.get('/api/catalog/:board/', (req,res)=>{
+        var board = req.params.board
+        postManager.getCatalog(board,true,req,res)
     });
 
     //Post New thread on :board
