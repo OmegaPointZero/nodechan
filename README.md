@@ -211,12 +211,13 @@ Future updates will allow existing administrators to register new administrators
     
     ```
     $.ajax({
-    type: "POST",
-    url: 'http://nodechan/api/thread/b/2',
-    data: `{ name: 'Anon', subject: 'Thread', text: 'Sample text of a post' }`,
-    success: function(data){
-        console.log(data)
-    }
+        type: "POST",
+        url: 'http://nodechan/api/thread/b/2',
+        data: `{ name: 'Anon', subject: 'Thread', text: 'Sample text of a post' }`,
+        success: function(data){
+            console.log(data)
+        }
+    })
     ```
     
 * **Sample AJAX POST Response**
@@ -297,7 +298,7 @@ Future updates will allow existing administrators to register new administrators
 * **Sample API GET Response** 
     ```
     [
-    {"_id":"5d37de141bedae5df6f9a518","publicBan":false,"locked":false,"sticky":false,"IP":"stripped","name":"","subject":"","board":"b","body":"Derpa doo","fileName":"1563942420636.jpeg","fileOriginalName":"serveimage.jpeg","fileSize":"58909","fileDimensions":"1280 x 720","time":1563942420636,"OP":2,"userID":"d3795d28","userIDColor":"rgb(121,93,40,1)","postID":3,"__v":0}
+ {"_id":"5d37de141bedae5df6f9a518","publicBan":false,"locked":false,"sticky":false,"IP":"stripped","name":"","subject":"","board":"b","body":"Derpa doo","fileName":"1563942420636.jpeg","fileOriginalName":"serveimage.jpeg","fileSize":"58909","fileDimensions":"1280 x 720","time":1563942420636,"OP":2,"userID":"d3795d28","userIDColor":"rgb(121,93,40,1)","postID":3,"__v":0}
     ]
     ```
 
@@ -333,12 +334,13 @@ Future updates will allow existing administrators to register new administrators
     
     ```
     $.ajax({
-    type: "POST",
-    url: 'http://nodechan/api/boards/b',
-    data: `{ name: 'Anon', subject: 'Thread', text: 'Sample text of a post' }`,
-    success: function(data){
-        console.log(data)
-    }
+        type: "POST",
+        url: 'http://nodechan/api/boards/b',
+        data: `{ name: 'Anon', subject: 'Thread', text: 'Sample text of a post' }`,
+        success: function(data){
+            console.log(data)
+        }
+    })
     ```
     
 * **Sample AJAX POST Response**
@@ -365,8 +367,9 @@ Future updates will allow existing administrators to register new administrators
         url: 'http://nodechan/api/banner',
         success: function(data){
             console.log(data)
-        })
-    },
+        }
+    })
+    ```
 
 * **Sample API Response**
 
@@ -402,11 +405,12 @@ Future updates will allow existing administrators to register new administrators
 
     ```
     $.ajax({
-    type: "POST",
-    url: 'http://nodechan/api/admin/users',
-    data: { board: 'js', IP: '192.168.0.1'},
-    success: function(data){
-        console.log(data)
+        type: "POST",
+        url: 'http://nodechan/api/admin/users',
+        data: { board: 'js', IP: '192.168.0.1'},
+        success: function(data){
+            console.log(data)
+        }
     })
     ```
     
@@ -430,11 +434,12 @@ Future updates will allow existing administrators to register new administrators
 
     ```
     $.ajax({
-    type: "GET",
-    url: 'http://nodechan/api/admin/reports',
-    success: function(data){
-        console.log(data)
-    }
+        type: "GET",
+        url: 'http://nodechan/api/admin/reports',
+        success: function(data){
+            console.log(data)
+        }
+    })
     ``` 
 
 * **Sample API Response**
@@ -533,4 +538,3 @@ Admin Properties
 ## To Fix:
 + Current API endpoint to retrieve catalog data exposes IP Addresses
 + Delete button on boards.ejs doesn't function the same as from within the thread, not deleting the entire thread if the OP is selected. Will need to rewrite delete function to differ between threads.ejs and board.ejs views.
-+ Not a functional issue, at least from what I've seen rendered, but there's an extra closing div tag on posts that do NOT have an image, so the thread is not contained completely within the div.thread div. It's irking me now that I noticed it, must fix.
