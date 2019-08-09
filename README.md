@@ -65,7 +65,7 @@ Future updates will allow existing administrators to register new administrators
         {"stickyThreads":[],"lockedThreads":[],"_id":"5b6121abfb6fc072a40d6c2d","boardCode":"pol","boardTitle":"Politically Incorrect","category":"General"}
     ]
     
-        ```
+    ```
 
 **Board Page**
 ----
@@ -186,7 +186,7 @@ Future updates will allow existing administrators to register new administrators
     
     `subject=[string]`
     
-    `thread=[integer]`
+    `text=[string]`
        
 * **Sample AJAX GET Request**
 
@@ -491,6 +491,9 @@ Admin Properties
 + Country Flags based on IP Address location
 + Run tests of posts of various lengths render properly
 + Clicking on a post number on board.ejs should take user to the thread.ejs view of that thread
++ Add documentation describing possible responses from the API for trying to:
+    + Access invalid endpoints/invalid parameters via GET (ie, letters in place of numbers for board page numbers)
+    + POST data to API endpoints with invalid parameters
 
 ### Back-End server-side:
 + Wordfilters
@@ -499,4 +502,6 @@ Admin Properties
 + Add middleware to prevent users from replying to locked threads (if thread is locked, thread page renders w/o reply form, but updated threads can still reply and can still reply via api)
 
 ## To Fix:
-+ Delete button on boards.ejs doesn't function the same as from within the thread, not deleting the entire thread if the OP is selected. Will need to rewrite delete function to differ between threads.ejs and board.ejs views.p
++ Current API endpoint to retrieve catalog data exposes IP Addresses
++ Delete button on boards.ejs doesn't function the same as from within the thread, not deleting the entire thread if the OP is selected. Will need to rewrite delete function to differ between threads.ejs and board.ejs views.
++ Not a functional issue, at least from what I've seen rendered, but there's an extra closing div tag on posts that do NOT have an image, so the thread is not contained completely within the div.thread div. It's irking me now that I noticed it, must fix.

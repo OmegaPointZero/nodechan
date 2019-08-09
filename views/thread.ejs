@@ -101,24 +101,25 @@
 
             <%if(post.fileSize){%>
             <div class="file">
-            <div class="FileInfo">
-               File: <a href="/images/<%=post.fileName%>" target="_blank" class="fileLink"><%=post.fileOriginalName%></a>
-                    <% if(post.fileSize < 1000 ){ %>
-                        (<%=post.fileSize%> Bytes, 
-                    <%} else { %>
-                        <%var filesize = Math.floor(post.fileSize/1000)%>
-                        <%if(filesize < 1000){ %>
-                            (<%=filesize%> KB, 
-                        <%} else if(filesize > 1000) {%>
-                            <%newsize = Math.floor(filesize/1000) + "." + filesize%100 %>(<%=newsize%> MB,
-                        <% } %>
-                    <% } %> 
-                    <%=post.fileDimensions%>)
-            </div>
-            <div class="thumbnail">
-                <a href="/images/<%=post.fileName%>" target="_blank">
-                    <img src="/images/s<%=post.time%>.png" alt="<%=post.fileSize%> Bytes">
-                </a>
+                <div class="FileInfo">
+                   File: <a href="/images/<%=post.fileName%>" target="_blank" class="fileLink"><%=post.fileOriginalName%></a>
+                        <% if(post.fileSize < 1000 ){ %>
+                            (<%=post.fileSize%> Bytes, 
+                        <%} else { %>
+                            <%var filesize = Math.floor(post.fileSize/1000)%>
+                            <%if(filesize < 1000){ %>
+                                (<%=filesize%> KB, 
+                            <%} else if(filesize > 1000) {%>
+                                <%newsize = Math.floor(filesize/1000) + "." + filesize%100 %>(<%=newsize%> MB,
+                            <% } %>
+                        <% } %> 
+                        <%=post.fileDimensions%>)
+                </div>
+                <div class="thumbnail">
+                    <a href="/images/<%=post.fileName%>" target="_blank">
+                        <img src="/images/s<%=post.time%>.png" alt="<%=post.fileSize%> Bytes">
+                    </a>
+                </div>
             </div>
             <%}%>
             <div class="postMessage">
@@ -142,8 +143,9 @@
             </div>
     </div>
     </div>
-</div>
+
 <%}%>
+</div>
 <hr>
     <div class="overboard"> <div class="threadNav">[<a class="threadNavItem" href="/boards/<%=thisBoard.boardCode%>">Return</a>] [<a class="threadNavItem" href="/boards/<%=thisBoard.boardCode%>/catalog">Catalog</a>] [<a class="threadNavItem" href="#top">Top</a>] [<a class="threadNavItem" id="update" href="#">Update</a>] </div>
 <div class="metadata"> 

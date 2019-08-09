@@ -211,22 +211,23 @@ module.exports = (function(app,passport){
         res.render('login.ejs', { message: req.flash('loginMessage') });
     });
 
-    /* Route for logging in existing admin */
+    /* Route for logging in existing admin 
     app.post(process.env.LOGINROUTE, passport.authenticate('local-login', {
         successRedirect : process.env.ADMINROUTE,
         failureRedirect : process.env.LOGINROUTE,
         failureFlash: true,
-    })); 
+    })); */
 
     /*  If it's the first time this database is saving an admin, comment out
         the above POST /login route, and uncomment this one, to register a 
         new user. It's a dirty way to do it but it works 
-
+    */ 
     app.post(process.env.LOGINROUTE, passport.authenticate('local-signup', {
         successRedirect: process.env.ADMINROUTE,
         failureRedirect: process.env.LOGINROUTE})
-    );  */
+    );  
 
+    
     app.get(process.env.ADMINROUTE, isAdmin, (req,res)=>{
         Board.find({}, function(err,boards){
             if(err){throw err;}
@@ -255,7 +256,7 @@ module.exports = (function(app,passport){
             B.lockedThreads = [];
             B.save(function(err){
                 if(err){throw(err);res.send(err)}else{
-                    res.send('Board Saved!');
+                    res.redirect('/admin');
                 }
             });
         } else if(req.body.action=='Delete'){
