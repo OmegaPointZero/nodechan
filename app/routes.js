@@ -532,6 +532,11 @@ module.exports = (function(app,passport){
         }
     })
 
+    app.get('/api/banner', (req,res) => {
+        res.send({'banner': imageManager.getBanners()})
+    })
+
+    // API for ADMIN functions
     //Get all posts by user IP address
     app.post('/api/admin/users', isAdminAPI, (req,res)=>{
         var board = req.body.board;

@@ -345,6 +345,35 @@ Future updates will allow existing administrators to register new administrators
 
     After POSTing data, the data returned is equal to a GET request to /api/thread/:board/:post of the relevant thread
 
+**Banners**
+----
+    Returns a random banner from the uploaded banners
+
+* **URL**
+
+    /api/banner
+
+* **Method**
+
+    `GET`
+
+* **Sample Ajax Request**
+
+    ```
+    $.ajax({
+        type: 'GET',
+        url: 'http://nodechan/api/banner',
+        success: function(data){
+            console.log(data)
+        })
+    },
+
+* **Sample API Response**
+
+    ```
+    {"banner":"staticImages/banners/nodechan0.png"}
+    ```
+
 ## Admin API Endpoints
 
 **Users**
@@ -378,7 +407,7 @@ Future updates will allow existing administrators to register new administrators
     data: { board: 'js', IP: '192.168.0.1'},
     success: function(data){
         console.log(data)
-    }
+    })
     ```
     
 **Reports**
