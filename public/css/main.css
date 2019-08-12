@@ -374,11 +374,11 @@ img.banner{
 
 .boardsContainer{
     border: 1px solid;
-    zoom: 100%;
     margin-bottom: 0px;
     padding-bottom: 3em;
-    height: 100%;
+    overflow-x: hidden;
 }
+
 .boardsTitleBar {
     vertical-align: top;
     text-align: left;
