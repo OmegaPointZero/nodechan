@@ -119,18 +119,11 @@ exports.APIgetPage = (function getPage(board,page,req,res){
             var pageArr = toolbox.trimToPage(sortedOPs,page)
         } else {var pageArr=""}
         pageArr.forEach(function(arr){
-            p = p.concat(arr.preview)
-        });
-        if(p.length==0){
-            res.send('')
-        } else {
-            for(var i=0;i<p.length;i++){
-                p[i] = exports.stripIP(p[i])
-                if(i==p.length-1){
-                    res.send(p)
-                }
-            }
-        } 
+            for(var i=0;i<arr.preview.length;i++){
+                arr.preview[i].IP="strippped" 
+            }  
+        })
+        res.send(pageArr)
    });
 });
 

@@ -1,9 +1,6 @@
 # nodechan
 A chan-style imageboard and API built with Node.js, Express.js and MongoDB
 
-## !Attention!
-Nodechan is going through a heavy overhaul right now, including a forced rollback to this previous, working version. In attempting to fix a few things, everything broke. 
-
 ## Before Running
 You will need to create a .env file:
 + MONGO=linkToMongoURI
@@ -15,9 +12,9 @@ the Login and Admin routes aren't just held as '/login' and '/admin' for securit
 
 The init.sh script creates the necessary folders to hold uploaded files and run the server. You can either run "./init.sh" or "npm start". Nodechan comes with 2 site banners; you can add additional images (300x100) to the folder /public/staticImages/banners/ to add more. There will be an admin panel entry shortly to take care of this.
 
-This currently needs to be tested with ZERO boards on a fresh Mongo database, and running it without adding any boards first might cause it to crash. 
+### The first time you run the server
 
-THE VERY FIRST TIME YOU RUN THIS SERVER, you should comment out lines 215-219 of /app/routes.js, and uncomment lines 225-228. Start the server, make sure it connects to your Mongo Database, and whatever username/password you put in, Nodechan will write to the database as an admin. Do this for whatever administrators you want initially, then comment out lines 225-228 and uncomment 215-219 again. This will then allow you to run the nodechan server and log into it as an administrator. Nodechan doesn't allow user/admin registration by design for security reasons, so this is a quick and easy way unless you want to enter the schema information manually.
+You should comment out lines 215-219 of /app/routes.js, and uncomment lines 225-228. Start the server, make sure it connects to your Mongo Database, and whatever username/password you put in, Nodechan will write to the database as an admin. Do this for whatever administrators you want initially, then comment out lines 225-228 and uncomment 215-219 again. This will then allow you to run the nodechan server and log into it as an administrator. Nodechan doesn't allow user/admin registration by design for security reasons, so this is a quick and easy way unless you want to enter the schema information manually.
 
 Future updates will allow existing administrators to register new administrators, but that's not quite priority right now.
 
@@ -478,7 +475,9 @@ Future updates will allow existing administrators to register new administrators
 
 * **Sample API Response**
     ```
-    [{"_id":"5d43078b448fef007e12b66c","IP":"::ffff:127.0.0.1","start":1564673931022,"end":1564760331022,"reason":"Because Reasons","offense":{"board":"b","post":"2"},"reportingIP":"::ffff:127.0.0.1","admin":"Cimelody-3","__v":0}]
+    [
+        {"_id":"5d43078b448fef007e12b66c","IP":"::ffff:127.0.0.1","start":1564673931022,"end":1564760331022,"reason":"Because Reasons","offense":{"board":"b","post":"2"},"reportingIP":"::ffff:127.0.0.1","admin":"Cimelody-3","__v":0}
+    ]
     ```
 
 ## Currently Functional Features:

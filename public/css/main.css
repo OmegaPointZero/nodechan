@@ -417,3 +417,25 @@ img.banner{
     margin: 0;
     padding:5px;
 }
+
+.threadNav{
+    display: block;
+    float: left;
+    padding: 3px;
+}
+
+a.threadNavItem{
+    color: blue;
+}
+
+a.threadNavItem:clicked{
+    color:blue;
+    text-decoration: none;
+}
+
+.metadata{
+    text-align: right;
+    float: right;
+    padding: 3px;
+}
+
