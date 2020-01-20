@@ -1,7 +1,7 @@
 # NodeChan
 A chan-style imageboard and API built with Node.js, Express.js and MongoDB
 
-This is the single-server Express/jQuery app. You can find a link to the independent React front-end that uses the API at https://github.com/OmegaPointZero/nodechan 
+This is the single-server Express/jQuery app. You can find a link to the independent React front-end that uses the API at https://github.com/OmegaPointZero/nodechan-react
 
 ## Before Running
 You will need to create a .env file:
