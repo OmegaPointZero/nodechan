@@ -259,7 +259,7 @@ Future updates will allow existing administrators to register new administrators
     
     `post=[integer]`
     
-    * **Sample AJAX GET Request**
+* **Sample AJAX GET Request**
 
     ```
     $.ajax({
@@ -529,7 +529,6 @@ Admin Properties
 + Can see all reported posts, and ban users based on reports
 + Can see all banned IP addresses, and edit/delete bans
 
-
 ## To Implement:
 
 ### User-facing front end:
@@ -553,5 +552,4 @@ Admin Properties
 + Add middleware to prevent users from replying to locked threads (if thread is locked, thread page renders w/o reply form, but updated threads can still reply and can still reply via api)
 
 ## To Fix:
-+ Current API endpoint to retrieve catalog data exposes IP Addresses
 + Delete button on boards.ejs doesn't function the same as from within the thread, not deleting the entire thread if the OP is selected. Will need to rewrite delete function to differ between threads.ejs and board.ejs views.
