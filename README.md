@@ -23,6 +23,24 @@ Future updates will allow existing administrators to register new administrators
 
 # API Documentation
 
+## Table of Contents
+
+**[Userland API Endpoints](#userland-api-endpoints)**
+* **[Board List](#board-list)**
+* **[Board Page](#board-page)**
+* **[Board Catalog](#board-catalog)**
+* **[Thread Data](#thread-data)**
+* **[Post data](#post-data)**
+* **[Update Thread](#update-thread)**
+* **[Post Thread](#post-thread)**
+* **[Banners](#banners)**
+
+**[Admin API Endpoints](#admin-api-endpoints)**
+* **[Users](#board-list)**
+* **[Reports](#reports)**
+* **[Bans](#bans)**
+
+
 ## Userland API Endpoints
 
 **Board List**
@@ -200,8 +218,7 @@ Future updates will allow existing administrators to register new administrators
     ```
 * **Sample API GET Response** 
     ```
-    [
-        {"_id":"5d37de091bedae5df6f9a517","publicBan":false,"locked":false,"sticky":false,"IP":"stripped","name":"","subject":"","board":"b","body":"","fileName":"1563942409270.png","fileOriginalName":"apuhug.png","fileSize":"91948","fileDimensions":"820 x 500","time":1563942409270,"OP":2,"userID":"d3795d28","userIDColor":"rgb(121,93,40,1)","postID":2,"__v":0},
+    [     {"_id":"5d37de091bedae5df6f9a517","publicBan":false,"locked":false,"sticky":false,"IP":"stripped","name":"","subject":"","board":"b","body":"","fileName":"1563942409270.png","fileOriginalName":"apuhug.png","fileSize":"91948","fileDimensions":"820 x 500","time":1563942409270,"OP":2,"userID":"d3795d28","userIDColor":"rgb(121,93,40,1)","postID":2,"__v":0},
         {"_id":"5d37de141bedae5df6f9a518","publicBan":false,"locked":false,"sticky":false,"IP":"stripped","name":"","subject":"","board":"b","body":"Derpa doo","fileName":"1563942420636.jpeg","fileOriginalName":"serveimage.jpeg","fileSize":"58909","fileDimensions":"1280 x 720","time":1563942420636,"OP":2,"userID":"d3795d28","userIDColor":"rgb(121,93,40,1)","postID":3,"__v":0}
     ]
     ```
@@ -296,8 +313,7 @@ Future updates will allow existing administrators to register new administrators
     ```
 * **Sample API GET Response** 
     ```
-    [
- {"_id":"5d37de141bedae5df6f9a518","publicBan":false,"locked":false,"sticky":false,"IP":"stripped","name":"","subject":"","board":"b","body":"Derpa doo","fileName":"1563942420636.jpeg","fileOriginalName":"serveimage.jpeg","fileSize":"58909","fileDimensions":"1280 x 720","time":1563942420636,"OP":2,"userID":"d3795d28","userIDColor":"rgb(121,93,40,1)","postID":3,"__v":0}
+    [ {"_id":"5d37de141bedae5df6f9a518","publicBan":false,"locked":false,"sticky":false,"IP":"stripped","name":"","subject":"","board":"b","body":"Derpa doo","fileName":"1563942420636.jpeg","fileOriginalName":"serveimage.jpeg","fileSize":"58909","fileDimensions":"1280 x 720","time":1563942420636,"OP":2,"userID":"d3795d28","userIDColor":"rgb(121,93,40,1)","postID":3,"__v":0}
     ]
     ```
 
